@@ -3,6 +3,30 @@ app:
     mm: mm
     mm/s: mm/s
     mm³/s: mm³/s
+    mm/s²: mm/s²
+  metrics:
+    m: m
+    cm: cm
+    mm: mm
+    μm: μm
+    kg: kg
+    g: g
+    Hz: Hz
+    KHz: KHz
+    MHz: MHz
+    GHz: GHz
+    KB: KB
+    MB: MB 
+    GB: GB
+    TB: TB 
+    PB: PB 
+    EB: EB 
+    ZB: ZB 
+    YB: YB
+  time:
+    s: s
+    m: m
+    h: h
   bedmesh:
     label:
       active: active

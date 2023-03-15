@@ -60,9 +60,9 @@ export const Filters = {
     const m = Math.floor(seconds % 3600 / 60)
     const s = Math.floor(seconds % 3600 % 60)
 
-    let r = s + 's' // always show seconds
-    r = m + 'm ' + r // always show minutes
-    if (h > 0) r = h + 'h ' + r // only show hours if relevent
+    let r = s + ' ' + i18n.t('app.time.s') // always show seconds
+    r = m + ' ' + i18n.t('app.time.m') + ' ' + r // always show minutes
+    if (h > 0) r = h + ' ' + i18n.t('app.time.h') + ' ' + r // only show hours if relevent
 
     return (isNeg) ? '-' + r : r
   },
@@ -223,7 +223,9 @@ export const Filters = {
    */
   getReadableFileSizeString (fileSizeInBytes: number) {
     let i = -1
-    const byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB']
+    const byteUnits = [' ' + i18n.t('app.metrics.KB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'), 
+                       ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'), 
+                       ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')]
     if (fileSizeInBytes === 0) return `0${byteUnits[0]}`
     do {
       fileSizeInBytes = fileSizeInBytes / 1024
@@ -237,18 +239,18 @@ export const Filters = {
    * Formats a number representing mm to human readable distance.
    */
   getReadableLengthString (lengthInMm: number, showMicrons = false) {
-    if (lengthInMm >= 1000) return (lengthInMm / 1000).toFixed(2) + ' m'
-    if (lengthInMm > 100) return (lengthInMm / 10).toFixed(1) + ' cm'
-    if (lengthInMm < 0.1 && showMicrons) return (lengthInMm * 1000).toFixed(0) + ' μm'
-    return lengthInMm.toFixed(1) + ' mm'
+    if (lengthInMm >= 1000) return (lengthInMm / 1000).toFixed(2) + ' ' + i18n.t('app.metrics.m')
+    if (lengthInMm > 100) return (lengthInMm / 10).toFixed(1) + ' ' + i18n.t('app.metrics.cm')
+    if (lengthInMm < 0.1 && showMicrons) return (lengthInMm * 1000).toFixed(0) + ' ' + i18n.t('app.metrics.μm')
+    return lengthInMm.toFixed(1) + ' ' + i18n.t('app.metrics.mm')
   },
 
   /**
    * Formats a number representing g to human readable weight.
    */
   getReadableWeightString (weightInG: number) {
-    if (weightInG >= 1000) return (weightInG / 1000).toFixed(2) + ' kg'
-    return weightInG.toFixed(2) + ' g'
+    if (weightInG >= 1000) return (weightInG / 1000).toFixed(2) + ' ' + i18n.t('app.metrics.kg')
+    return weightInG.toFixed(2) + ' ' + i18n.t('app.metrics.g')
   },
 
   /**
@@ -256,7 +258,7 @@ export const Filters = {
    */
   getReadableFrequencyString (frequencyInHz: number) {
     let i = 0
-    const frequencyUnits = [' Hz', ' KHz', ' MHz', ' GHz']
+    const frequencyUnits = [' ' + i18n.t('app.metrics.Hz'), ' ' + i18n.t('app.metrics.KHz'), ' ' + i18n.t('app.metrics.MHz'), ' ' + i18n.t('app.metrics.GHz')]
     while (frequencyInHz >= 1000) {
       frequencyInHz = frequencyInHz / 1000
       i++

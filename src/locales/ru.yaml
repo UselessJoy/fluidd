@@ -4,6 +4,29 @@ app:
     mm/s: мм/с
     mm³/s: мм³/с
     mm/s²: мм/с²
+  metrics:
+    m: м
+    cm: см
+    mm: мм
+    μm: мкм
+    kg: кг
+    g: г
+    Hz: Гц
+    KHz: кГц
+    MHz: МГц
+    GHz: ГГц
+    KB: Кб
+    MB: Мб 
+    GB: Гб
+    TB: Тб 
+    PB: Пб 
+    EB: Эб 
+    ZB: Зб 
+    YB: Йб
+  time:
+    s: сек.
+    m: мин.
+    h: ч.
   bedmesh:
     label:
       active: Активно

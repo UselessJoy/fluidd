@@ -76,11 +76,11 @@
               sm="6"
             >
               <status-label :label="$t('app.general.label.requested_speed')">
-                <span v-if="requestedSpeed > 0 && printerPrinting">{{ requestedSpeed }} mm/s</span>
+                <span v-if="requestedSpeed > 0 && printerPrinting">{{ requestedSpeed }} {{ $t('app.suffix.mm/s') }}</span>
               </status-label>
 
               <status-label :label="$t('app.general.label.flow')">
-                <span v-if="flow.value > 0 && printerPrinting">{{ flow.value.toFixed(1) }} mm&sup3;/s</span>
+                <span v-if="flow.value > 0 && printerPrinting">{{ flow.value.toFixed(1) }} {{ $t('app.suffix.mm³/s') }}</span>
               </status-label>
 
               <status-label :label="$t('app.general.label.filament')">
