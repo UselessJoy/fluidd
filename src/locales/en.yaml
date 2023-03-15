@@ -1,4 +1,8 @@
 app:
+  suffix:
+    mm: mm
+    mm/s: mm/s
+    mm³/s: mm³/s
   bedmesh:
     label:
       active: active

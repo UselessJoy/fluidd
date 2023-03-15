@@ -94,7 +94,7 @@
             item-value="first_layer_height"
           >
             <span v-if="item.first_layer_height !== undefined">
-              {{ item.first_layer_height }} mm
+              {{ item.first_layer_height}} {{ $t('app.suffix.mm') }}
             </span>
           </file-row-item>
 
@@ -104,7 +104,7 @@
             item-value="layer_height"
           >
             <span v-if="item.layer_height !== undefined">
-              {{ item.layer_height }} mm
+              {{ item.layer_height }} {{ $t('app.suffix.mm') }}
             </span>
           </file-row-item>
 
@@ -164,7 +164,7 @@
             item-value="nozzle_diameter"
           >
             <span v-if="item.nozzle_diameter !== undefined">
-              {{ item.nozzle_diameter }} mm
+              {{ item.nozzle_diameter }} {{ $t('app.suffix.mm') }}
             </span>
           </file-row-item>
 

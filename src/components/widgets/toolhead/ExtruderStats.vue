@@ -21,7 +21,7 @@
               :class="{ 'text--disabled': !klippyReady }"
             >
               <v-fade-transition>
-                <span v-if="!open">~ {{ estimatedExtrudedLength }} mm @ {{ estimatedVolumetricFlow }} mm³/s, {{ estimatedMaxSpeed }} mm/s</span>
+                <span v-if="!open">~ {{ estimatedExtrudedLength }} {{ $t('app.suffix.mm') }} @ {{ estimatedVolumetricFlow }} {{ $t('app.suffix.mm³/s') }}, {{ estimatedMaxSpeed }} {{ $t('app.suffix.mm/s') }}</span>
               </v-fade-transition>
             </v-col>
           </v-row>

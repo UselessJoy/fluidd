@@ -64,7 +64,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @change="setDefaultExtrudeLength"
         />
       </app-setting>
@@ -83,7 +83,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           @change="setDefaultExtrudeSpeed"
         />
       </app-setting>
@@ -102,7 +102,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @change="setDefaultToolheadMoveLength"
         />
       </app-setting>
@@ -121,7 +121,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           @change="setDefaultToolheadYXSpeed"
         />
       </app-setting>
@@ -140,7 +140,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           @change="setDefaultToolheadZSpeed"
         />
       </app-setting>

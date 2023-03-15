@@ -1,4 +1,9 @@
 app:
+  suffix:
+    mm: мм
+    mm/s: мм/с
+    mm³/s: мм³/с
+    mm/s²: мм/с²
   bedmesh:
     label:
       active: Активно

@@ -19,7 +19,7 @@
         filled
         dense
         single-line
-        suffix="mm"
+        :suffix="$t('app.suffix.mm')"
         @change="setParkPosX"
       />
     </app-setting>
@@ -43,7 +43,7 @@
         filled
         dense
         single-line
-        suffix="mm"
+        :suffix="$t('app.suffix.mm')"
         @change="setParkPosY"
       />
     </app-setting>

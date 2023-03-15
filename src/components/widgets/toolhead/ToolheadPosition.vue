@@ -118,13 +118,13 @@
         cols="auto"
         class="secondary--text text--lighten-1"
       >
-        {{ $t('app.general.label.requested_speed') }} [ {{ liveVelocity.toFixed(2) }} mm/s ]
+        {{ $t('app.general.label.requested_speed') }} [ {{ liveVelocity.toFixed(2) }} {{ $t('app.suffix.mm/s') }} ]
       </v-col>
       <v-col
         cols="auto"
         class="focus--text"
       >
-        {{ requestedSpeed }} mm/s
+        {{ requestedSpeed }} {{ $t('app.suffix.mm/s') }}
       </v-col>
     </v-row>
 

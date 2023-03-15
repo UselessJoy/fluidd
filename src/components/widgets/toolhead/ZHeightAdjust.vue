@@ -30,7 +30,7 @@
         :class="{ 'text--disabled': !klippyReady }"
       >
         <span class="secondary--text">{{ $t('app.general.label.z_offset') }}&nbsp;</span>
-        <span>{{ ZHomingOrigin }}mm</span>
+        <span>{{ ZHomingOrigin }}{{ $t('app.suffix.mm') }}</span>
       </div>
     </v-col>
     <v-col cols="6">

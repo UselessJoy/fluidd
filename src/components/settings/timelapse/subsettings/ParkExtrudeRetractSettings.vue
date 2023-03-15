@@ -18,7 +18,7 @@
         filled
         dense
         single-line
-        suffix="mm"
+        :suffix="$t('app.suffix.mm')"
         @change="setParkRetractDistance"
       />
     </app-setting>
@@ -41,7 +41,7 @@
         filled
         dense
         single-line
-        suffix="mm/s"
+        :suffix="$t('app.suffix.mm/s')"
         @change="setParkRetractSpeed"
       />
     </app-setting>
@@ -64,7 +64,7 @@
         filled
         dense
         single-line
-        suffix="mm"
+        :suffix="$t('app.suffix.mm')"
         @change="setParkExtrudeDistance"
       />
     </app-setting>
@@ -87,7 +87,7 @@
         filled
         dense
         single-line
-        suffix="mm/s"
+        :suffix="$t('app.suffix.mm/s')"
         @change="setParkExtrudeSpeed"
       />
     </app-setting>

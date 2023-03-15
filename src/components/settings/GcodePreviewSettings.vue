@@ -53,7 +53,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @change="setExtrusionLineWidth"
         />
       </app-setting>
@@ -72,7 +72,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @change="setMoveLineWidth"
         />
       </app-setting>
@@ -91,7 +91,7 @@
           dense
           single-line
           hide-details="auto"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @change="setRetractionIconSize"
         />
       </app-setting>

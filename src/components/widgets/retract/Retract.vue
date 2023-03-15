@@ -10,7 +10,7 @@
       >
         <app-slider
           :label="$t('app.general.label.retract_length')"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           :value="retract_length"
           :reset-value="defaults.retract_length"
           :min="0"
@@ -32,7 +32,7 @@
       >
         <app-slider
           :label="$t('app.general.label.unretract_extra_length')"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           :value="unretract_extra_length"
           :reset-value="defaults.unretract_extra_length"
           :min="0"
@@ -56,7 +56,7 @@
       >
         <app-slider
           :label="$t('app.general.label.retract_speed')"
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           :value="retract_speed"
           :reset-value="defaults.retract_speed"
           :min="0"
@@ -78,7 +78,7 @@
       >
         <app-slider
           :label="$t('app.general.label.unretract_speed')"
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           :value="unretract_speed"
           :reset-value="defaults.unretract_speed"
           :min="0"

@@ -56,7 +56,7 @@
           filled
           dense
           single-line
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           @change="setParkTravelSpeed"
         />
       </app-setting>
@@ -98,7 +98,7 @@
           filled
           dense
           single-line
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @change="setParkPosZ"
         />
       </app-setting>

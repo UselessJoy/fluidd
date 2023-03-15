@@ -19,7 +19,7 @@
             :overridable="true"
             :locked="isMobile"
             :loading="hasWait($waits.onSetVelocity)"
-            suffix="mm/s"
+            :suffix="$t('app.suffix.mm/s')"
             @change="setVelocity($event)"
           />
         </v-col>
@@ -40,7 +40,7 @@
             :overridable="true"
             :locked="isMobile"
             :loading="hasWait($waits.onSetSCV)"
-            suffix="mm/s"
+            :suffix="$t('app.suffix.mm/s')"
             @change="setSCV($event)"
           />
         </v-col>
@@ -63,7 +63,7 @@
             :overridable="true"
             :locked="isMobile"
             :loading="hasWait($waits.onSetAcceleration)"
-            suffix="mm/s²"
+            :suffix="$t('app.suffix.mm/s²')"
             @change="setAcceleration($event)"
           />
         </v-col>
@@ -83,7 +83,7 @@
             :overridable="true"
             :locked="isMobile"
             :loading="hasWait($waits.onSetDeceleration)"
-            suffix="mm/s²"
+            :suffix="$t('app.suffix.mm/s²')"
             @change="setDeceleration($event)"
           />
         </v-col>

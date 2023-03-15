@@ -20,7 +20,7 @@
           outlined
           dense
           :label="$t('app.general.label.extrude_length')"
-          suffix="mm"
+          :suffix="$t('app.suffix.mm')"
           @focus="$event.target.select()"
         />
       </v-col>
@@ -54,7 +54,7 @@
           outlined
           dense
           :label="$t('app.general.label.extrude_speed')"
-          suffix="mm/s"
+          :suffix="$t('app.suffix.mm/s')"
           @focus="$event.target.select()"
         />
       </v-col>
