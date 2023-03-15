@@ -53,7 +53,7 @@
               class="legend-item"
               @click="$emit('legendPowerClick', item)"
             >
-              <span v-if="item.power <= 0 && item.target <= 0">off</span>
+              <span v-if="item.power <= 0 && item.target <= 0">{{ $t('app.temptarget.off') }}</span>
               <span v-if="item.target > 0">
                 {{ (item.power) ? (item.power * 100).toFixed() : 0 }}<small>%</small>
               </span>
@@ -67,7 +67,7 @@
               :class="{ 'active': chartSelectedLegends[item.name + 'Power'] }"
               class="legend-item"
             >
-              <span>{{ getRateOfChange(item) }}<small>&deg;C/s</small></span>
+              <span>{{ getRateOfChange(item) }}<small>{{ $t('app.temptarget.temp_rate_of_change') }}</small></span>
             </span>
           </td>
           <td class="temp-actual">
@@ -119,7 +119,7 @@
               <span v-if="item.speed <= 0 && item.target && item.target > 0">
                 {{ $t('app.printer.state.standby') }}
               </span>
-              <span v-if="item.speed <=0 && ((item.target && item.target <= 0) || !item.target)">off</span>
+              <span v-if="item.speed <=0 && ((item.target && item.target <= 0) || !item.target)">{{ $t('app.temptarget.off') }}</span>
             </span>
           </td>
           <td
@@ -130,7 +130,7 @@
               :class="{ 'active': chartSelectedLegends[item.name + 'Power'] }"
               class="legend-item"
             >
-              <span>{{ getRateOfChange(item) }}<small>&deg;C/s</small></span>
+              <span>{{ getRateOfChange(item) }}<small>{{ $t('app.temptarget.temp_rate_of_change') }}</small></span>
             </span>
           </td>
           <td class="temp-actual">
@@ -190,7 +190,7 @@
                 >
                   {{ item.temperature.toFixed(1) }}<small>°C</small>
                   <small v-if="item.humidity && showRelativeHumidity"><br>{{ item.humidity.toFixed(1) }}&nbsp;%</small>
-                  <small v-if="item.pressure && showBarometricPressure"><br>{{ item.pressure.toFixed(1) }}&nbsp;hpa</small>
+                  <small v-if="item.pressure && showBarometricPressure"><br>{{ item.pressure.toFixed(1) }}&nbsp;{{ $t('app.metrics.hpa') }}</small>
                   <small v-if="item.current_z_adjust !== undefined"><br>{{ $filters.getReadableLengthString(item.current_z_adjust, true) }}</small>
                 </div>
               </template>
@@ -214,6 +214,7 @@ import TemperaturePresetsMenu from './TemperaturePresetsMenu.vue'
 import InputTemperature from './InputTemperature.vue'
 import StateMixin from '@/mixins/state'
 import { Heater, Sensor } from '@/store/printer/types'
+import i18n from '@/plugins/i18n'
 
 @Component({
   components: {

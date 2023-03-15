@@ -23,10 +23,17 @@ app:
     EB: EB 
     ZB: ZB 
     YB: YB
+    hpa: hpa
   time:
     s: s
     m: m
     h: h
+  thermal:
+    temp: Temperature
+    power: Power
+  temptarget:
+    off: off
+    temp_rate_of_change: °C/s
   bedmesh:
     label:
       active: active

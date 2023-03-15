@@ -232,7 +232,7 @@ export default class ThermalChart extends Vue {
       },
       yAxis: [
         {
-          name: 'Temperature °C',
+          name: this.$t('app.thermal.temp') + ' °C',
           nameTextStyle: {
             fontSize,
             color: fontColor,
@@ -257,7 +257,7 @@ export default class ThermalChart extends Vue {
           boundaryGap: [0, '100%']
         },
         {
-          name: 'Power %',
+          name: this.$t('app.thermal.power') + ' %',
           nameTextStyle: {
             fontSize,
             color: fontColor,

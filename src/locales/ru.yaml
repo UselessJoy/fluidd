@@ -23,10 +23,17 @@ app:
     EB: Эб 
     ZB: Зб 
     YB: Йб
+    hpa: гПа
   time:
     s: сек.
     m: мин.
     h: ч.
+  thermal:
+    temp: Температура
+    power: Мощность
+  temptarget:
+    off: выкл.
+    temp_rate_of_change: °C/с
   bedmesh:
     label:
       active: Активно
