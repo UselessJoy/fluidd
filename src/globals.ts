@@ -210,7 +210,7 @@ export const Globals = Object.freeze({
   DOCS_MOONRAKER_COMPONENTS: 'https://docs.fluidd.xyz/configuration/moonraker',
   DOCS_AUTH_LOST_PASSWORD: 'https://docs.fluidd.xyz/authorization#lost-password',
   DOCS_AUTH: 'https://docs.fluidd.xyz/authorization',
-  GITHUB_REPO: 'https://github.com/fluidd-core/fluidd'
+  GITHUB_REPO: 'https://github.com/UselessJoy/fluidd'
 })
 
 export const Icons = Object.freeze({
