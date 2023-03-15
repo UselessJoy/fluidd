@@ -26,7 +26,6 @@
         />
       </div>
     </v-toolbar>
-
     <v-data-table
       :items="history"
       :headers="visibleHeaders"
@@ -39,6 +38,7 @@
       item-key="job_id"
       sort-by="start_time"
       sort-desc
+      locale="ru"
     >
       <template #expanded-item="{ headers, item }">
         <td

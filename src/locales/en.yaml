@@ -34,6 +34,10 @@ app:
   temptarget:
     off: off
     temp_rate_of_change: °C/s
+  filesystem:
+    logs: logs
+    docs: docs
+    config_examples: config_examples
   bedmesh:
     label:
       active: active

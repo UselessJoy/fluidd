@@ -64,7 +64,7 @@
               filled
               dense
               single-line
-              suffix="s"
+              :suffix="$t('app.time.s')"
               @change="setTargetLength"
             />
           </app-setting>

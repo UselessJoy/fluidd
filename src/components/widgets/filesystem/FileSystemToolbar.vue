@@ -139,7 +139,7 @@
           :key="index"
           @change="$emit('root-change', root)"
         >
-          {{ root }}
+          {{ $t(root) }}
         </v-tab>
       </v-tabs>
     </template>

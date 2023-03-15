@@ -25,7 +25,7 @@
     >
       <app-slider
         :label="$t('app.general.label.smooth_time')"
-        suffix="s"
+        :suffix="$t('app.time.s')"
         :value="selectedExtruderStepper.smooth_time || 0"
         :overridable="false"
         :reset-value="selectedExtruderStepper.config_smooth_time || 0"
