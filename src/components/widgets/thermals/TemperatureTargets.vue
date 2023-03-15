@@ -178,7 +178,7 @@
             class="rate-of-change"
           >
             <span class="legend-item">
-              {{ getRateOfChange(item) }}<small>&deg;C/s</small>
+              {{ getRateOfChange(item) }}<small>{{ $t('app.temptarget.temp_rate_of_change') }}</small>
             </span>
           </td>
           <td class="temp-actual">
