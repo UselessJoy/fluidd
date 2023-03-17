@@ -288,7 +288,7 @@ export const SocketActions = {
     }
    )
   },
-  async machineChangeWifiMode () {
+  async changeWifiMode () {
     baseEmit(
       'machine.changewifimode', {
         dispatch: 'void'

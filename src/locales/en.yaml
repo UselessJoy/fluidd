@@ -38,6 +38,11 @@ app:
     logs: logs
     docs: docs
     config_examples: config_examples
+    loading_text: Loading...
+  language:
+    browser_default: Browser default
+  users:
+    trusted_user: Trusted User
   bedmesh:
     label:
       active: active
@@ -466,6 +471,19 @@ app:
   history:
     msg:
       confirm: Are you sure? This will clear all history, and printer statistics
+    rows_per_page_text: Rows per page
+    all: All
+    page_text: "{0}-{1} of {2}"
+    no_data_text: No data available
+    chip:
+      size: size
+      modified: modified
+      uuid: uuid
+      slicer: slicer
+      slicer_version: slicer_version
+      gcode_start_byte: gcode_start_byte
+      gcode_end_byte: gcode_end_byte
+      object_height: object_height
   job_queue:
     msg:
       confirm: Are you sure? This will clear the entire printer queue

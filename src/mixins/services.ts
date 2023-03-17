@@ -37,7 +37,7 @@ export default class ServicesMixin extends Vue {
   /*      NEW      */
   hostChangeWifiMode ()
   {
-    SocketActions.machineChangeWifiMode()
+    SocketActions.changeWifiMode()
   }
   /*    END NEW    */
   /**

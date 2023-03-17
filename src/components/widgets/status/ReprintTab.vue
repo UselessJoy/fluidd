@@ -10,6 +10,7 @@
       sort-by="start_time"
       sort-desc
       style="background-color: transparent;"
+      :no-data-text="$t('app.history.no_data_text')"
     >
       <template
         #item="{ item }"

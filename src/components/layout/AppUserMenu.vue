@@ -18,7 +18,7 @@
             <v-icon>$account</v-icon>
           </v-btn>
         </template>
-        <span>{{ currentUser }}</span>
+        <span>{{ $t('app.users.'+currentUser) }}</span>
       </v-tooltip>
     </template>
 
@@ -29,7 +29,7 @@
             $account
           </v-icon>
         </div>
-        <span class="text-h5">{{ currentUser }}</span>
+        <span class="text-h5">{{ $t('app.users.'+currentUser) }}</span>
 
         <div
           v-if="user && !isTrustedOnly"
@@ -96,7 +96,7 @@ export default class AppNotificationMenu extends Vue {
       this.user.username === '_TRUSTED_USER_' ||
       this.user.username === '_API__API_KEY_USER_USER_'
     ) {
-      return capitalize(startCase(this.user.username))
+      return 'trusted_user'//capitalize(startCase(this.user.username))
     } else {
       return this.user.username
     }

@@ -61,7 +61,7 @@
       :collapsed="true"
       menu-icon="$imageSizeSelectLarge"
       size="small"
-    >
+    > 
       <app-slider
         v-model="thumbnailSize"
         class="ma-1"
@@ -139,7 +139,7 @@
           :key="index"
           @change="$emit('root-change', root)"
         >
-          {{ $t(root) }}
+          {{ $t('app.filesystem.'+root) }}
         </v-tab>
       </v-tabs>
     </template>

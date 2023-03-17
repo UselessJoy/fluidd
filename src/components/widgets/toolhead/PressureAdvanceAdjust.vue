@@ -6,7 +6,7 @@
     >
       <app-slider
         :label="$t('app.general.label.pressure_advance')"
-        suffix="s"
+        :suffix="$t('app.time.s')"
         :value="selectedExtruderStepper.pressure_advance || 0"
         :overridable="true"
         :reset-value="selectedExtruderStepper.config_pressure_advance || 0"

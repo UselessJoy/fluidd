@@ -11,6 +11,7 @@
       :items="files"
       :dense="dense"
       :disable-pagination="true"
+      :loading-text="$t('app.filesystem.loading_text')"
       :loading="loading"
       :sort-desc="true"
       :custom-sort="customSort"

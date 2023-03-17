@@ -38,7 +38,13 @@
       item-key="job_id"
       sort-by="start_time"
       sort-desc
-      locale="ru"
+      :items-per-page-all="$t('app.history.all')"
+      :no-data-text="$t('app.history.no_data_text')"
+      :footer-props="{
+        itemsPerPageText:$t('app.history.rows_per_page_text'),
+        itemsPerPageAllText:$t('app.history.all'),
+        pageText: $t('app.history.page_text')
+        }"   
     >
       <template #expanded-item="{ headers, item }">
         <td
@@ -52,7 +58,7 @@
                 :key="i"
                 small
               >
-                {{ key }}: {{ item.metadata[key] }}
+                {{ $t('app.history.chip.'+key) }}: {{ item.metadata[key] }}
               </v-chip>
             </template>
           </div>
