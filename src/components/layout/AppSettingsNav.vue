@@ -14,6 +14,7 @@
         :to="`/settings${item.hash}`"
         :exact="false"
         link
+        class="scrollactive-item"
       >
         <v-list-item-content>
           <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -25,13 +26,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-
 @Component({})
 export default class AppSettingsNav extends Vue {
   get isVisible () {
     return !this.$vuetify.breakpoint.mobile
   }
-
   get items () {
     return [
       { name: this.$t('app.setting.title.general'), hash: '#general', visible: true },

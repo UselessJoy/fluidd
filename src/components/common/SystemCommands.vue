@@ -33,6 +33,21 @@
           </v-icon>
         </v-list-item-icon>
       </v-list-item>
+
+      <v-list-item
+        @click="handleHostChangeWifiMode"
+      >
+        <v-list-item-title>{{ $t('app.general.btn.access_point') }}</v-list-item-title>
+        <v-list-item-icon>
+          <v-icon v-if="wifiMode == 'AP'" color="blue">
+                $accesspoint
+              </v-icon>
+              <v-icon v-else color="grey">
+                $accesspoint
+              </v-icon>
+        </v-list-item-icon>
+      </v-list-item>
+      <app-modal-window v-if="modal"></app-modal-window>
     </v-list-group>
 
     <v-list-group
@@ -131,8 +146,14 @@ import StateMixin from '@/mixins/state'
 import ServicesMixin from '@/mixins/services'
 import { SocketActions } from '@/api/socketActions'
 import { ServiceInfo } from '@/store/server/types'
+import AppModalWindow from '../layout/AppModalWindow.vue'
+import i18n from '@/plugins/i18n'
 
-@Component({})
+@Component({
+  components: {
+    AppModalWindow
+  }
+})
 export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
   get serverInfo () {
     return this.$store.getters['server/getInfo']
@@ -160,7 +181,8 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
         this.$t(
           `app.general.simple_form.msg.confirm_service_${action}`,
           { name: service.name })?.toString(),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no')}
       )
       if (res) {
         this.$emit('click')
@@ -187,7 +209,8 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
   handleHostReboot () {
     this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_reboot_host'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
       .then(res => {
         if (res) {
@@ -200,7 +223,8 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
   handleHostShutdown () {
     this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_shutdown_host'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
       .then(res => {
         if (res) {
@@ -209,14 +233,37 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
         }
       })
   }
-
+  /*      NEW      */
+  /**New */
+  get wifiMode(): string {
+    return this.$store.getters['printer/getWifiMode']
+  }
+  /**End new */
+  modal = false
+  handleHostChangeWifiMode () {
+    this.$confirm(
+      this.$tc('app.general.simple_form.msg.confirm_change_wifi_mode'),
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no')}
+    )
+      .then(res => {
+        if (res) {
+          this.$emit('click')
+          this.modal=true
+          this.addConsoleEntry(this.$tc('app.console.change_wifi'))
+          this.hostChangeWifiMode()
+        }
+      })
+  }
+  /*    END NEW    */
   async togglePowerDevice (device: Device, wait?: string) {
     const confirmOnPowerDeviceChange = this.$store.state.config.uiSettings.general.confirmOnPowerDeviceChange
     let res: boolean | undefined = true
     if (confirmOnPowerDeviceChange) {
       res = await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_power_device_toggle'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
     }
     if (res) {

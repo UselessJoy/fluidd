@@ -272,6 +272,11 @@ export default class App extends Mixins(StateMixin, FilesMixin) {
       this.flashMessageState.type = (payload && payload.type) || undefined
       this.flashMessageState.timeout = (payload && payload.timeout !== undefined) ? payload.timeout : undefined
       this.flashMessageState.open = true
+      /*/if (this.flashMessageState.text?.startsWith('!!'))
+      {
+        this.sendGcode(`STOP_LED_EFFECTS`)
+        this.sendGcode(`SET_LED_EFFECT EFFECT=ERROR_DEFAULT`)
+      }/*/
     })
 
     const legacyElementsSelectors = [

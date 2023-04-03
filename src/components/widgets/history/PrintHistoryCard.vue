@@ -55,7 +55,8 @@ export default class PrinterHistoryCard extends Vue {
   handleRemoveAll () {
     this.$confirm(
       this.$tc('app.history.msg.confirm_jobs'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
       .then(res => {
         if (res) {

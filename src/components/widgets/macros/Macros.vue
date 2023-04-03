@@ -57,7 +57,7 @@
                 v-on="on"
                 @click="sendGcode($event, `${$waits.onMacro}${macro.name}`)"
               >
-                {{ macro.alias || macro.name }}
+                {{ macro.config.macro_locale || macro.name }}
               </app-macro-btn>
             </template>
             <span>{{ macro.config.description }}</span>

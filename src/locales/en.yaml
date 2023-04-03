@@ -43,6 +43,14 @@ app:
     browser_default: Browser default
   users:
     trusted_user: Trusted User
+  components:
+    heaters:
+      extruder: extruder
+      heater_bed: heater_bed
+    fans:
+      part_fan: Part Fan 
+      heater_fan: Heater Fan
+    neopixel: neopixel
   bedmesh:
     label:
       active: active
@@ -87,6 +95,13 @@ app:
       hide_temp_waits: Hide temp waits
     placeholder:
       command: '''tab'' for autocomplete, ''help'' for commands ''arrows'' for history'
+    restart_gcode: Restarting G-code file
+    interrupt_gcode: Deleted interrupted gcode
+    cancel_print: CANCEL_PRINT
+    pause: PAUSE
+    resume: RESUME
+    sdcard_reset_file: SDCARD_RESET_FILE
+    change_wifi: Change Wifi mode...
   endpoint:
     error:
       cant_connect: >-
@@ -175,6 +190,9 @@ app:
   general:
     btn:
       abort: Abort
+      access_point: Access Point
+      yes: "Yes"
+      no: "No"
       accept: Accept
       add: Add
       add_dir: Add Directory

@@ -39,53 +39,6 @@
     <!-- <v-spacer /> -->
 
     <div class="toolbar-supplemental">
-      
-  <!--    <template>
-        <div class="page" v-if="socketConnected && !isMobile && authenticated">
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <app-btn
-                :disabled="!klippyReady"
-                v-bind="attrs"
-                class="mx-1"
-                color=""
-                v-on="on"
-                @click="modal = true"
-              >
-                <v-icon color="error">
-                  $minus
-                </v-icon>
-              </app-btn>
-            </template>
-            <span>Показать модальное окно</span>
-          </v-tooltip>
-          <app-modal-window v-if="modal"></app-modal-window>
-        </div>
-    </template> -->
-      <!--      NEW      -->
-      <div v-if="socketConnected && !isMobile && authenticated">
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <app-btn
-              :disabled="!klippyReady"
-              v-bind="attrs"
-              class="mx-1"
-              color=""
-              v-on="on"
-              @click="handleHostChangeWifiMode()"
-            >
-              <v-icon v-if="wifiMode == 'AP'" color="blue">
-                $accesspoint
-              </v-icon>
-              <v-icon v-else>
-                $minus
-              </v-icon>
-            </app-btn>
-          </template>
-          <span>Сменить режим Wi-fi</span>
-        </v-tooltip>
-      </div>
-
       <div v-if="socketConnected">
         {{ handleRebuildGcode() }}
       </div>
@@ -247,22 +200,19 @@ import FilesMixin from '@/mixins/files'
 import { SocketActions } from '@/api/socketActions'
 import { OutputPin } from '@/store/printer/types'
 import { Device } from '@/store/power/types'
-import AppModalWindow from './AppModalWindow.vue'
 
 @Component({
   components: {
     UserPasswordDialog,
     PendingChangesDialog,
     AppSaveConfigAndRestartBtn,
-    AppUploadAndPrintBtn,
-    AppModalWindow
+    AppUploadAndPrintBtn
   }
 })
 export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin) {
   menu = false
   userPasswordDialogOpen = false
   pendingChangesDialogOpen = false
-  modal = false
   isShutdownAtPrinting = false
 
   get supportsAuth () {
@@ -304,11 +254,6 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   get inLayout (): boolean {
     return (this.$store.state.config.layoutMode)
   }
-  /**New */
-  get wifiMode(): string {
-    return this.$store.getters['printer/getWifiMode']
-  }
-  /**End new */
   get showSaveConfigAndRestart (): boolean {
     return this.$store.state.config.uiSettings.general.showSaveConfigAndRestart
   }
@@ -435,7 +380,8 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     if (confirmOnPowerDeviceChange) {
       res = await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_power_device_toggle'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
     }
 
@@ -479,36 +425,23 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     {
       this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_rebuild_interrupted_gcode'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
         .then(res => {
           if (res) {
             this.$emit('click')
-            this.addConsoleEntry('Restarting G-code file')
+            this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
             SocketActions.printerPrintRebuild()
           }
           else
           {
             this.$emit('click')
-            this.addConsoleEntry('Deleted interrupted gcode')
+            this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
             SocketActions.deleteInterruptedFile()
           }
         })
     }
-  }
-  handleHostChangeWifiMode () {
-    this.$confirm(
-      this.$tc('app.general.simple_form.msg.confirm_change_wifi_mode'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
-    )
-      .then(res => {
-        if (res) {
-          this.$emit('click')
-          this.modal=true
-          this.addConsoleEntry('Change Wifi mode, rebooting system...')
-          this.hostChangeWifiMode()
-        }
-      })
   }
   /*    END NEW    */
 }

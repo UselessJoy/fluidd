@@ -213,7 +213,8 @@ export default class FileEditorDialog extends Mixins(StateMixin) {
     if (this.showDirtyEditorWarning) {
       const result = await this.$confirm(
         this.$tc('app.general.simple_form.msg.unsaved_changes'),
-        { title: this.$tc('app.general.label.unsaved_changes'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.unsaved_changes'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
 
       if (!result) {

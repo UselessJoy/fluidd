@@ -203,7 +203,8 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     if (!this.forceMove && this.$store.state.config.uiSettings.general.forceMoveToggleWarning) {
       const result = await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_forcemove_toggle'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
 
       if (!result) {

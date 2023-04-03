@@ -152,7 +152,8 @@ export default class AuthSettings extends Vue {
   handleRemoveUser (user: AppUser) {
     this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
       .then(res => {
         if (res) {

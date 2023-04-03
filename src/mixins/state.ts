@@ -119,7 +119,8 @@ export default class StateMixin extends Vue {
     if (confirmOnEstop) {
       res = await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
     }
     if (res) {

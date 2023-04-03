@@ -5,6 +5,7 @@ import { PrinterState, Heater, Fan, Led, OutputPin, Sensor, RunoutSensor, Extrud
 import { get } from 'lodash-es'
 import getKlipperType from '@/util/get-klipper-type'
 import { Http2ServerResponse } from 'http2'
+import i18n from '@/plugins/i18n'
 
 export const getters: GetterTree<PrinterState, RootState> = {
 
@@ -395,8 +396,20 @@ export const getters: GetterTree<PrinterState, RootState> = {
           }
 
           const color = Vue.$colorset.next(getKlipperType(e), e)
-          const prettyName = Vue.$filters.startCase(name)
-
+          let pretty = ""
+          if (e == "extruder")
+          {
+            pretty = Vue.$filters.startCase(i18n.tc('app.components.heaters.extruder'))
+          }
+          else if (e == "heater_bed")
+          {
+            pretty = Vue.$filters.startCase(i18n.tc('app.components.heaters.heater_bed'))
+          }
+          else
+          {
+            pretty = Vue.$filters.startCase(name)
+          }
+          const prettyName = Vue.$filters.startCase(pretty)
           r.push({
             ...heater,
             name,
@@ -538,16 +551,40 @@ export const getters: GetterTree<PrinterState, RootState> = {
         supportedTypes.includes(type) &&
         (!filterByPrefix.includes(type) || !name.startsWith('_'))
       ) {
-        const prettyName = name === 'fan'
-          ? 'Part Fan' // If we know its the part fan.
-          : Vue.$filters.startCase(name)
+        let pretty =""
+       /* if (name === 'fan')
+        {
+          pretty = i18n.tc('app.components.fans.part_fan')
+        }
+        else if (name === 'heater_fan')
+        {
+          pretty = i18n.tc('app.components.fans.heater_fan')
+        }
+        else if (name === 'neopixel')
+        {
+          pretty = i18n.tc('app.components.neopixel')
+        }
+        else{
+          pretty = Vue.$filters.startCase(name)
+        }*/
+        //const prettyName = pretty
+        /*name === 'fan'
+          ? i18n.tc('app.components.fans.part_fan') // If we know its the part fan.
+          : Vue.$filters.startCase(name)*/
 
         const color = (applyColor.includes(type))
           ? Vue.$colorset.next(getKlipperType(pin), pin)
           : undefined
 
         const config = getters.getPrinterSettings(pin)
-
+        if (config.locale)
+        {
+          pretty = config.locale
+        }
+        else{
+          pretty = Vue.$filters.startCase(name)
+        }
+        const prettyName = pretty
         let output: Fan | Led | OutputPin = {
           ...state.printer[pin],
           config: { ...config },
@@ -603,10 +640,17 @@ export const getters: GetterTree<PrinterState, RootState> = {
       const name = (split.length > 1) ? split[1] : item
 
       if (supportedSensors.includes(split[0])) {
-        const prettyName = Vue.$filters.startCase(name)
         const color = Vue.$colorset.next(getKlipperType(item), item)
         const config = getters.getPrinterSettings(item)
-
+        let pretty = ""
+        if (config.locale)
+        {
+          pretty = config.locale
+        }
+        else{
+          pretty = Vue.$filters.startCase(name)
+        }
+        const prettyName = pretty
         groups[name] = {
           ...groups[name],
           ...state.printer[item],

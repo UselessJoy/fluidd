@@ -18,7 +18,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Globals } from '@/globals'
 import { ConsoleEntry } from '@/store/console/types'
-
 @Component({})
 export default class ConsoleItem extends Vue {
   @Prop({ type: Object, default: {} })

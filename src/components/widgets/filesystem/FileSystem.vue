@@ -810,7 +810,8 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
 
     const res = await this.$confirm(
       this.$tc('app.file_system.msg.confirm'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
     if (res) {
       items.forEach((item) => {

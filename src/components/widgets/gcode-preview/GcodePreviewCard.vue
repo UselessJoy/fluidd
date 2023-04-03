@@ -365,7 +365,8 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
   async cancelObject (id: string) {
     const res = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_exclude_object'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
 
     if (res) {

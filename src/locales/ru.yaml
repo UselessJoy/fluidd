@@ -23,7 +23,7 @@ app:
     EB: Эб 
     ZB: Зб 
     YB: Йб
-    hpa: гПа
+    hpa: ГПа
   time:
     s: сек.
     m: мин.
@@ -43,6 +43,14 @@ app:
     browser_default: По умолчанию
   users:
     trusted_user: Доверенный пользователь
+  components:
+    heaters:
+      extruder: экструдер
+      heater_bed: стол
+    fans:
+      part_fan: Вентилятор экструдера
+      heater_fan: Хеатер Фан
+    neopixel: Светодиодная лента
   bedmesh:
     label:
       active: Активно
@@ -87,6 +95,13 @@ app:
       hide_temp_waits: Скрыть временные ожидания
     placeholder:
       command: '''tab'' для автокомплита, ''help'' for для списка комманд ''↑ и ↓'' история команд'
+    restart_gcode: Восстановление печати
+    interrupt_gcode: Отмена восстановления печати
+    cancel_print: ОТМЕНА ПЕЧАТИ
+    pause: ПАУЗА ПЕЧАТИ
+    resume: ВОЗОБНОВЛЕНИЕ ПЕЧАТИ
+    sdcard_reset_file: ОТМЕНА ПЕЧАТИ
+    change_wifi: Смена работы wifi...
   endpoint:
     error:
       cant_connect: >-
@@ -175,11 +190,15 @@ app:
   general:
     btn:
       abort: Отменить
+      access_point: Точка Доступа
+      yes: Подтвердить
+      no: Отмена
       accept: Применить
       add: Добавить
       add_dir: Добавить папку
       add_file: Добавить файл
       add_printer: Добавить принтер
+      add_to_queue: Добавить в очередь
       adjust_layout: Настроить компановку интерфейса панели управления
       adjusted: Настроено
       all: Все
@@ -360,7 +379,7 @@ app:
     simple_form:
       error:
         arrayofnums: Только цифры
-        credentials: Недопустимый credentials
+        credentials: Недействительные данные
         exists: Уже существует
         invalid_number: Неверный номер
         invalid_url: Невалидный URL

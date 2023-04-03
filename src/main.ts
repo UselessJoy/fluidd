@@ -30,7 +30,6 @@ import { HttpClientPlugin } from './plugins/httpClient'
 import { FiltersPlugin } from './plugins/filters'
 import { SocketPlugin } from './plugins/socketClient'
 import { ColorSetPlugin } from './plugins/colorSet'
-
 // Main App component
 import App from './App.vue'
 

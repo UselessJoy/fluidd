@@ -95,7 +95,8 @@ export default class JobQueue extends Vue {
   async handleRemoveAll () {
     const res = await this.$confirm(
       this.$tc('app.job_queue.msg.confirm'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
 
     if (res) {

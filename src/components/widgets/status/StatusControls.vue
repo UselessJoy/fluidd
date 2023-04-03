@@ -144,28 +144,29 @@ export default class StatusControls extends Mixins(StateMixin) {
     this.$tc('app.general.simple_form.msg.confirm')
     this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
       .then(res => {
         if (res) {
           SocketActions.printerPrintCancel()
-          this.addConsoleEntry('CANCEL_PRINT')
+          this.addConsoleEntry(this.$tc('app.console.cancel_print'))
         }
       })
   }
 
   pausePrint () {
     SocketActions.printerPrintPause()
-    this.addConsoleEntry('PAUSE')
+    this.addConsoleEntry(this.$tc('app.console.pause'))
   }
 
   resumePrint () {
     SocketActions.printerPrintResume()
-    this.addConsoleEntry('RESUME')
+    this.addConsoleEntry(this.$tc('app.console.resume'))
   }
 
   resetFile () {
-    this.sendGcode('SDCARD_RESET_FILE')
+    this.sendGcode(this.$tc('app.console.sdcard_reset_file'))
   }
 }
 </script>
