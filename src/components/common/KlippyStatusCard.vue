@@ -1,6 +1,6 @@
 <template>
   <collapsable-card
-    :title="`Klippy: ${klippyState}`"
+    :title="'Klippy: '+$tc('app.printer.state.'+`${klippyState.toLowerCase()}`) "
     icon="$error"
     icon-color="error"
   >

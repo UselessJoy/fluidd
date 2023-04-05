@@ -502,6 +502,9 @@ app:
       object_height: высота объекта
   printer:
     state:
+      startup: Запускается
+      shutdown: Отключен
+      error: Ошибка
       busy: Занят
       cancelled: Отменено
       complete: Готово

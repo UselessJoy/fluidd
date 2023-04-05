@@ -509,6 +509,9 @@ app:
       confirm_stats: Are you sure? This will clear all stats.
   printer:
     state:
+      startup: Startup
+      shutdown: Shutdown
+      error: Error
       busy: Busy
       cancelled: Cancelled
       complete: Complete
