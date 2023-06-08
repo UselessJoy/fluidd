@@ -193,6 +193,7 @@ app:
       access_point: Точка Доступа
       yes: Подтвердить
       no: Отмена
+      off_now: Выключить сейчас
       accept: Применить
       add: Добавить
       add_dir: Добавить папку
@@ -257,6 +258,8 @@ app:
       socket_reconnect: Повторное подключение
       socket_refresh: Принудительно обновление
       upload: Загрузить
+      upload_files: Загрузить файлы
+      upload_folder: Загрузить папку
       upload_print: Загрузить и напечатать
       view: Вид
       reset_stats: Сбросить Статистику
@@ -370,6 +373,7 @@ app:
       add_category: Добавить категорию
       file_time: Файл
     msg:
+      heaters_heating_and_wait: Нагрев с параметром 'wait', g-коды будут обработаны после разогрева 
       password_changed: Пароль изменен
       wrong_password: Ой, что-то пошло не так. Пароль введен верно?
       bed_screws_adjust: >-
@@ -402,6 +406,7 @@ app:
         confirm_service_restart: Вы уверены, что хотите перезапустить службу %{name}?
         confirm_service_stop: Вы уверены, что хотите остановить службу %{name}?
         confirm_power_device_toggle: Вы уверены? Это позволит переключить питание этого устройства.
+        power_off: Печать закончена, принтер будет выключен после охлаждения экструдера
         unsaved_changes: У вас есть несохраненные изменения. Вы уверены, что хотите закрыть файл?
         apply_z_offset_endstop: >-
           Z-смещение конечной точки будет рассчитано и обновлено по текущему
@@ -536,6 +541,7 @@ app:
       '270': 270°
       none: Нет
     label:
+      auto_off_complete: Включить автовыключение после печати
       all_off: Всё выключить
       all_on: Всё включить
       aspect_ratio: Соотношение сторон
@@ -689,7 +695,7 @@ app:
       home_y: Y
       home_all: Парковать все
     title:
-      bed_screws_adjust: Регулировка винтов стола
+      bed_screws_adjust: Регулировка винтов
       manual_probe: Ручная регулировка стола
     tooltip:
       absolute_positioning: Абсолютная позиция
@@ -701,9 +707,10 @@ app:
       z_tilt_adjust: Z Регулировка наклона
       quad_gantry_level: QGL
       relative_positioning: Относительная позиция
-      screws_tilt_calculate: Расчет Наклона Винтами
-      bed_screws_adjust: РЕГУЛИРОВКА ВИНТОВ СТОЛА
-      force_move: Принудительное перемещение
+      screws_tilt_calculate: Расчет поворота винтов
+      bed_screws_adjust: Регулировка винтов
+      force_move: Принудительно
+      force_move_description: Режим принудительного перемещения (движение без парковки экструдера)
     label:
       stats_active_extruder: >-
         <span class="secondary--text">Активный экструдер настроен на </span>

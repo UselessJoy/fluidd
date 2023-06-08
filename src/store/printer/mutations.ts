@@ -20,6 +20,26 @@ export const mutations: MutationTree<PrinterState> = {
   setWifiMode (state, payload) {
     state.printer.wifiMode = payload
   },
+
+  setAutoOff (state, payload) {
+    state.printer.autooff = payload
+  },
+
+  setAutoEnable (state, payload) {
+    state.printer.autooff = payload
+  },
+  
+  setTimeAutoOff (state, payload) {
+    state.printer.autooff = payload
+  },
+
+  setIsScrewImage(state, payload) {
+    state.printer.screw_image = payload
+  },
+
+  setHeatersIsWaiting(state, payload) {
+    state.printer.heaters = payload
+  },
   /*    END NEW    */
   setQueryEndstops (state, payload) {
     state.printer.endstops = payload

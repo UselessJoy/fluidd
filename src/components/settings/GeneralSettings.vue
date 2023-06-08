@@ -161,6 +161,19 @@
       <v-divider />
 
       <app-setting
+        :title="$t('app.setting.label.auto_off_complete')"
+      >
+        <v-switch
+          :loading="hasWait($waits.onSetAutoOffEnable)"
+          v-model="enableAutoOff"
+          hide-details
+          class="mt-0 mb-4"
+        />
+      </app-setting>
+      
+      <v-divider />
+
+      <app-setting
         :title="$t('app.setting.label.enable_diagnostics')"
         :sub-title="$t('app.setting.tooltip.diagnostics_performance')"
       >
@@ -181,6 +194,7 @@ import { VInput } from '@/types'
 import { SupportedLocales, DateFormats, TimeFormats } from '@/globals'
 import { OutputPin } from '@/store/printer/types'
 import { Device } from '@/store/power/types'
+import { SocketActions } from '@/api/socketActions'
 
 @Component({
   components: {}
@@ -400,6 +414,25 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
+
+  /*      NEW      */
+
+  get enableAutoOff (): boolean {
+    // this.$store.state.config.uiSettings.general.autoOff_enable = this.$store.getters['printer/getAutoOffEnable']
+    //return this.$store.state.config.uiSettings.general.autoOff_enable
+     return this.$store.getters['printer/getAutoOffEnable']
+  }
+
+  set enableAutoOff (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.autoOff_enable',
+      value,
+      server: true
+    })
+    // SocketActions.printerGcodeScript(`SET_AUTO_OFF ENABLE=${value}`, this.$waits.onGetAutoOffEnable)
+    SocketActions.setAutoOff(value, this.$waits.onSetAutoOffEnable)
+  }
+  /*    END NEW    */
 
   get current_time () {
     return Math.floor(Date.now() / 1000)

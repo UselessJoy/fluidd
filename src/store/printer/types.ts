@@ -11,6 +11,14 @@ export interface Extruder {
   key: string;
 }
 
+/*      NEW      */
+export interface AutoOff {
+  autoOff: boolean;
+  timeAutoOff: number;
+  autoOff_enable: boolean;
+}
+/*    END NEW    */
+
 export interface ExtruderStepper {
   name: string;
   pressure_advance: number;

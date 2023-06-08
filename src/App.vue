@@ -19,6 +19,27 @@
       :type="flashMessageState.type"
       :timeout="flashMessageState.timeout"
     />
+    <template v-if="hasScrewImage && showModal">
+      <div class="parent_modal_div">
+        <v-card class="modal v-dialog"
+          >
+          <v-card-text class="text-center">
+            <img :src="screw">
+            <br>
+            <v-btn
+              bottom
+              left
+              class="ml-2 mb-2"
+              color="error"
+              @click="closeModal()"
+            >
+              <span>Close</span>
+              <v-icon>$estop</v-icon>
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </div>
+    </template>
 
     <v-btn
       v-if="isMobile && authenticated && socketConnected"
@@ -82,10 +103,17 @@
 
 <script lang="ts">
 import { Component, Mixins, Watch } from 'vue-property-decorator'
-import { EventBus, FlashMessage } from '@/eventBus'
+import { EventBus, FlashMessage , FlashMessageTypes } from '@/eventBus'
 import StateMixin from '@/mixins/state'
 import FilesMixin from '@/mixins/files'
+import ServicesMixin from './mixins/services'
 import { LinkPropertyHref } from 'vue-meta'
+import { Waits } from './globals'
+import { Interface } from 'readline/promises'
+import { AutoOff } from './store/printer/types'
+import i18n from './plugins/i18n'
+import { SocketActions } from './api/socketActions'
+import { VAlert } from 'vuetify/lib'
 
 @Component<App>({
   metaInfo () {
@@ -101,18 +129,19 @@ import { LinkPropertyHref } from 'vue-meta'
     }
   }
 })
-export default class App extends Mixins(StateMixin, FilesMixin) {
+export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
   toolsdrawer: boolean | null = null
   navdrawer: boolean | null = null
   showUpdateUI = false
   customBackgroundImageStyle: Record<string, string> = {}
-
+  autoOffEnable = false
+  screw = ''
+  showModal = false
   flashMessageState: FlashMessage = {
     open: false,
     text: undefined,
     type: undefined
   }
-
   // Our app is in a loading state when the socket isn't quite ready, or
   // our translations are loading.
   get updating () {
@@ -130,7 +159,6 @@ export default class App extends Mixins(StateMixin, FilesMixin) {
   get loading () {
     return this.hasWait(this.$waits.onLoadLanguage)
   }
-
   get progress () {
     let progress = this.$store.getters['printer/getPrintProgress']
     progress = (progress * 100).toFixed()
@@ -245,6 +273,67 @@ export default class App extends Mixins(StateMixin, FilesMixin) {
     document.head.appendChild(linkElement)
   }
 
+  /*      NEW      */
+  get autoOff(): boolean {
+    return this.$store.getters['printer/getAutoOff']
+  }
+  get timeAutoOff(): number {
+    return Math.round(this.$store.getters['printer/getTimeAutoOff'])
+  }
+  get hasScrewImage(): boolean {
+    return this.$store.getters['printer/getIsScrewImage']
+  }
+  get screwImage () {
+    return this.$store.getters['config/getScrewImage']('screw_image', ['.png', '.jpg', '.jpeg'])
+  }
+
+  get heaterWaiting() {
+    return this.$store.getters['printer/getHeatersIsWaiting']
+  }
+
+  @Watch('heaterWaiting')
+  async onHeaterWaiting (value: boolean) {
+    if (!value) {
+      return
+    }
+    EventBus.$emit(this.$tc('app.general.msg.heaters_heating_and_wait'), { type: FlashMessageTypes.warning})
+  }
+
+  @Watch('autoOff')
+  async onAutoOff (value: boolean) {
+    if (!value) {
+       return
+     }
+    //  this.autoOffEnable = true
+    this.$confirm(
+      this.$tc(`app.general.simple_form.msg.power_off`),
+      { title: this.$tc('app.general.label.power'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.off_now'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      ).then(res => {
+        if (res) {
+          this.$emit('click')
+          this.hostShutdown()
+        }
+        else {
+          this.$emit('click')
+          SocketActions.offAutoOff()
+        }
+      })
+  }
+  @Watch('hasScrewImage')
+   async onScrewImage (value: boolean) {
+     if (!value) {
+       return
+     }
+     const url = await this.createFileUrlWithToken(this.screwImage, 'config')
+     this.screw = url
+     this.showModal = true
+   }
+
+  async closeModal() {
+    this.showModal = false
+  }
+  /*    END NEW    */
   get customBackgroundImage () {
     return this.$store.getters['config/getCustomThemeFile']('background', ['.png', '.jpg', '.jpeg', '.gif'])
   }
@@ -272,11 +361,6 @@ export default class App extends Mixins(StateMixin, FilesMixin) {
       this.flashMessageState.type = (payload && payload.type) || undefined
       this.flashMessageState.timeout = (payload && payload.timeout !== undefined) ? payload.timeout : undefined
       this.flashMessageState.open = true
-      /*/if (this.flashMessageState.text?.startsWith('!!'))
-      {
-        this.sendGcode(`STOP_LED_EFFECTS`)
-        this.sendGcode(`SET_LED_EFFECT EFFECT=ERROR_DEFAULT`)
-      }/*/
     })
 
     const legacyElementsSelectors = [
@@ -305,4 +389,30 @@ export default class App extends Mixins(StateMixin, FilesMixin) {
     this.navdrawer = !this.navdrawer
   }
 }
+
 </script>
+
+<style scoped lang="scss">
+    .modal {
+    position: fixed;
+    border-radius: 8px;
+    min-height: 100px;
+    max-height: 700px;
+    min-width: 450px;
+    max-width: 1000px;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    }
+    .parent_modal_div {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    //background-color: #00000080;
+    }
+</style>

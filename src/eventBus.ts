@@ -23,6 +23,7 @@ export interface FlashMessage {
   timeout?: number;
 }
 
+
 export enum FlashMessageTypes {
   success = 'success',
   error = 'error',

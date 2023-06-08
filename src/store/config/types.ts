@@ -76,6 +76,7 @@ export interface GeneralConfig {
   forceMoveToggleWarning: boolean;
   enableDiagnostics: boolean;
   thumbnailSize: number;
+  autoOff_enable: boolean;
 }
 
 export type TextSortOrder = 'default' | 'numeric-prefix' | 'version'

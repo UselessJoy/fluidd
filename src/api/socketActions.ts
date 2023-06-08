@@ -281,6 +281,34 @@ export const SocketActions = {
     )
   },
 
+  async getIsScrewImage () {
+    baseEmit('printer.getscrewimage', {
+      dispatch: 'printer/onGetIsScrewImage',
+      wait: Waits.onGetIsScrewImage
+    }
+   )
+  },
+
+  async setAutoOff (value: boolean, wait?: string) {
+    baseEmit(
+      'printer.setautooff', {
+        dispatch: 'void',
+        params: {
+          autoOff_enable: value
+        },
+        wait: Waits.onSetAutoOffEnable
+      }
+    )
+  },
+
+  async offAutoOff () {
+    baseEmit(
+      'printer.offautooff', {
+        dispatch: 'void'
+      }
+    )
+  },
+
   async getWifiMode () {
     baseEmit('printer.getwifimode', {
       dispatch: 'printer/onGetWifiMode',

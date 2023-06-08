@@ -98,6 +98,22 @@ export const getters: GetterTree<ConfigState, RootState> = {
     return r
   },
 
+  // getScrewImage: (state) => {
+  //   return state.printer.screw_image.imageCreated
+  // },
+  getScrewImage: (state, getters, rootState, rootGetters) => (filename: string, extensions: string[]) => {
+    const files = rootGetters['files/getRootFiles']('config') as RootFile[]
+    if (files) {
+      for (const extension of extensions) {
+        const path = `.fluidd-screw-image/${filename}${extension}`
+
+        if (files.some(f => f.path === path)) {
+          return path
+        }
+      }
+    }
+  },
+  
   getCustomThemeFile: (state, getters, rootState, rootGetters) => (filename: string, extensions: string[]) => {
     const files = rootGetters['files/getRootFiles']('config') as RootFile[]
 

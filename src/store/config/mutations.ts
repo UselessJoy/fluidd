@@ -153,7 +153,6 @@ export const mutations: MutationTree<ConfigState> = {
     const i = state.uiSettings.dashboard.tempPresets.findIndex(preset => preset.id === payload.id)
     state.uiSettings.dashboard.tempPresets.splice(i, 1)
   },
-
   /**
    * Puts us into layout mode
    */

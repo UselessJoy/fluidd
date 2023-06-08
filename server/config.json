@@ -91,6 +91,15 @@
         "src": "/logo_zerog.svg",
         "dynamic": true
       }
+    },
+    {
+      "name": "Warhammer",
+      "color": "#dfff3e",
+      "isDark": true,
+      "logo": {
+        "src": "/logo_warhammer.svg",
+        "dynamic": true
+      }
     }
   ]
 }

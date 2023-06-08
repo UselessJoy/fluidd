@@ -12,7 +12,8 @@ export const defaultState = (): PrinterState => {
       bed_mesh: {},
       heaters: {
         available_heaters: [],
-        available_sensors: []
+        available_sensors: [],
+        is_waiting: false
       },
       info: {
         state: '',
@@ -65,6 +66,14 @@ export const defaultState = (): PrinterState => {
       },
       wifi_mode: {
         wifiMode: ''
+      },
+      screw_image: {
+        imageCreated: false
+      },
+      autooff: {
+        autoOff: false,
+        timeAutoOff: 0,
+        autoOff_enable: false
       },
       virtual_sdcard: {
         file_position: 0,

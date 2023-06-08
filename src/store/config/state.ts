@@ -13,6 +13,9 @@ export const defaultState = (): ConfigState => {
       hosted: false,
       themePresets: []
     },
+    screw_image: {
+      imageCreated: false
+    },
     instances: [],
     uiSettings: {
       general: {
@@ -52,7 +55,8 @@ export const defaultState = (): ConfigState => {
         showBedScrewsAdjustDialogAutomatically: true,
         forceMoveToggleWarning: true,
         enableDiagnostics: false,
-        thumbnailSize: 32
+        thumbnailSize: 32,
+        autoOff_enable: false
       },
       theme: {
         isDark: true,

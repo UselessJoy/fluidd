@@ -39,16 +39,25 @@
         >
           {{ $t('app.tool.tooltip.manual_probe') }}
         </app-btn>
-        <app-btn
-          v-if="printerSupportsForceMove"
-          :disabled="!klippyReady || printerPrinting"
-          small
-          class="ml-1"
-          :color="forceMove ? 'error' : undefined"
-          @click="toggleForceMove"
+        <v-tooltip 
+          v-if="printerSupportsForceMove" 
+          top
         >
-          {{ $t('app.tool.tooltip.force_move') }}
-        </app-btn>
+        <template #activator="{ on, attrs }">
+          <app-btn
+            v-bind="attrs"
+            v-on="on"
+            :disabled="!klippyReady || printerPrinting"
+            small
+            class="ml-1"
+            :color="forceMove ? 'error' : undefined"
+            @click="toggleForceMove"
+          >
+            {{ $t('app.tool.tooltip.force_move') }}
+          </app-btn>
+        </template>
+          <span>{{ $t('app.tool.tooltip.force_move_description') }}</span>
+        </v-tooltip>
         <app-btn
           :disabled="!klippyReady || printerPrinting"
           small

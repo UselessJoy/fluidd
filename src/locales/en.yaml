@@ -193,6 +193,7 @@ app:
       access_point: Access Point
       yes: "Yes"
       no: "No"
+      off_now: turn off now
       accept: Accept
       add: Add
       add_dir: Add Directory
@@ -373,6 +374,7 @@ app:
       add_category: Add category
       file_time: File
     msg:
+      heaters_heating_and_wait: heating with the wait parameter, gcodes will be processed after warming up
       password_changed: Password changed
       wrong_password: Oops, something went wrong. Is your password correct?
       bed_screws_adjust: >-
@@ -406,6 +408,7 @@ app:
         confirm_service_stop: Are you sure you want to stop the %{name} service?
         confirm_power_device_toggle: Are you sure? This will toggle the power of this device.
         unsaved_changes: You have unsaved changes. Are you sure you want to close this file?
+        power_off: Printing is finished, the printer will be turned off after cooling the extruder
         apply_z_offset_endstop: >-
           Endstop Z-Offset will be calculated and updated from the current
           Z-Offset.
@@ -542,6 +545,7 @@ app:
       '270': 270°
       none: None
     label:
+      auto_off_complete: Enable auto off after printing
       all_off: All off
       all_on: All on
       aspect_ratio: Aspect Ratio
@@ -714,6 +718,7 @@ app:
       screws_tilt_calculate: Screws_Tilt_Calculate
       bed_screws_adjust: BED_SCREWS_ADJUST
       force_move: FORCE_MOVE
+      force_move_description: forced movement mode (movement without home of extruder)
     label:
       stats_active_extruder: >-
         <span class="secondary--text">The active extruder configuration is set for</span>

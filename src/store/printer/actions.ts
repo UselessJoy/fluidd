@@ -30,6 +30,26 @@ export const actions: ActionTree<PrinterState, RootState> = {
   async onGetWifiMode ({ commit }, payload) {
     commit('setWifiMode', payload)
   },
+
+  async onGetAutoOff ({ commit }, payload) {
+    commit('setAutoOff', payload)
+  },
+
+  async onGetAutoEnable ({ commit }, payload) {
+    commit('setAutoOffEnable', payload)
+  },
+
+  async onGetTimeAutoOff ({ commit }, payload) {
+    commit('setTimeAutoOff', payload)
+  },
+
+  async onGetScrewImage ({ commit }, payload) {
+    commit('setScrewImage', payload)
+  },
+
+  async onGetHeatersIsWaiting ({ commit }, payload) {
+    commit('setHeatersIsWaiting', payload)
+  },
   /*    END NEW    */
   /**
    * Query endstops

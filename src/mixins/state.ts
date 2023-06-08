@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { SocketActions } from '@/api/socketActions'
 import { Component } from 'vue-property-decorator'
+import { EventBus, FlashMessageTypes } from '@/eventBus'
 
 @Component
 export default class StateMixin extends Vue {
@@ -104,7 +105,15 @@ export default class StateMixin extends Vue {
   /**
    * Send a gcode script.
    */
+  get heaterWaiting() {
+    return this.$store.getters['printer/getHeatersIsWaiting']
+  }
+
   sendGcode (gcode: string, wait?: string) {
+    if (this.heaterWaiting)
+    {
+      EventBus.$emit(this.$tc('app.general.msg.heaters_heating_and_wait'), { type: FlashMessageTypes.warning, timeout: 5000})
+    }
     SocketActions.printerGcodeScript(gcode, wait)
     this.addConsoleEntry(gcode)
   }

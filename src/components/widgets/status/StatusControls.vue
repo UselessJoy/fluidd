@@ -166,7 +166,7 @@ export default class StatusControls extends Mixins(StateMixin) {
   }
 
   resetFile () {
-    this.sendGcode(this.$tc('app.console.sdcard_reset_file'))
+    this.sendGcode("SDCARD_RESET_FILE")
   }
 }
 </script>

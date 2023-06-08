@@ -50,6 +50,7 @@ declare module 'vue' {
     RegisterServiceWorker: typeof import('./src/components/common/RegisterServiceWorker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScrewImage: typeof import('./src/components/common/ScrewImage.vue')['default']
     SocketDisconnected: typeof import('./src/components/common/SocketDisconnected.vue')['default']
     SystemCommands: typeof import('./src/components/common/SystemCommands.vue')['default']
     SystemControl: typeof import('./src/components/common/SystemControl.vue')['default']

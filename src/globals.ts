@@ -136,7 +136,8 @@ import {
   mdiTrayFull,
   mdiTrayPlus,
   mdiFolderArrowUp,
-  mdiAccessPoint
+  mdiAccessPoint,
+  mdiScriptText
 } from '@mdi/js'
 
 /**
@@ -356,7 +357,8 @@ export const Icons = Object.freeze({
   fileZip: mdiArchive,
   fileZipAdd: mdiArchivePlus,
   jobQueue: mdiTrayFull,
-  enqueueJob: mdiTrayPlus
+  enqueueJob: mdiTrayPlus,
+  ref: mdiScriptText
 })
 
 export const Waits = Object.freeze({
@@ -408,7 +410,12 @@ export const Waits = Object.freeze({
   onQueryProbe: 'onQueryProbe',
   onVersionRefresh: 'onVersionRefresh',
   /*      NEW      */
-  onGetWifiMode: 'onGetWifiMode'
+  onGetWifiMode: 'onGetWifiMode',
+  onGetIsScrewImage: 'onGetScrewImage',
+  onGetAutoOff: 'onGetAutoOff',
+  onGetTimeAutoOff: 'onGetAutoOff',
+  onGetAutoOffEnable: 'onGetAutoOffEnable',
+  onSetAutoOffEnable: 'onGetAutoOffEnable'
   /*    END NEW    */
 })
 

@@ -150,5 +150,10 @@ export const actions: ActionTree<ConfigState, RootState> = {
     if (state.uiSettings.tableHeaders[payload.name]) {
       SocketActions.serverWrite(`uiSettings.tableHeaders.${payload.name}`, state.uiSettings.tableHeaders[payload.name])
     }
+  },
+  /*      NEW      */
+  async onGetIsScrewImage({commit}, payload) {
+    commit('setIsScrewImage', payload)
   }
+  /*    END NEW    */
 }

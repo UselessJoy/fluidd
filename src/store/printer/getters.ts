@@ -6,7 +6,7 @@ import { get } from 'lodash-es'
 import getKlipperType from '@/util/get-klipper-type'
 import { Http2ServerResponse } from 'http2'
 import i18n from '@/plugins/i18n'
-
+import { RootFile } from '../files/types'
 export const getters: GetterTree<PrinterState, RootState> = {
 
   /**
@@ -123,6 +123,26 @@ export const getters: GetterTree<PrinterState, RootState> = {
   /*      NEW      */
   getWifiMode: (state) => {
     return state.printer.wifi_mode.wifiMode
+  },
+
+  getAutoOff: (state) => {
+    return state.printer.autooff.autoOff
+  },
+
+  getAutoOffEnable: (state) => {
+    return state.printer.autooff.autoOff_enable
+  },
+
+  getTimeAutoOff: (state) => {
+    return state.printer.autooff.timeAutoOff
+  },
+
+  getIsScrewImage: (state) => {
+    return state.printer.screw_image.imageCreated
+  },
+
+  getHeatersIsWaiting: (state) => {
+    return state.printer.heaters.is_waiting
   },
   /*    END NEW    */
   getPrintLayers: (state) => {

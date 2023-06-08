@@ -19,6 +19,8 @@ import FullscreenCamera from '@/views/FullscreenCamera.vue'
 import NotFound from '@/views/NotFound.vue'
 import Login from '@/views/Login.vue'
 import Icons from '@/views/Icons.vue'
+import Reference from '@/views/Reference.vue'
+import AppReferenceNav from '@/components/layout/AppReferenceNav.vue'
 
 Vue.use(VueRouter)
 
@@ -135,6 +137,31 @@ const routes: Array<RouteConfig> = [
     path: '/icons',
     name: 'Icons',
     component: Icons
+  },
+  {
+    path: '/reference',
+    name: 'Reference',
+    beforeEnter: ifAuthenticated,
+    meta: {
+      hasSubNavigation: true
+    },
+    components: {
+      default: Reference,
+      navigation: AppReferenceNav
+    },
+    children: [
+      {
+        path: '/settings/macros/:categoryId',
+        name: 'Macros',
+        meta: {
+          hasSubNavigation: true
+        },
+        components: {
+          default: MacroSettings,
+          navigation: AppSettingsNav
+        }
+      }
+    ]
   },
   {
     path: '*',
