@@ -137,6 +137,22 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.autooff.timeAutoOff
   },
 
+  getKlipperLangs: (state) => {
+    return state.printer.locale.langs
+  },
+
+  getCurrentKlipperLang: (state) => {
+    return state.printer.locale.currentLang
+  },
+
+  getSafetyPrinting: (state) => {
+    return state.printer.safety_printing
+  },
+
+  getPrintingIsPaused: (state) => {
+    return state.printer.print_stats.state
+  },
+
   getIsScrewImage: (state) => {
     return state.printer.screw_image.imageCreated
   },

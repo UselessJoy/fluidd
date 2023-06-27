@@ -309,6 +309,28 @@ export const SocketActions = {
     )
   },
 
+  async setKlipperLang (value: string) {
+    baseEmit(
+      'printer.setKlipperLang', {
+        dispatch: 'void',
+        params: {
+          lang: value
+        }
+      }
+    )
+  },
+
+  async setSafetyPrinting (value: boolean) {
+    baseEmit(
+      'printer.setSafetyPrinting', {
+        dispatch: 'void',
+        params: {
+          safety: value
+        }
+      }
+    )
+  },
+
   async getWifiMode () {
     baseEmit('printer.getwifimode', {
       dispatch: 'printer/onGetWifiMode',

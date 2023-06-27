@@ -25,6 +25,14 @@ export const mutations: MutationTree<PrinterState> = {
     state.printer.autooff = payload
   },
 
+  setKlipperLang (state, payload) {
+    state.printer.locale = payload
+  },
+
+  setSafetyPrinting(state, payload) {
+    state.printer.safety_printing = payload
+  },
+  
   setAutoEnable (state, payload) {
     state.printer.autooff = payload
   },

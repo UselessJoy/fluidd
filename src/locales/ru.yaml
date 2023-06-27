@@ -373,6 +373,7 @@ app:
       add_category: Добавить категорию
       file_time: Файл
     msg:
+      safety_printing_open_doors_or_cap: Открыта крышка или створки. Печать приостановлена
       heaters_heating_and_wait: Нагрев с параметром 'wait', g-коды будут обработаны после разогрева 
       password_changed: Пароль изменен
       wrong_password: Ой, что-то пошло не так. Пароль введен верно?
@@ -541,6 +542,9 @@ app:
       '270': 270°
       none: Нет
     label:
+      klipper_language: Язык Клиппера
+      klipper_language_description: Язык, на котором будут показываться ошибки и вывод консоли
+      safety_printing: Безопасная печать
       auto_off_complete: Включить автовыключение после печати
       all_off: Всё выключить
       all_on: Всё включить
@@ -645,7 +649,7 @@ app:
       authentication: Аутентификация
       console: Консоль
       camera: Камера | Камеры
-      file_editor: Редактор конфигурационных файлов
+      file_editor: Редактор файлов
       gcode_preview: Предпросмотр GCode
       general: Общие
       macros: Макросы

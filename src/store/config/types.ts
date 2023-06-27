@@ -77,6 +77,8 @@ export interface GeneralConfig {
   enableDiagnostics: boolean;
   thumbnailSize: number;
   autoOff_enable: boolean;
+  lang: string;
+  safety: boolean;
 }
 
 export type TextSortOrder = 'default' | 'numeric-prefix' | 'version'

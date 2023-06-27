@@ -1,3 +1,4 @@
+import { findLastKey } from 'lodash-es'
 import { PrinterState } from './types'
 
 /**
@@ -74,6 +75,19 @@ export const defaultState = (): PrinterState => {
         autoOff: false,
         timeAutoOff: 0,
         autoOff_enable: false
+      },
+      locale: {
+        langs: [
+          {
+            name: "default",
+            code: "def"
+          }
+        ],
+        currentLang: "en"
+      },
+      safety_printing: {
+        safety: false,
+        open: false
       },
       virtual_sdcard: {
         file_position: 0,

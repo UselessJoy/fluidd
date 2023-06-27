@@ -42,6 +42,24 @@
 
       <v-divider />
 
+      <app-setting 
+        :title="$t('app.setting.label.klipper_language')"
+        :sub-title="$t('app.setting.label.klipper_language_description')">
+        <v-select
+          filled
+          dense
+          single-line
+          hide-details="auto"
+          :items="klipperLangs"
+          :value="currentKlipperLang"
+          item-text="name"
+          item-value="code"
+          @change="setKlipperLocale"
+        />
+      </app-setting>
+
+      <v-divider />
+
       <app-setting :title="$t('app.setting.label.date_format')">
         <v-select
           v-model="dateFormat"
@@ -166,6 +184,18 @@
         <v-switch
           :loading="hasWait($waits.onSetAutoOffEnable)"
           v-model="enableAutoOff"
+          hide-details
+          class="mt-0 mb-4"
+        />
+      </app-setting>
+      
+      <v-divider />
+
+      <app-setting
+        :title="$t('app.setting.label.safety_printing')"
+      >
+        <v-switch
+          v-model="safetyPrinting"
           hide-details
           class="mt-0 mb-4"
         />
@@ -432,6 +462,41 @@ export default class GeneralSettings extends Mixins(StateMixin) {
     // SocketActions.printerGcodeScript(`SET_AUTO_OFF ENABLE=${value}`, this.$waits.onGetAutoOffEnable)
     SocketActions.setAutoOff(value, this.$waits.onSetAutoOffEnable)
   }
+
+  get klipperLangs () {
+    return [
+      { name: this.$t('app.language.browser_default'), code: 'default' },
+      ...this.$store.getters['printer/getKlipperLangs']
+    ]
+  }
+
+  get currentKlipperLang(): string {
+    return this.$store.getters['printer/getCurrentKlipperLang']
+  }
+
+  setKlipperLocale (value: string) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.lang',
+      value,
+      server: true
+    })
+    SocketActions.setKlipperLang(value)
+  }
+
+  get safetyPrinting (): boolean {
+     return this.$store.getters['printer/getSafetyPrinting'].safety
+  }
+
+  set safetyPrinting (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.safety',
+      value,
+      server: true
+    })
+    SocketActions.setSafetyPrinting(value)
+  }
+
+
   /*    END NEW    */
 
   get current_time () {

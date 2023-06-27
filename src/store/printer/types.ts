@@ -17,6 +17,11 @@ export interface AutoOff {
   timeAutoOff: number;
   autoOff_enable: boolean;
 }
+
+export interface SafetyPrinting {
+  safety: boolean;
+  open: boolean;
+}
 /*    END NEW    */
 
 export interface ExtruderStepper {

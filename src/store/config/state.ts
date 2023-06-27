@@ -56,7 +56,9 @@ export const defaultState = (): ConfigState => {
         forceMoveToggleWarning: true,
         enableDiagnostics: false,
         thumbnailSize: 32,
-        autoOff_enable: false
+        autoOff_enable: false,
+        lang: 'en',
+        safety: false
       },
       theme: {
         isDark: true,

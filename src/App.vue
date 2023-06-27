@@ -110,7 +110,7 @@ import ServicesMixin from './mixins/services'
 import { LinkPropertyHref } from 'vue-meta'
 import { Waits } from './globals'
 import { Interface } from 'readline/promises'
-import { AutoOff } from './store/printer/types'
+import { SafetyPrinting } from './store/printer/types'
 import i18n from './plugins/i18n'
 import { SocketActions } from './api/socketActions'
 import { VAlert } from 'vuetify/lib'
@@ -136,7 +136,11 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
   customBackgroundImageStyle: Record<string, string> = {}
   autoOffEnable = false
   screw = ''
+  safety = false
+  open = false
   showModal = false
+  last_state = ""
+  now_state = ""
   flashMessageState: FlashMessage = {
     open: false,
     text: undefined,
@@ -289,6 +293,53 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
 
   get heaterWaiting() {
     return this.$store.getters['printer/getHeatersIsWaiting']
+  }
+
+  get openEndstops() {
+    return this.$store.getters['printer/getSafetyPrinting'].open
+  }
+
+  get status_safety_printing() {
+    return this.$store.getters['printer/getSafetyPrinting'].safety
+  }
+
+  get printingPaused() {
+    return this.$store.getters['printer/getPrintingIsPaused']
+  }
+
+  @Watch('printerState')
+  async onNewPrinterState (value: string) {
+    if (value == "interrupt")
+    {
+      this.$confirm(
+        this.$tc('app.general.simple_form.msg.confirm_rebuild_interrupted_gcode'),
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
+        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      ).then(res => {
+          if (res) {
+            this.$emit('click')
+            this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
+            SocketActions.printerPrintRebuild()
+          }
+          else
+          {
+            this.$emit('click')
+            this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
+            SocketActions.deleteInterruptedFile()
+          }
+        })
+    }
+  }
+
+  @Watch('printingPaused')
+  async onPrintingPaused (value: string) {
+    if (!this.status_safety_printing || !this.openEndstops) {
+      this.flashMessageState.open = false
+      return
+    }
+    if (value == 'paused' && this.openEndstops) {
+      EventBus.$emit(this.$tc('app.general.msg.safety_printing_open_doors_or_cap'), { type: FlashMessageTypes.warning})
+    }
   }
 
   @Watch('heaterWaiting')

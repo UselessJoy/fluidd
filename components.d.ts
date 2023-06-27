@@ -30,6 +30,7 @@ declare module 'vue' {
     AppNavItem: typeof import('./src/components/ui/AppNavItem.vue')['default']
     AppNotificationMenu: typeof import('./src/components/layout/AppNotificationMenu.vue')['default']
     AppQrCode: typeof import('./src/components/ui/AppQrCode.vue')['default']
+    AppReferenceNav: typeof import('./src/components/layout/AppReferenceNav.vue')['default']
     AppSaveConfigAndRestartBtn: typeof import('./src/components/layout/AppSaveConfigAndRestartBtn.vue')['default']
     AppSelect: typeof import('./src/components/ui/AppSelect.vue')['default']
     AppSetting: typeof import('./src/components/ui/AppSetting.vue')['default']

@@ -39,9 +39,9 @@
     <!-- <v-spacer /> -->
 
     <div class="toolbar-supplemental">
-      <div v-if="socketConnected">
+      <!-- <div v-if="socketConnected">
         {{ handleRebuildGcode() }}
-      </div>
+      </div> -->
       <!--    END NEW    -->
       <div
         v-if="socketConnected && klippyReady && authenticated && showSaveConfigAndRestart && saveConfigPending"
@@ -419,31 +419,6 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
 
     this.sendGcode('SAVE_CONFIG', this.$waits.onSaveConfig)
   }
-  /*      NEW      */
-  handleRebuildGcode () {
-    if (this.printerState == "interrupt")
-    {
-      this.$confirm(
-        this.$tc('app.general.simple_form.msg.confirm_rebuild_interrupted_gcode'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
-      )
-        .then(res => {
-          if (res) {
-            this.$emit('click')
-            this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
-            SocketActions.printerPrintRebuild()
-          }
-          else
-          {
-            this.$emit('click')
-            this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
-            SocketActions.deleteInterruptedFile()
-          }
-        })
-    }
-  }
-  /*    END NEW    */
 }
 </script>
 
