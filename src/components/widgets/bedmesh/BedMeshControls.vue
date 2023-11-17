@@ -176,6 +176,18 @@
               $home
             </v-icon> {{ $t('app.general.btn.all') }}
           </app-btn>
+          
+          <app-btn
+            block
+            small
+            class="mb-2"
+            :loading="hasWait($waits.onShaperCalibrate)"
+            :disabled="printerPrinting || printerBusy"
+            :color="(!allHomed) ? 'primary' : undefined"
+            @click="sendGcode('SHAPER_CALIBRATE', $waits.onShaperCalibrate)"
+          >
+            {{ $t('app.general.btn.shaper_calibrate') }}
+          </app-btn>
 
           <app-btn
             v-if="!printerPrinting && printerSupportsQgl"

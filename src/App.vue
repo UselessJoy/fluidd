@@ -325,7 +325,7 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
           {
             this.$emit('click')
             this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
-            SocketActions.deleteInterruptedFile()
+            // SocketActions.deleteInterruptedFile()
           }
         })
     }

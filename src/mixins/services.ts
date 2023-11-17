@@ -35,9 +35,9 @@ export default class ServicesMixin extends Vue {
     SocketActions.machineShutdown()
   }
   /*      NEW      */
-  hostChangeWifiMode ()
+  hostChangeWifiMode (wifi_mode: string)
   {
-    SocketActions.changeWifiMode()
+    SocketActions.changeWifiMode(wifi_mode)
   }
   /*    END NEW    */
   /**

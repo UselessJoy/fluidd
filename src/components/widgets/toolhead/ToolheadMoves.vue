@@ -238,11 +238,12 @@ export default class ToolheadMoves extends Mixins(StateMixin, ToolheadMixin) {
    * Send a move gcode script.
    */
   sendMoveGcode (axis: string, distance: string, negative = false) {
-    axis = axis.toLowerCase()
     const rate = (axis.toLowerCase() === 'z')
       ? this.$store.state.config.uiSettings.general.defaultToolheadZSpeed
       : this.$store.state.config.uiSettings.general.defaultToolheadXYSpeed
-    const inverted = this.$store.state.config.uiSettings.general.axis[axis].inverted || false
+    const inverted = (axis.toLowerCase() === 'z')
+      ? !this.$store.state.config.uiSettings.general.axis[axis].inverted
+      : this.$store.state.config.uiSettings.general.axis[axis].inverted || false
     distance = ((negative && !inverted) || (!negative && inverted))
       ? '-' + distance
       : distance

@@ -251,7 +251,12 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
           this.$emit('click')
           this.modal=true
           this.addConsoleEntry(this.$tc('app.console.change_wifi'))
-          this.hostChangeWifiMode()
+          if (this.wifiMode == 'AP'){
+            this.hostChangeWifiMode('Default')
+          }
+          else {
+            this.hostChangeWifiMode('AP')
+          }
         }
       })
   }

@@ -68,6 +68,16 @@
           <v-icon>$chevronDown</v-icon>
         </app-btn>
       </v-col>
+      <v-col cols="6">
+        <app-btn
+          :disabled="!klippyReady"
+          block
+          @click="printerPrintRebuild"
+        >
+          {{ $t('Ребилд печати') }}
+          <v-icon>$chevronDown</v-icon>
+        </app-btn>
+      </v-col>
     </v-row>
   </v-form>
 </template>
@@ -76,7 +86,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import ToolheadMixin from '@/mixins/toolhead'
-
+import { SocketActions } from '@/api/socketActions'
 @Component({})
 export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
   valid = true
@@ -129,6 +139,10 @@ export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
     }
   }
 
+
+  printerPrintRebuild() {
+    SocketActions.printerPrintRebuild()
+  }
   sendExtrudeGcode (amount: number, rate: number, wait?: string) {
     if (this.valid) {
       const gcode = `M83

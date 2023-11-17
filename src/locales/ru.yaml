@@ -253,6 +253,8 @@ app:
       send: Отправить
       set_color: Установить цвет
       set_default_layout: Установить по умолчанию
+      self_diagnosis: Самодиагностика
+      shaper_calibrate: Калибровка шейпера
       shutdown: Отключение
       snooze: Вздремнуть
       socket_reconnect: Повторное подключение
@@ -545,7 +547,7 @@ app:
       klipper_language: Язык Клиппера
       klipper_language_description: Язык, на котором будут показываться ошибки и вывод консоли
       safety_printing: Безопасная печать
-      auto_off_complete: Включить автовыключение после печати
+      auto_off_complete: Автовыключение после печати
       all_off: Всё выключить
       all_on: Всё включить
       aspect_ratio: Соотношение сторон

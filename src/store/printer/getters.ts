@@ -421,7 +421,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
           // Some heater items may have a prefix determining type.
           // Check for these and split as necessary.
           const keys = [
-            'heater_generic'
+            'heater_generic',
           ]
 
           let name = e

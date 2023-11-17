@@ -59,7 +59,16 @@
         <span>{{ $t('app.general.tooltip.reload_restart_klipper') }}</span>
       </v-tooltip>
     </div>
-
+    <div v-if="klippyReady">
+        <app-btn
+        block
+        color="primary"
+        class="me-2 mb-2"
+        @click="selfDiagnosis"
+        >
+          <span>{{ $t('app.general.btn.self_diagnosis') }}</span>
+        </app-btn>
+    </div>  
     <app-btn
       block
       class="me-2 mb-2"
@@ -102,6 +111,9 @@ export default class SystemControl extends Mixins(StateMixin, FilesMixin, Servic
     this.downloadFile('klippy.log', '')
   }
 
+  selfDiagnosis () {
+    this.sendGcode('SELF_DIAGNOSIS')
+  }
   getMoonrakerLog () {
     this.downloadFile('moonraker.log', '')
   }
