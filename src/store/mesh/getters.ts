@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import { MeshState, KlipperMesh, AppMeshes } from './types'
+import { MeshState, KlipperMesh, AppMeshes, MeshProfiles } from './types'
 import { RootState } from '../types'
 import { transformMesh } from '@/util/transform-mesh'
 
@@ -17,28 +17,29 @@ export const getters: GetterTree<MeshState, RootState> = {
    */
   getBedMeshes: (state, getters, rootState, rootGetters): KlipperMesh[] => {
     const meshes: KlipperMesh[] = []
+    const klipperMeshes = rootState.printer.printer.bed_mesh
+    if (!klipperMeshes.profiles || !klipperMeshes.unsaved_profiles || !klipperMeshes)
+      return meshes
+    const profiles:string[] =  Object.keys(klipperMeshes.profiles)
+    const unsaved_profiles:string[] = klipperMeshes.unsaved_profiles
+    // alert(klipperMeshes.unsaved_profiles)
     const currentProfile = rootState.printer.printer.bed_mesh.profile_name || ''
-    const config = rootGetters['printer/getPrinterConfig']()
-    if (rootState.printer.printer.bed_mesh && currentProfile.length > 0) {
-      meshes.push({
-        ...rootState.printer.printer.bed_mesh,
-        active: true
-      })
-    }
-    if (config) {
-      const meshSettings = Object.keys(config).filter(key => key.startsWith('bed_mesh'))
-      for (const key of meshSettings) {
-        if (key === 'bed_mesh') continue // The mesh configuration.
-        const profile_name = key.split(' ').splice(1).join(' ')
-        if (
-          profile_name !== currentProfile
-        ) {
-          const profile: KlipperMesh = {
-            profile_name,
-            active: false
-          }
-          meshes.push(profile)
-        }
+    for (const profile of profiles)
+    {
+      if (currentProfile === profile)
+      {
+          meshes.push({
+            ...rootState.printer.printer.bed_mesh,
+            active: true,
+            unsaved: unsaved_profiles.includes(profile)
+          })
+      }
+      else {
+        meshes.push({
+          profile_name: profile,
+          active: false,
+          unsaved: unsaved_profiles.includes(profile)
+        })
       }
     }
     return meshes.sort((a, b) =>

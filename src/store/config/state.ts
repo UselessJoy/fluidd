@@ -58,7 +58,8 @@ export const defaultState = (): ConfigState => {
         thumbnailSize: 32,
         autoOff_enable: false,
         lang: 'en',
-        safety: false
+        safety_enabled: false,
+        led_enabled: true,
       },
       theme: {
         isDark: true,

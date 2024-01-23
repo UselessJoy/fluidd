@@ -19,6 +19,16 @@
       :type="flashMessageState.type"
       :timeout="flashMessageState.timeout"
     />
+    <auto-close-confirm
+    v-if="autoOff"
+    v-model="autoOff"
+    :title = "$tc('app.general.label.power')"
+    :color = "'card-heading'"
+    :message = "$tc(`app.general.simple_form.msg.power_off`)"
+    :icon="'$error'"
+    :buttonTrueText= "$tc('app.general.btn.off_now')"
+    :buttonFalseText="$tc('app.general.btn.no')"
+    ></auto-close-confirm>
     <template v-if="hasScrewImage && showModal">
       <div class="parent_modal_div">
         <v-card class="modal v-dialog"
@@ -110,10 +120,10 @@ import ServicesMixin from './mixins/services'
 import { LinkPropertyHref } from 'vue-meta'
 import { Waits } from './globals'
 import { Interface } from 'readline/promises'
-import { SafetyPrinting } from './store/printer/types'
 import i18n from './plugins/i18n'
 import { SocketActions } from './api/socketActions'
 import { VAlert } from 'vuetify/lib'
+import AutoCloseConfirm from '@/components/common/AutoCloseConfirm.vue'
 
 @Component<App>({
   metaInfo () {
@@ -134,7 +144,6 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
   navdrawer: boolean | null = null
   showUpdateUI = false
   customBackgroundImageStyle: Record<string, string> = {}
-  autoOffEnable = false
   screw = ''
   safety = false
   open = false
@@ -295,13 +304,13 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
     return this.$store.getters['printer/getHeatersIsWaiting']
   }
 
-  get openEndstops() {
-    return this.$store.getters['printer/getSafetyPrinting'].open
-  }
+  // get openEndstops() {
+  //   return this.$store.getters['printer/getSafetyPrinting'].open
+  // }
 
-  get status_safety_printing() {
-    return this.$store.getters['printer/getSafetyPrinting'].safety
-  }
+  // get status_safety_printing() {
+  //   return this.$store.getters['printer/getSafetyPrinting'].safety
+  // }
 
   get printingPaused() {
     return this.$store.getters['printer/getPrintingIsPaused']
@@ -317,13 +326,11 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       ).then(res => {
           if (res) {
-            this.$emit('click')
             this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
             SocketActions.printerPrintRebuild()
           }
           else
           {
-            this.$emit('click')
             this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
             // SocketActions.deleteInterruptedFile()
           }
@@ -331,16 +338,16 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
     }
   }
 
-  @Watch('printingPaused')
-  async onPrintingPaused (value: string) {
-    if (!this.status_safety_printing || !this.openEndstops) {
-      this.flashMessageState.open = false
-      return
-    }
-    if (value == 'paused' && this.openEndstops) {
-      EventBus.$emit(this.$tc('app.general.msg.safety_printing_open_doors_or_cap'), { type: FlashMessageTypes.warning})
-    }
-  }
+  // @Watch('printingPaused')
+  // async onPrintingPaused (value: string) {
+  //   if (!this.status_safety_printing || !this.openEndstops) {
+  //     this.flashMessageState.open = false
+  //     return
+  //   }
+  //   // if (value == 'paused' && this.openEndstops) {
+  //   //   EventBus.$emit(this.$tc('app.general.msg.safety_printing_open_doors_or_cap'), { type: FlashMessageTypes.warning})
+  //   // }
+  // }
 
   @Watch('heaterWaiting')
   async onHeaterWaiting (value: boolean) {
@@ -350,27 +357,26 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
     EventBus.$emit(this.$tc('app.general.msg.heaters_heating_and_wait'), { type: FlashMessageTypes.warning})
   }
 
-  @Watch('autoOff')
-  async onAutoOff (value: boolean) {
-    if (!value) {
-       return
-     }
-    //  this.autoOffEnable = true
-    this.$confirm(
-      this.$tc(`app.general.simple_form.msg.power_off`),
-      { title: this.$tc('app.general.label.power'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.off_now'),  buttonFalseText: this.$tc('app.general.btn.no') }
-      ).then(res => {
-        if (res) {
-          this.$emit('click')
-          this.hostShutdown()
-        }
-        else {
-          this.$emit('click')
-          SocketActions.offAutoOff()
-        }
-      })
-  }
+  // @Watch('autoOff')
+  // async onAutoOff (value: boolean) {
+  //   if (!value) {
+  //       this.$emit('click')
+  //       return
+  //    }
+  //   //  this.autoOffEnable = true
+  //   this.$confirm(
+  //     this.$tc(`app.general.simple_form.msg.power_off`),
+  //     { title: this.$tc('app.general.label.power'), color: 'card-heading', icon: '$error', 
+  //       buttonTrueText: this.$tc('app.general.btn.off_now'),  buttonFalseText: this.$tc('app.general.btn.no')}
+  //     ).then(res => {
+  //       if (res) {
+  //         this.hostShutdown()
+  //       }
+  //       else {
+  //         SocketActions.offAutoOff()
+  //       }
+  //     })
+  // }
   @Watch('hasScrewImage')
    async onScrewImage (value: boolean) {
      if (!value) {
@@ -410,7 +416,7 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
     EventBus.bus.$on('flashMessage', (payload: FlashMessage) => {
       this.flashMessageState.text = (payload && payload.text) || undefined
       this.flashMessageState.type = (payload && payload.type) || undefined
-      this.flashMessageState.timeout = (payload && payload.timeout !== undefined) ? payload.timeout : undefined
+      this.flashMessageState.timeout = (payload && payload.timeout !== undefined) ? payload.timeout : 10000
       this.flashMessageState.open = true
     })
 

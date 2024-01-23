@@ -32,7 +32,10 @@ export const mutations: MutationTree<PrinterState> = {
   setSafetyPrinting(state, payload) {
     state.printer.safety_printing = payload
   },
-  
+
+  setLedStatus(state, payload) {
+    state.printer.led_control.led_status = payload
+  },
   setAutoEnable (state, payload) {
     state.printer.autooff = payload
   },

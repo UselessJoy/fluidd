@@ -81,6 +81,28 @@
             <v-tooltip bottom>
               <template #activator="{ on, attrs }">
                 <app-btn
+                  v-if="item.unsaved"
+                  :disabled="printerPrinting || printerBusy"
+                  v-bind="attrs"
+                  color=""
+                  class="ml-2"
+                  fab
+                  text
+                  x-small
+                  @click="saveProfile(item.profile_name)"
+                  v-on="on"
+                >
+                  <v-icon color="">
+                    $save
+                  </v-icon>
+                </app-btn>
+              </template>
+              <span>{{ $t('app.bedmesh.tooltip.save') }}</span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <app-btn
                   :disabled="printerPrinting || printerBusy"
                   v-bind="attrs"
                   color=""
@@ -98,6 +120,7 @@
               </template>
               <span>{{ $t('app.bedmesh.tooltip.delete') }}</span>
             </v-tooltip>
+
           </td>
         </tr>
       </tbody>
@@ -134,29 +157,12 @@
                 :loading="hasWait($waits.onMeshCalibrate)"
                 :disabled="printerPrinting || printerBusy"
                 v-on="on"
-                @click="calibrate()"
+                @click="handleOpenCalibrateDialog()"
               >
                 {{ $t('app.general.btn.calibrate') }}
               </app-btn>
             </template>
             <span>{{ $t(`app.bedmesh.tooltip.calibrate`) }}</span>
-          </v-tooltip>
-
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <app-btn
-                v-bind="attrs"
-                block
-                small
-                color="primary"
-                :disabled="!meshLoaded || printerPrinting || printerBusy"
-                v-on="on"
-                @click="handleOpenSaveDialog()"
-              >
-                {{ $t('app.general.btn.save_as') }}
-              </app-btn>
-            </template>
-            <span>{{ $t('app.bedmesh.tooltip.save') }}</span>
           </v-tooltip>
         </v-col>
         <v-col cols="6">
@@ -281,8 +287,8 @@
     <save-mesh-dialog
       v-if="saveDialogState.open"
       v-model="saveDialogState.open"
-      :existing-name="saveDialogState.existingName"
-      @save="handleMeshSave"
+      :profile="saveDialogState.profile"
+      @calibrate="handleMeshCalibrate"
     />
 
     <manual-probe-dialog
@@ -312,7 +318,7 @@ export default class BedMesh extends Mixins(StateMixin, ToolheadMixin) {
 
   saveDialogState = {
     open: false,
-    existingName: 'default'
+    profile: ""
   }
 
   get matrix () {
@@ -370,6 +376,10 @@ export default class BedMesh extends Mixins(StateMixin, ToolheadMixin) {
     return this.$store.state.printer.printer.bed_mesh
   }
 
+  get meshProfiles (): string[] {
+    return Object.keys(this.$store.state.printer.printer.bed_mesh.profiles)
+  }
+
   // If we have a mesh loaded.
   get meshLoaded (): boolean {
     return ('profile_name' in this.currentMesh && this.currentMesh.profile_name.length > 0)
@@ -386,12 +396,12 @@ export default class BedMesh extends Mixins(StateMixin, ToolheadMixin) {
     return 'quad_gantry_level' in printerSettings
   }
 
-  calibrate () {
-    this.sendGcode('BED_MESH_CALIBRATE', this.$waits.onMeshCalibrate)
-  }
-
   clearMesh () {
     this.sendGcode('BED_MESH_CLEAR')
+  }
+
+  saveProfile (name: string) {
+    this.sendGcode(`BED_MESH_PROFILE SAVE="${name}"`)
   }
 
   loadProfile (name: string) {
@@ -400,23 +410,32 @@ export default class BedMesh extends Mixins(StateMixin, ToolheadMixin) {
 
   removeProfile (name: string) {
     this.sendGcode(`BED_MESH_PROFILE REMOVE="${name}"`)
-    this.sendGcode('SAVE_CONFIG', this.$waits.onSaveConfig)
   }
 
-  handleMeshSave (config: {name: string; removeDefault: boolean}) {
-    if (config.name !== this.currentMesh.profile_name) {
-      this.sendGcode(`BED_MESH_PROFILE SAVE="${config.name}"`)
+  handleMeshCalibrate (config: {name: string; savePermanently: boolean}) {
+    if (!config.savePermanently) {
+      this.sendGcode(`BED_MESH_CALIBRATE PROFILE="${config.name}"`)
     }
-    if (config.removeDefault) {
-      this.sendGcode(`BED_MESH_PROFILE REMOVE="${this.currentMesh.profile_name}"`)
+    else {
+      this.sendGcode(`BED_MESH_CALIBRATE PROFILE="${config.name}" SAVE_PERMANENTLY=TRUE`)
     }
-    this.sendGcode('SAVE_CONFIG', this.$waits.onSaveConfig)
   }
 
-  handleOpenSaveDialog () {
+  handleOpenCalibrateDialog () {
+    let reserved: string[] = [];
+    let i = 0;
+    let name = "";
+    for (const prof of this.meshProfiles)
+      if (prof.startsWith("profile_"))
+        i = reserved.push(prof);
+    while (name === "")
+    {
+      name = reserved.findIndex(prof => prof === `profile_${i}`) === -1 ? `profile_${i}` : "";
+      i++;
+    }
     this.saveDialogState = {
       open: true,
-      existingName: this.currentMesh.profile_name
+      profile: name
     }
   }
 

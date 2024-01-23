@@ -11,8 +11,7 @@ export interface KlipperMesh {
   [index: string]: string | boolean | number[] | number[][] | undefined;
   profile_name: string;
   active: boolean;
-  markedForRemoval?: boolean;
-  markedForSave?: boolean;
+  unsaved: boolean;
   mesh_max?: number[];
   mesh_min?: number[];
   mesh_matrix?: number[][];
@@ -21,6 +20,11 @@ export interface KlipperMesh {
 
 export interface AppMeshes {
   [index: string]: ProcessedMesh;
+}
+
+export interface MeshProfiles {
+  profiles: string[];
+  unsaved_profiles: string[];
 }
 
 export interface ProcessedMesh {

@@ -415,8 +415,8 @@ export const Waits = Object.freeze({
   onGetAutoOff: 'onGetAutoOff',
   onGetTimeAutoOff: 'onGetAutoOff',
   onGetAutoOffEnable: 'onGetAutoOffEnable',
-  onSetAutoOffEnable: 'onGetAutoOffEnable',
-  onShaperCalibrate: 'onShaperCalibrate'
+  onShaperCalibrate: 'onShaperCalibrate',
+  onGetLedStatus: 'onGetLedStatus',
   /*    END NEW    */
 })
 

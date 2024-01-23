@@ -42,6 +42,7 @@ declare module 'vue' {
     AppUploadAndPrintBtn: typeof import('./src/components/layout/AppUploadAndPrintBtn.vue')['default']
     AppUserMenu: typeof import('./src/components/layout/AppUserMenu.vue')['default']
     AppWarnings: typeof import('./src/components/common/AppWarnings.vue')['default']
+    AutoCloseConfirm: typeof import('./src/components/common/AutoCloseConfirm.vue')['default']
     BedScrewsAdjustDialog: typeof import('./src/components/common/BedScrewsAdjustDialog.vue')['default']
     CollapsableCard: typeof import('./src/components/common/CollapsableCard.vue')['default']
     FlashMessage: typeof import('./src/components/common/FlashMessage.vue')['default']

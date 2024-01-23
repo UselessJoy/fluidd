@@ -242,8 +242,12 @@ export default class ToolheadMoves extends Mixins(StateMixin, ToolheadMixin) {
       ? this.$store.state.config.uiSettings.general.defaultToolheadZSpeed
       : this.$store.state.config.uiSettings.general.defaultToolheadXYSpeed
     const inverted = (axis.toLowerCase() === 'z')
-      ? !this.$store.state.config.uiSettings.general.axis[axis].inverted
-      : this.$store.state.config.uiSettings.general.axis[axis].inverted || false
+      ? !this.$store.state.config.uiSettings.general.axis.z.inverted
+      : 
+      (axis.toLowerCase() === 'x') 
+      ? this.$store.state.config.uiSettings.general.axis.x.inverted 
+      : this.$store.state.config.uiSettings.general.axis.y.inverted
+      
     distance = ((negative && !inverted) || (!negative && inverted))
       ? '-' + distance
       : distance

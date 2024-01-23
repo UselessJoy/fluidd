@@ -62,6 +62,7 @@ app:
       remove_profile: Удалить %{name} профиль
       scale: Масштаб по мин. / макс.
       wireframe: Каркасная сетка
+      save_permanently: Сохранить по завершению
     msg:
       hint: >-
         Если сохранить не как %{name}, вы так же можете выбрать - удалить
@@ -204,6 +205,7 @@ app:
       adjusted: Настроено
       all: Все
       auth_unsure: Не знаете, почему вы это видите?
+      begin_calibrate: Начать калибровку
       calibrate: Калибровка
       cancel: Отменить
       clear_profile: Очистить профиль
@@ -254,7 +256,7 @@ app:
       set_color: Установить цвет
       set_default_layout: Установить по умолчанию
       self_diagnosis: Самодиагностика
-      shaper_calibrate: Калибровка шейпера
+      shaper_calibrate: Компенсация резонанса
       shutdown: Отключение
       snooze: Вздремнуть
       socket_reconnect: Повторное подключение
@@ -329,7 +331,7 @@ app:
       'off': 'Выкл.'
       numeric_prefix_sort: Сортировка по номеру
       password: Пароль
-      partial_of_total: '%{partial} of %{total}'
+      partial_of_total: '%{partial} из %{total}'
       power: Питание
       pressure_advance: Pressure Advance
       printers: Принтеры
@@ -573,6 +575,8 @@ app:
       confirm_dirty_editor_close: Требовать подтверждения при закрытии редактора с несохраненными изменениями
       contains: Содержит
       dark_mode: Тёмная тема
+      lighting_on: Включить подсветку
+      lighting_color: Цвет подсветки по умолчанию
       dashed: Пунктирная
       default_extrude_length: Длина экструдирования по умолчанию
       default_extrude_speed: Скорость экструдера по умолчанию
@@ -655,7 +659,7 @@ app:
       gcode_preview: Предпросмотр GCode
       general: Общие
       macros: Макросы
-      theme: Тема
+      theme: Управление цветом
       thermal_presets: Температурные профили
       tool: Инструменты
     tooltip:

@@ -35,6 +35,10 @@ export const actions: ActionTree<PrinterState, RootState> = {
     commit('setAutoOff', payload)
   },
 
+  async onGetLedStatus({ commit}, payload) {
+    commit('setLedStatus', payload)
+  },
+
   async onGetAutoEnable ({ commit }, payload) {
     commit('setAutoOffEnable', payload)
   },

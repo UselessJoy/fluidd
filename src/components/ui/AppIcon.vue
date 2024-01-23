@@ -47,10 +47,14 @@ export default class AppIcon extends Vue {
         if (
           e.tagName === 'path' ||
           e.tagName === 'polygon' ||
-          e.tagName === 'g'
+          e.tagName === 'g' ||
+          e.tagName === 'line'
         ) {
           const path = e as SVGPathElement
-          path.style.fill = query.color
+          if (this.theme.logo.src === '/logo_gelios.svg')
+            path.style.stroke = query.color
+          else
+            path.style.fill = query.color
         }
       })
     })

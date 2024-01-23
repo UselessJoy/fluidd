@@ -1,7 +1,8 @@
 <template>
   <app-dialog
     v-model="open"
-    :title="$t('app.general.label.save_as')"
+    :saveButtonText="$t('app.general.btn.begin_calibrate')"
+    :title="$t('app.general.btn.calibrate')"
     :max-width="450"
     @save="handleSubmit()"
   >
@@ -20,16 +21,11 @@
       />
 
       <v-checkbox
-        v-model="removeDefault"
-        :label="$t('app.bedmesh.label.remove_profile', { name: existingName })"
+        v-model="savePermanently"
+        :label="$t('app.bedmesh.label.save_permanently')"
         hide-details="auto"
         class="mb-4"
-        :disabled="name === existingName"
       />
-
-      <span>
-        {{ $t('app.bedmesh.msg.hint', { name: existingName }) }}
-      </span>
     </v-card-text>
   </app-dialog>
 </template>
@@ -45,18 +41,18 @@ export default class SaveMeshDialog extends Mixins(StateMixin, ToolheadMixin) {
     open!: boolean
 
   @Prop({ type: String })
-  readonly existingName!: string
+  readonly profile!: string
 
   mounted () {
-    this.name = 'default'
-    this.removeDefault = false
+    this.name = this.profile
+    this.savePermanently = false
   }
 
   name = 'default'
-  removeDefault = false
+  savePermanently = false
 
   handleSubmit () {
-    this.$emit('save', { name: this.name, removeDefault: this.removeDefault })
+    this.$emit('calibrate', { name: this.name, savePermanently: this.savePermanently })
     this.open = false
   }
 }

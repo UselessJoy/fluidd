@@ -9,10 +9,10 @@
   "themePresets": [
     {
       "name": "Fluidd",
-      "color": "#2196F3",
+      "color": "#F3D700",
       "isDark": true,
       "logo": {
-        "src": "/logo_fluidd.svg",
+        "src": "/logo_gelios.svg",
         "dynamic": true
       }
     },

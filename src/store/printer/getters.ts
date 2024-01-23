@@ -7,6 +7,7 @@ import getKlipperType from '@/util/get-klipper-type'
 import { Http2ServerResponse } from 'http2'
 import i18n from '@/plugins/i18n'
 import { RootFile } from '../files/types'
+import { stat } from 'fs'
 export const getters: GetterTree<PrinterState, RootState> = {
 
   /**
@@ -123,6 +124,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
   /*      NEW      */
   getWifiMode: (state) => {
     return state.printer.wifi_mode.wifiMode
+  },
+
+  getLedStatus: (state) => {
+    return state.printer.led_control.led_status
   },
 
   getAutoOff: (state) => {

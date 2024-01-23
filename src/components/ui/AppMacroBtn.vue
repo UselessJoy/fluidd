@@ -57,7 +57,7 @@
                 v-for="(param, i) in paramList"
                 :key="param"
                 v-model="params[param].value"
-                :label="param"
+                :label="params_locale[param] || param"
                 outlined
                 dense
                 hide-details="auto"
@@ -109,7 +109,11 @@ export default class AppMacroBtn extends Mixins(StateMixin) {
   @Prop({ type: Boolean, default: false })
   readonly enableParams!: boolean
 
+  @Prop({})
+  readonly opt!: string[]
+
   params: { [index: string]: { value: string | number; reset: string | number }} = {}
+  params_locale: Record<string, string> = {}
 
   get paramList () {
     return Object.keys(this.params)
@@ -140,8 +144,12 @@ export default class AppMacroBtn extends Mixins(StateMixin) {
   }
 
   mounted () {
-    if (!this.macro.config || !this.macro.config.gcode) return []
-
+    if (!this.macro.config || !this.macro.config.gcode || !this.opt) return []
+    for (const option of this.opt)
+    {
+      const partision_option = option.split('_')
+      this.params_locale[partision_option[0]] = partision_option[1]
+    }
     if (['m117', 'm118'].includes(this.macro.name)) {
       this.$set(this.params, 'message', { value: '', reset: '' })
     } else {

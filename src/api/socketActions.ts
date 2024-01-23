@@ -295,12 +295,10 @@ export const SocketActions = {
         dispatch: 'void',
         params: {
           autoOff_enable: value
-        },
-        wait: Waits.onSetAutoOffEnable
+        }
       }
     )
   },
-
   async offAutoOff () {
     baseEmit(
       'printer.offautooff', {
@@ -325,7 +323,7 @@ export const SocketActions = {
       'printer.setSafetyPrinting', {
         dispatch: 'void',
         params: {
-          safety: value
+          safety_enabled: value
         }
       }
     )

@@ -54,24 +54,74 @@
           @click.native.stop
         />
       </app-setting>
+
+      <v-divider />
+
+      <app-setting :title="$t('app.setting.label.lighting_on')">
+        <v-switch
+          v-model="ledEnabled"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+      
+      <v-divider />
+
+      <app-setting v-if="now_led == ledEnabled && now_led == true" :title="$t('app.setting.label.lighting_color')">
+        <OutputItem v-for="(item, i) in allLeds"
+            :key="item.key"
+            :item="item"
+          />
+      </app-setting>
+
     </v-card>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins, Prop } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import { IroColor } from '@irojs/iro-core'
 import { SupportedTheme, ThemeConfig } from '@/store/config/types'
 import ThemePicker from '../ui/AppColorPicker.vue'
+import { Led } from '@/store/printer/types'
+import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
 
 @Component({
   components: {
-    ThemePicker
+    ThemePicker,
+    OutputItem
   }
 })
 export default class ThemeSettings extends Mixins(StateMixin) {
   preset: SupportedTheme | null = null
+  now_led = false
+  get allLeds () {
+    const items: Array<Led> = [
+      ...this.$store.getters['printer/getAllLeds']
+    ]
+    return items
+  }
+  
+  get ledEnabled (): boolean {
+    // console.log(this.$store.getters['printer/getLedStatus'].led_status)
+    return this.now_led = this.$store.getters['printer/getLedStatus'] != 'disabled' ? true : false
+  }
+
+  set ledEnabled (value: boolean) {
+    this.now_led = value
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.led_enabled',
+      value,
+      server: true
+    })
+    value ? 
+    this.sendGcode(`ENABLE_LED_EFFECTS`)
+    :
+    this.sendGcode(`DISABLE_LED_EFFECTS`)
+  }
+
 
   get themePreset () {
     return this.$store.getters['config/getCurrentThemePreset']
@@ -101,7 +151,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
   get themeColor () {
     return this.theme.currentTheme.primary
   }
-
+  
   handleChangeThemeColor (value: { channel: string; color: IroColor }) {
     this.setTheme(value.color.hexString, this.isDark)
     this.$store.dispatch('config/saveByPath', {

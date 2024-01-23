@@ -51,6 +51,7 @@
               <app-macro-btn
                 v-bind="attrs"
                 :macro="macro"
+                :opt="macro.config.param_locale"
                 :loading="hasWait(`${$waits.onMacro}${macro.name}`)"
                 enable-params
                 class="me-2 mb-2 float-left"

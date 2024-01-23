@@ -19,8 +19,13 @@ export interface AutoOff {
 }
 
 export interface SafetyPrinting {
-  safety: boolean;
-  open: boolean;
+  safety_enabled: boolean;
+  is_hood_open: boolean;
+  is_doors_open: boolean;
+}
+
+export interface LedControl {
+  led_status: string
 }
 /*    END NEW    */
 

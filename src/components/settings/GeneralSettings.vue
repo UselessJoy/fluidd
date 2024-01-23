@@ -182,10 +182,10 @@
         :title="$t('app.setting.label.auto_off_complete')"
       >
         <v-switch
-          :loading="hasWait($waits.onSetAutoOffEnable)"
           v-model="enableAutoOff"
           hide-details
           class="mt-0 mb-4"
+          @click.native.stop
         />
       </app-setting>
       
@@ -198,6 +198,7 @@
           v-model="safetyPrinting"
           hide-details
           class="mt-0 mb-4"
+          @click.native.stop
         />
       </app-setting>
       
@@ -460,7 +461,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
     // SocketActions.printerGcodeScript(`SET_AUTO_OFF ENABLE=${value}`, this.$waits.onGetAutoOffEnable)
-    SocketActions.setAutoOff(value, this.$waits.onSetAutoOffEnable)
+    SocketActions.setAutoOff(value)
   }
 
   get klipperLangs () {
@@ -484,12 +485,12 @@ export default class GeneralSettings extends Mixins(StateMixin) {
   }
 
   get safetyPrinting (): boolean {
-     return this.$store.getters['printer/getSafetyPrinting'].safety
+     return this.$store.getters['printer/getSafetyPrinting'].safety_enabled
   }
 
   set safetyPrinting (value: boolean) {
     this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.general.safety',
+      path: 'uiSettings.general.safety_enabled',
       value,
       server: true
     })

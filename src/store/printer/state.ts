@@ -68,6 +68,9 @@ export const defaultState = (): PrinterState => {
       wifi_mode: {
         wifiMode: ''
       },
+      led_control: {
+        led_status: ''
+      },
       screw_image: {
         imageCreated: false
       },
@@ -86,8 +89,9 @@ export const defaultState = (): PrinterState => {
         currentLang: "en"
       },
       safety_printing: {
-        safety: false,
-        open: false
+        safety_enabled: false,
+        is_doors_open: false,
+        is_hood_open: false
       },
       virtual_sdcard: {
         file_position: 0,

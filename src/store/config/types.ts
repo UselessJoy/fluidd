@@ -78,7 +78,8 @@ export interface GeneralConfig {
   thumbnailSize: number;
   autoOff_enable: boolean;
   lang: string;
-  safety: boolean;
+  safety_enabled: boolean;
+  led_enabled: boolean;
 }
 
 export type TextSortOrder = 'default' | 'numeric-prefix' | 'version'
