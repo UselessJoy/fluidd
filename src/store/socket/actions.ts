@@ -95,11 +95,11 @@ export const actions: ActionTree<SocketState, RootState> = {
       // This is pretty bad, should get moonraker to fix this response.
       let message = ''
       try {
-        message = JSON.parse(payload.message.replace(/'/g, '"')).message
+        message = payload.message.replace(/'|\'/g, '\"')
+        message = JSON.parse(message).message.replace("Дом", "\"Дом\"")
       } catch (e) {
         message = payload.message
       }
-
       EventBus.$emit(message, { type: FlashMessageTypes.error })
     }
     if (payload.code === 503) {

@@ -119,7 +119,7 @@ const createHttpClient = (store: any) => {
         break
       case 404:
         consola.debug(error.response.status, error.message, message)
-        // EventBus.$emit(message || 'Server error', { type: FlashMessageTypes.warning })
+        EventBus.$emit(message || 'Server error', { type: FlashMessageTypes.warning })
         break
       default:
         consola.debug(error.response.status, error.message)
