@@ -68,16 +68,20 @@
           <v-icon>$chevronDown</v-icon>
         </app-btn>
       </v-col>
-      <v-col cols="6">
-        <app-btn
-          :disabled="!klippyReady"
-          block
-          @click="printerPrintRebuild"
-        >
-          {{ $t('Ребилд печати') }}
-          <v-icon>$chevronDown</v-icon>
+    </v-row>
+    <v-row
+      class="mb-2"
+      style="align-items: center;"
+    >
+    <v-col cols="6">
+      <app-btn v-if="hasInterruptFile"
+            :disabled="!klippyReady"
+            block
+            @click="printerPrintRebuild"
+          >
+            {{ $t('app.general.btn.rebuild_printing') }}
         </app-btn>
-      </v-col>
+    </v-col>
     </v-row>
   </v-form>
 </template>
@@ -90,7 +94,7 @@ import { SocketActions } from '@/api/socketActions'
 @Component({})
 export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
   valid = true
-
+  hasInterruptFile = false
   get maxExtrudeSpeed () {
     return this.activeExtruder?.max_extrude_only_velocity || 500
   }

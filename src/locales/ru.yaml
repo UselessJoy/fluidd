@@ -232,6 +232,7 @@ app:
       print: Напечатать
       quad_gantry_level: QGL
       reboot: Перезагрузка
+      rebuild_printing: Восстановление печати
       recover: Восстановить
       refresh: Обновить
       remove: Удалить
