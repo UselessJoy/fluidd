@@ -69,7 +69,8 @@ export const defaultState = (): PrinterState => {
         wifiMode: ''
       },
       led_control: {
-        led_status: ''
+        led_status: '',
+        enabled: true
       },
       screw_image: {
         imageCreated: false

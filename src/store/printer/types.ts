@@ -26,6 +26,7 @@ export interface SafetyPrinting {
 
 export interface LedControl {
   led_status: string
+  enabled: boolean
 }
 /*    END NEW    */
 

@@ -105,8 +105,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
   }
   
   get ledEnabled (): boolean {
-    // console.log(this.$store.getters['printer/getLedStatus'].led_status)
-    return this.now_led = this.$store.getters['printer/getLedStatus'] != 'disabled' ? true : false
+    return this.now_led = this.$store.getters['printer/getLedControl'].enabled
   }
 
   set ledEnabled (value: boolean) {
@@ -116,6 +115,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
       value,
       server: true
     })
+    this.now_led = value
     value ? 
     this.sendGcode(`ENABLE_LED_EFFECTS`)
     :

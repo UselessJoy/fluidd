@@ -126,8 +126,8 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.wifi_mode.wifiMode
   },
 
-  getLedStatus: (state) => {
-    return state.printer.led_control.led_status
+  getLedControl: (state) => {
+    return state.printer.led_control
   },
 
   getAutoOff: (state) => {
