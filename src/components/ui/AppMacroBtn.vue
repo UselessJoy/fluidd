@@ -147,7 +147,8 @@ export default class AppMacroBtn extends Mixins(StateMixin) {
     if (!this.macro.config || !this.macro.config.gcode || !this.opt) return []
     for (const option of this.opt)
     {
-      const partision_option = option.split('_')
+      const partision_option = option.split('.')
+      partision_option[1] = partision_option[1].replace('_', ' ')
       this.params_locale[partision_option[0]] = partision_option[1]
     }
     if (['m117', 'm118'].includes(this.macro.name)) {
