@@ -28,6 +28,12 @@ export interface LedControl {
   led_status: string
   enabled: boolean
 }
+
+export interface KlipperMessage {
+  last_message_eventtime: number,
+  message: string,
+  message_type: string
+}
 /*    END NEW    */
 
 export interface ExtruderStepper {

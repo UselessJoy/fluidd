@@ -8,7 +8,7 @@ import { Globals } from '@/globals'
 import consola from 'consola'
 import { DiagnosticsCardContainer } from '@/store/diagnostics/types'
 import sandboxedEval from '@/plugins/sandboxedEval'
-
+import { EventBus, FlashMessageTypes } from '@/eventBus'
 // let retryTimeout: number
 
 export const actions: ActionTree<PrinterState, RootState> = {
@@ -54,6 +54,11 @@ export const actions: ActionTree<PrinterState, RootState> = {
   async onGetHeatersIsWaiting ({ commit }, payload) {
     commit('setHeatersIsWaiting', payload)
   },
+
+  // async onOpenMessage({ commit }, payload) {
+  //   alert(payload)
+  //   EventBus.$emit(payload.message, { type: payload.message_type, timeout: 5000})
+  // },
   /*    END NEW    */
   /**
    * Query endstops

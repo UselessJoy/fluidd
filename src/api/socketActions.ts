@@ -338,7 +338,7 @@ export const SocketActions = {
   },
   async changeWifiMode (wifi_mode: string) {
     baseEmit(
-      'machine.changewifimode', {
+      'printer.setwifimode', {
         dispatch: 'void',
         params: {
           wifi_mode: wifi_mode
@@ -382,6 +382,18 @@ export const SocketActions = {
       'printer.print.resume', {
         dispatch: 'printer/onPrintResume',
         wait: Waits.onPrintResume
+      }
+    )
+  },
+
+  async printerOpenMessage(message_type: string, message: string) {
+    baseEmit(
+      'printer.open_message', {
+        dispatch: 'void',
+        params: {
+          message_type: message_type,
+          message: message
+        }
       }
     )
   },

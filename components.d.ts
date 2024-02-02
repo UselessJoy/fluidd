@@ -24,7 +24,6 @@ declare module 'vue' {
     AppInlineHelp: typeof import('./src/components/ui/AppInlineHelp.vue')['default']
     AppIroColorPicker: typeof import('./src/components/ui/AppIroColorPicker.vue')['default']
     AppMacroBtn: typeof import('./src/components/ui/AppMacroBtn.vue')['default']
-    AppModalWindow: typeof import('./src/components/layout/AppModalWindow.vue')['default']
     AppNamedInput: typeof import('./src/components/ui/AppNamedInput.vue')['default']
     AppNavDrawer: typeof import('./src/components/layout/AppNavDrawer.vue')['default']
     AppNavItem: typeof import('./src/components/ui/AppNavItem.vue')['default']

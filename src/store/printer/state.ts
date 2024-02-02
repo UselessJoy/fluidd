@@ -72,6 +72,11 @@ export const defaultState = (): PrinterState => {
         led_status: '',
         enabled: true
       },
+      messages: {
+        last_message_eventtime: .0,
+        message: "",
+        message_type: ""
+      },
       screw_image: {
         imageCreated: false
       },

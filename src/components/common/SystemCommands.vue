@@ -47,7 +47,6 @@
               </v-icon>
         </v-list-item-icon>
       </v-list-item>
-      <app-modal-window v-if="modal"></app-modal-window>
     </v-list-group>
 
     <v-list-group
@@ -146,14 +145,9 @@ import StateMixin from '@/mixins/state'
 import ServicesMixin from '@/mixins/services'
 import { SocketActions } from '@/api/socketActions'
 import { ServiceInfo } from '@/store/server/types'
-import AppModalWindow from '../layout/AppModalWindow.vue'
 import i18n from '@/plugins/i18n'
 
-@Component({
-  components: {
-    AppModalWindow
-  }
-})
+@Component({})
 export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
   get serverInfo () {
     return this.$store.getters['server/getInfo']
@@ -239,7 +233,6 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
     return this.$store.getters['printer/getWifiMode']
   }
   /**End new */
-  modal = false
   handleHostChangeWifiMode () {
     this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_change_wifi_mode'),
@@ -249,7 +242,6 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
       .then(res => {
         if (res) {
           this.$emit('click')
-          this.modal=true
           this.addConsoleEntry(this.$tc('app.console.change_wifi'))
           if (this.wifiMode == 'AP'){
             this.hostChangeWifiMode('Default')

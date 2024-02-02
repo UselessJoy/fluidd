@@ -124,7 +124,7 @@ import i18n from './plugins/i18n'
 import { SocketActions } from './api/socketActions'
 import { VAlert } from 'vuetify/lib'
 import AutoCloseConfirm from '@/components/common/AutoCloseConfirm.vue'
-
+import { KlipperMessage } from '@/store/printer/types'
 @Component<App>({
   metaInfo () {
     const pageTitle = this.pageTitle
@@ -300,10 +300,6 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
     return this.$store.getters['config/getScrewImage']('screw_image', ['.png', '.jpg', '.jpeg'])
   }
 
-  get heaterWaiting() {
-    return this.$store.getters['printer/getHeatersIsWaiting']
-  }
-
   // get openEndstops() {
   //   return this.$store.getters['printer/getSafetyPrinting'].open
   // }
@@ -349,14 +345,19 @@ export default class App extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
   //   // }
   // }
 
-  @Watch('heaterWaiting')
-  async onHeaterWaiting (value: boolean) {
-    if (!value) {
+  get lastEventtimeKlipperMessage(): number {
+    return this.$store.getters['printer/getLastEventtimeKlipperMessage']
+  }
+  get klipperMessage(): KlipperMessage {
+    return this.$store.getters['printer/getKlipperMessage']
+  }
+  @Watch('klipperMessage', {deep: true})
+  async onOpenMessage (value: KlipperMessage) {
+    if (value.last_message_eventtime == .0) {
       return
     }
-    EventBus.$emit(this.$tc('app.general.msg.heaters_heating_and_wait'), { type: FlashMessageTypes.warning})
+    EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: 10000})
   }
-
   // @Watch('autoOff')
   // async onAutoOff (value: boolean) {
   //   if (!value) {

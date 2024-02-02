@@ -165,6 +165,15 @@ export const getters: GetterTree<PrinterState, RootState> = {
   getHeatersIsWaiting: (state) => {
     return state.printer.heaters.is_waiting
   },
+
+  getLastEventtimeKlipperMessage: (state) => {
+    return state.printer.messages.last_message_eventtime
+  },
+
+  getKlipperMessage: (state) => {
+    return state.printer.messages
+  },
+
   /*    END NEW    */
   getPrintLayers: (state) => {
     const layersFromPrintStats = state.printer.print_stats?.info?.total_layer
