@@ -18,7 +18,7 @@
 
       <div class="chart-label">
         <span>{{ $t('app.system_info.label.mcu_awake', { mcu: mcu.toUpperCase() }) }}</span>
-        <span v-if="chartData.length">{{ chartData[chartData.length - 1].awake, $t('app.time.s') }}</span>
+        <span v-if="chartData.length">{{ chartData[chartData.length - 1].awake}}%</span>
       </div>
 
       <!-- <div v-if="chartData && chartData.length" class="chart-label">
@@ -47,7 +47,7 @@ export default class McuLoadChart extends Vue {
     const o = {
       ...this.$store.getters['charts/getBaseChartOptions']({
         load: '%',
-        awake: 's',
+        awake: '%',
         bw: 'b'
       }),
       series: this.series
@@ -71,12 +71,12 @@ export default class McuLoadChart extends Vue {
 
   get series () {
     const load = this.$store.getters['charts/getBaseSeries']({
-      name: 'load',
+      name: this.$t('app.system_info.label.load'),
       encode: { x: 'date', y: 'load' }
     })
 
     const awake = this.$store.getters['charts/getBaseSeries']({
-      name: 'awake time',
+      name: this.$t('app.system_info.label.awake_time'),
       encode: { x: 'date', y: 'awake' }
     })
 

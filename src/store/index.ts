@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import consola from 'consola'
-import { RootState } from './types'
-import { InitConfig } from './config/types'
+import { consola } from 'consola'
+import type { RootState } from './types'
+import type { InitConfig } from './config/types'
 
 // Modules
 import { socket } from './socket'
@@ -28,6 +28,8 @@ import { timelapse } from './timelapse'
 import { parts } from './parts'
 import { webcams } from './webcams'
 import { jobQueue } from './jobQueue'
+import { spoolman } from './spoolman'
+import { sensors } from './sensors'
 
 Vue.use(Vuex)
 
@@ -56,7 +58,9 @@ export default new Vuex.Store<RootState>({
     timelapse,
     parts,
     webcams,
-    jobQueue
+    jobQueue,
+    spoolman,
+    sensors
   },
   mutations: {},
   actions: {
@@ -68,7 +72,7 @@ export default new Vuex.Store<RootState>({
       Vue.$colorset.forceResetAll()
 
       // Dispatch a reset for each registered module.
-      const p: Promise<any>[] = []
+      const p: Promise<unknown>[] = []
       const keys = payload || Object.keys(this.state)
       keys.forEach((key) => {
         if (this.hasModule(key)) {

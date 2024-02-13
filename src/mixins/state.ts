@@ -1,67 +1,60 @@
 import Vue from 'vue'
 import { SocketActions } from '@/api/socketActions'
 import { Component } from 'vue-property-decorator'
-import { EventBus, FlashMessageTypes } from '@/eventBus'
+import type { ServerInfo } from '@/store/server/types'
 
 @Component
 export default class StateMixin extends Vue {
-  get authenticated () {
-    const auth = this.$store.getters['auth/getAuthenticated']
-    return auth
+
+
+  get authenticated (): boolean {
+    return this.$store.getters['auth/getAuthenticated'] as boolean
   }
 
-  get socketConnected () {
-    return this.$store.getters['socket/getConnectionState']
+  get socketConnected (): boolean {
+    return this.$store.getters['socket/getConnectionState'] as boolean
   }
 
-  get apiConnected () {
-    return this.$store.getters['socket/getApiConnected']
+  get apiConnected (): boolean {
+    return this.$store.getters['socket/getApiConnected'] as boolean
   }
 
-  get socketConnecting () {
-    return this.$store.getters['socket/getConnectingState']
+  get socketConnecting (): boolean {
+    return this.$store.getters['socket/getConnectingState'] as boolean
   }
 
-  get klippyReady () {
-    return this.$store.getters['printer/getklippyReady']
+  get klippyReady (): boolean {
+    return this.$store.getters['printer/getklippyReady'] as boolean
   }
 
-  get klippyConnected () {
-    const server = this.$store.getters['server/getInfo']
+  get klippyConnected (): boolean {
+    const server = this.$store.getters['server/getInfo'] as ServerInfo
     return server.klippy_connected
   }
 
-  get hasWarnings () {
-    return this.$store.getters['printer/getHasWarnings']
+  get hasWarnings (): boolean {
+    return this.$store.getters['printer/getHasWarnings'] as boolean
   }
 
-  get klippyState () {
-    return this.$store.getters['printer/getKlippyState']
+  get klippyState (): string {
+    return this.$store.getters['printer/getKlippyState'] as string
   }
   
-  get klippyStateMessage () {
-    return this.$store.getters['printer/getKlippyStateMessage']
+  get klippyStateMessage (): string {
+    return this.$store.getters['printer/getKlippyStateMessage'] as string
   }
 
   // Return the printer state
-  get printerState () {
-    return this.$store.getters['printer/getPrinterState']
+  get printerState (): string {
+    return this.$store.getters['printer/getPrinterState'] as string
   }
   // Returns a boolean indicating if the printer is busy.
-  get printerBusy () {
-    const printerState = this.printerState.toLowerCase()
-    if (
-      printerState === 'printing' ||
-      printerState === 'paused' ||
-      printerState === 'busy'
-    ) {
-      return true
-    }
-    return false
+  get printerBusy (): boolean {
+    return (this.printerState.toLowerCase() === 'paused') as boolean
   }
 
   // Returns a boolean indicating if the printer is paused.
-  get printerPaused () {
+  get printerPaused (): boolean {
     const printerState = this.printerState.toLowerCase()
     if (
       printerState === 'paused'
@@ -75,31 +68,30 @@ export default class StateMixin extends Vue {
    * Returns a boolean indicating of the printer is printing.
    * (versus busy in some other way...)
    */
-  get printerPrinting () {
-    if (this.printerState === 'printing') return true
-    return false
+  get printerPrinting (): boolean {
+    return (this.printerState.toLowerCase() === 'printing') as boolean
   }
 
   /**
    * Indicates if we have a valid wait(s).
    * Supports a single string or a list of.
    */
-  hasWait (wait: string | string[]) {
-    return this.$store.getters['wait/hasWait'](wait)
+  hasWait (wait: string | string[]): boolean {
+    return this.$store.getters['wait/hasWait'](wait) as boolean
   }
 
   /**
    * Indicates if we have any waits.
    */
-  get hasWaits () {
-    return this.$store.getters['wait/hasWaits']
+  get hasWaits (): boolean {
+    return this.$store.getters['wait/hasWaits'] as boolean
   }
 
   /**
    * Indicates if we have any waits prefixed by.
    */
-  hasWaitsBy (prefix: string) {
-    return this.$store.getters['wait/hasWaitsBy'](prefix)
+  hasWaitsBy (prefix: string): boolean {
+    return this.$store.getters['wait/hasWaitsBy'](prefix) as boolean
   }
 
   /**
@@ -128,15 +120,15 @@ export default class StateMixin extends Vue {
 
   async emergencyStop () {
     const confirmOnEstop = this.$store.state.config.uiSettings.general.confirmOnEstop
-    let res: boolean | undefined = true
-    if (confirmOnEstop) {
-      res = await this.$confirm(
-        this.$tc('app.general.simple_form.msg.confirm'),
+    const result = (
+      !confirmOnEstop ||
+      await this.$confirm(
+        this.$tc('app.general.simple_form.msg.confirm_emergency_stop'),
         { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
-    }
-    if (res) {
+    )
+    if (result) {
       SocketActions.printerEmergencyStop()
     }
   }

@@ -13,16 +13,15 @@
 
       <div
         style="max-width: 160px;"
-        class="ml-1"
+        class="ms-1 my-1"
       >
         <v-text-field
-          v-model="search"
+          v-model="searchModel"
           outlined
           dense
           single-line
           hide-details
           append-icon="$magnify"
-          @keyup="$emit('update:search', search);"
         />
       </div>
     </v-toolbar>
@@ -31,13 +30,14 @@
       :headers="visibleHeaders"
       :items-per-page="15"
       :item-class="getRowClasses"
-      :single-expand="true"
-      :search="search"
+      single-expand
+      :search="searchModel"
       :expanded="expanded"
       mobile-breakpoint="0"
       item-key="job_id"
       sort-by="start_time"
       sort-desc
+      fixed-header
       :items-per-page-all="$t('app.history.all')"
       :no-data-text="$t('app.history.no_data_text')"
       :footer-props="{
@@ -90,7 +90,7 @@
         <img
           v-else
           class="mr-2 file-icon-thumb"
-          :src="getThumbUrl(item.metadata.thumbnails, getFilePaths(item.filename).path, false, item.metadata.modified)"
+          :src="getThumbUrl(item.metadata, 'gcodes', getFilePaths(item.filename).path, false, item.metadata.modified)"
           :width="24"
           @error="handleJobThumbnailError(item)"
         >
@@ -134,7 +134,7 @@
         #[`item.print_duration`]="{ item }"
       >
         <span class="text-no-wrap">
-          {{ $filters.formatCounterTime(item.print_duration) }}
+          {{ $filters.formatCounterSeconds(item.print_duration) }}
         </span>
       </template>
 
@@ -142,7 +142,7 @@
         #[`item.total_duration`]="{ item }"
       >
         <span class="text-no-wrap">
-          {{ $filters.formatCounterTime(item.total_duration) }}
+          {{ $filters.formatCounterSeconds(item.total_duration) }}
         </span>
       </template>
 
@@ -195,13 +195,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins, PropSync } from 'vue-property-decorator'
 import JobHistoryItemStatus from './JobHistoryItemStatus.vue'
 import FilesMixin from '@/mixins/files'
 import getFilePaths from '@/util/get-file-paths'
-import { HistoryItem } from '@/store/history/types'
+import type { HistoryItem } from '@/store/history/types'
 import { SocketActions } from '@/api/socketActions'
-import { AppTableHeader } from '@/types'
+import type { AppTableHeader } from '@/types'
 
 @Component({
   components: {
@@ -210,7 +210,9 @@ import { AppTableHeader } from '@/types'
 })
 export default class JobHistory extends Mixins(FilesMixin) {
   expanded: HistoryItem[] = []
-  search = ''
+
+  @PropSync('search', { type: String, default: '' })
+    searchModel!: string
 
   get headers (): AppTableHeader[] {
     const headers = [

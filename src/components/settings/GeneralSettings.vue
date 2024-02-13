@@ -84,18 +84,6 @@
 
       <v-divider />
 
-      <app-setting :title="$t('app.setting.label.text_sort_order')">
-        <v-select
-          v-model="textSortOrder"
-          filled
-          dense
-          hide-details="auto"
-          :items="availableTextSortOrders"
-        />
-      </app-setting>
-
-      <v-divider />
-
       <app-setting
         :title="$t('app.setting.label.confirm_on_estop')"
       >
@@ -174,6 +162,26 @@
             @click.native.stop
           />
         </app-setting>
+
+        <v-divider />
+
+        <app-setting
+          :title="$t('app.setting.label.sections_to_ignore_pending_configuration_changes')"
+        >
+          <v-combobox
+            v-model="sectionsToIgnorePendingConfigurationChanges"
+            :items="['bed_mesh default', 'bed_tilt']"
+            filled
+            dense
+            hide-selected
+            hide-details="auto"
+            multiple
+            small-chips
+            append-icon=""
+            deletable-chips
+          />
+        </app-setting>
+
       </template>
 
       <v-divider />
@@ -205,6 +213,20 @@
       <v-divider />
 
       <app-setting
+        :title="$t('app.setting.label.print_in_progress_layout')"
+      >
+        <v-select
+          v-model="printInProgressLayout"
+          filled
+          dense
+          hide-details="auto"
+          :items="availablePrintInProgressLayouts"
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting
         :title="$t('app.setting.label.enable_diagnostics')"
         :sub-title="$t('app.setting.tooltip.diagnostics_performance')"
       >
@@ -221,11 +243,12 @@
 <script lang="ts">
 import { Component, Mixins, Ref } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { VInput } from '@/types'
+import type { VInput } from '@/types'
 import { SupportedLocales, DateFormats, TimeFormats } from '@/globals'
-import { OutputPin } from '@/store/printer/types'
-import { Device } from '@/store/power/types'
+import type { OutputPin } from '@/store/printer/types'
+import type { Device } from '@/store/power/types'
 import { SocketActions } from '@/api/socketActions'
+import type { PrintInProgressLayout } from '@/store/config/types'
 
 @Component({
   components: {}
@@ -233,15 +256,6 @@ import { SocketActions } from '@/api/socketActions'
 export default class GeneralSettings extends Mixins(StateMixin) {
   @Ref('instanceName')
   readonly instanceNameElement!: VInput
-
-  get estimateTypes () {
-    return [
-      { name: this.$t('app.setting.timer_options.duration'), value: 'totals' },
-      { name: this.$t('app.setting.timer_options.slicer'), value: 'slicer' },
-      { name: this.$t('app.setting.timer_options.file'), value: 'file' },
-      { name: this.$t('app.setting.timer_options.filament'), value: 'filament' }
-    ]
-  }
 
   get instanceName () {
     return this.$store.state.config.uiSettings.general.instanceName
@@ -284,7 +298,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
     return Object.entries(DateFormats)
       .map(([key, entry]) => ({
         value: key,
-        text: `${date.toLocaleDateString(entry.locale ?? this.$i18n.locale, entry.options)}${entry.suffix ?? ''}`
+        text: `${date.toLocaleDateString(entry.locales ?? this.$filters.getAllLocales(), entry.options)}${entry.suffix ?? ''}`
       }))
   }
 
@@ -306,37 +320,8 @@ export default class GeneralSettings extends Mixins(StateMixin) {
     return Object.entries(TimeFormats)
       .map(([key, entry]) => ({
         value: key,
-        text: `${date.toLocaleTimeString(entry.locale ?? this.$i18n.locale, entry.options)}${entry.suffix ?? ''}`
+        text: `${date.toLocaleTimeString(entry.locales ?? this.$filters.getAllLocales(), entry.options)}${entry.suffix ?? ''}`
       }))
-  }
-
-  get textSortOrder () {
-    return this.$store.state.config.uiSettings.general.textSortOrder
-  }
-
-  set textSortOrder (value: string) {
-    this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.general.textSortOrder',
-      value,
-      server: true
-    })
-  }
-
-  get availableTextSortOrders () {
-    return [
-      {
-        value: 'default',
-        text: this.$t('app.general.label.default')
-      },
-      {
-        value: 'numeric-prefix',
-        text: this.$t('app.general.label.numeric_prefix_sort')
-      },
-      {
-        value: 'version',
-        text: this.$t('app.general.label.version_sort')
-      }
-    ]
   }
 
   get confirmOnEstop () {
@@ -364,7 +349,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
   }
 
   get powerDevicesList () {
-    const devices = this.$store.state.power.devices as Device[]
+    const devices = this.$store.getters['power/getDevices'] as Device[]
     const deviceEntries = devices.length
       ? [
           { header: 'Moonraker' },
@@ -422,8 +407,8 @@ export default class GeneralSettings extends Mixins(StateMixin) {
     })
   }
 
-  get confirmOnSaveConfigAndRestart () {
-    return this.$store.state.config.uiSettings.general.confirmOnSaveConfigAndRestart
+  get confirmOnSaveConfigAndRestart (): boolean {
+    return this.$store.state.config.uiSettings.general.confirmOnSaveConfigAndRestart as boolean
   }
 
   set confirmOnSaveConfigAndRestart (value: boolean) {
@@ -433,7 +418,44 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-
+  
+  get sectionsToIgnorePendingConfigurationChanges (): string[] {
+    return this.$store.state.config.uiSettings.general.sectionsToIgnorePendingConfigurationChanges as string[]
+  }
+  
+  set sectionsToIgnorePendingConfigurationChanges (value: string[]) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.sectionsToIgnorePendingConfigurationChanges',
+      value: [...new Set(value)].sort((a, b) => a.localeCompare(b)),
+      server: true
+    })
+  }
+  
+  get printInProgressLayout (): PrintInProgressLayout {
+    return this.$store.state.config.uiSettings.general.printInProgressLayout as PrintInProgressLayout
+  }
+  
+  set printInProgressLayout (value: PrintInProgressLayout) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.printInProgressLayout',
+      value,
+      server: true
+    })
+  }
+  
+  get availablePrintInProgressLayouts () {
+    return [
+      {
+        value: 'default',
+        text: this.$t('app.general.label.default')
+      },
+      {
+        value: 'compact',
+        text: this.$t('app.general.label.compact')
+      }
+    ]
+  }
+  
   get enableDiagnostics () {
     return this.$store.state.config.uiSettings.general.enableDiagnostics
   }
@@ -499,9 +521,5 @@ export default class GeneralSettings extends Mixins(StateMixin) {
 
 
   /*    END NEW    */
-
-  get current_time () {
-    return Math.floor(Date.now() / 1000)
-  }
 }
 </script>

@@ -2,8 +2,9 @@
   <collapsable-card
     :title="$t('app.general.title.jobs')"
     icon="$files"
-    :draggable="true"
+    draggable
     layout-path="dashboard.jobs-card"
+    :help-tooltip="$t('app.general.tooltip.file_browser_help')"
   >
     <template #menu>
       <app-btn

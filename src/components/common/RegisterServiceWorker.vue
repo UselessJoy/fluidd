@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import consola from 'consola'
+import { consola } from 'consola'
 import { EventBus } from '@/eventBus'
 
 @Component({})
@@ -45,7 +45,7 @@ export default class RegisterServiceWorker extends Vue {
     consola.debug('[PWA] registered', registration)
   }
 
-  onRegisterError (e: any) {
+  onRegisterError (e: unknown) {
     consola.error('[PWA] registration error', e)
   }
 

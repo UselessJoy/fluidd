@@ -3,7 +3,7 @@
     v-model="menu"
     offset-y
     left
-    :max-width="(isMobile) ? 220 : 420"
+    :max-width="(isMobileViewport) ? 220 : 420"
     :close-on-content-click="false"
     :close-delay="300"
   >
@@ -73,7 +73,7 @@
         >
           <v-list-item
             :key="`notification-${n.id}`"
-            :three-line="true"
+            three-line
             :class="classes(n)"
           >
             <v-list-item-content>
@@ -152,9 +152,10 @@
 </template>
 
 <script lang="ts">
-import { AppNotification } from '@/store/notifications/types'
+import type { AppNotification } from '@/store/notifications/types'
 import isSetAppBadgeSupported from '@/util/is-set-app-badge-supported'
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Watch, Mixins } from 'vue-property-decorator'
+import BrowserMixin from '@/mixins/browser'
 import AppAnnouncementDismissMenu from './AppAnnouncementDismissMenu.vue'
 
 @Component({
@@ -162,7 +163,7 @@ import AppAnnouncementDismissMenu from './AppAnnouncementDismissMenu.vue'
     AppAnnouncementDismissMenu
   }
 })
-export default class AppNotificationMenu extends Vue {
+export default class AppNotificationMenu extends Mixins(BrowserMixin) {
   menu = false
 
   get notifications (): AppNotification[] {
@@ -206,11 +207,6 @@ export default class AppNotificationMenu extends Vue {
     if (this.color === 'transparent') return 'info'
     return this.color
   }
-
-  get isMobile () {
-    return this.$vuetify.breakpoint.mobile
-  }
-
   /**
    * If no defined icon, pull from a standard set based on notification type.
    */

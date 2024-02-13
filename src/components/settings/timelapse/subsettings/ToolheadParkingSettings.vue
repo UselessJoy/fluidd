@@ -78,7 +78,7 @@
         />
       </app-setting>
 
-      <custom-park-position-settings v-if="parkpos === 'custom'" />
+      <custom-park-position-settings v-if="['custom', 'x_only', 'y_only'].includes(parkpos)" />
 
       <v-divider />
       <app-setting
@@ -125,11 +125,11 @@
 <script lang="ts">
 import { Component, Mixins, Ref } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { ParkPosition, TimelapseSettings } from '@/store/timelapse/types'
+import type { ParkPosition, TimelapseSettings } from '@/store/timelapse/types'
 import { SocketActions } from '@/api/socketActions'
 import ParkExtrudeRetractSettings from './ParkExtrudeRetractSettings.vue'
 import CustomParkPositionSettings from './CustomParkPositionSettings.vue'
-import { VInput } from '@/types'
+import type { VInput } from '@/types'
 
 @Component({
   components: {
@@ -137,7 +137,7 @@ import { VInput } from '@/types'
     ParkExtrudeRetractSettings
   }
 })
-export default class LayerMacroSettings extends Mixins(StateMixin) {
+export default class ToolheadParkingSettings extends Mixins(StateMixin) {
   @Ref('parkTimeElement')
   readonly parkTimeElement?: VInput
 
@@ -148,7 +148,7 @@ export default class LayerMacroSettings extends Mixins(StateMixin) {
   readonly parkPosDZElement?: VInput
 
   get parkPositions (): {text: string, value: ParkPosition}[] {
-    const values: ParkPosition[] = ['front_left', 'front_right', 'center', 'back_left', 'back_right', 'custom']
+    const values: ParkPosition[] = ['front_left', 'front_right', 'center', 'back_left', 'back_right', 'x_only', 'y_only', 'custom']
 
     return values.map(value => ({ text: this.$tc(`app.timelapse.setting.parkpos.${value}`), value }))
   }

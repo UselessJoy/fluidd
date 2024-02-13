@@ -1,3 +1,5 @@
+import type { FlashMessageTypes } from "@/types";
+
 export interface PrinterState {
   printer: Printer;
 }
@@ -6,9 +8,30 @@ export interface Printer {
   [key: string]: any;
 }
 
-export interface Extruder {
+export interface KnownExtruder {
   name: string;
   key: string;
+}
+
+export interface Extruder {
+  config: ExtruderConfig
+  temperature: number;
+  target: number;
+  power: number;
+  can_extrude: boolean;
+  min_extrude_temp: number;
+  pressure_advance?: number;
+  smooth_time?: number;
+}
+
+export interface ExtruderConfig {
+  nozzle_diameter: number;
+  filament_diameter: number;
+  min_extrude_temp: number;
+  max_extrude_only_distance: number;
+  max_extrude_only_velocity: number;
+  pressure_advance?: number;
+  pressure_advance_smooth_time?: number;
 }
 
 /*      NEW      */
@@ -32,16 +55,29 @@ export interface LedControl {
 export interface KlipperMessage {
   last_message_eventtime: number,
   message: string,
-  message_type: string
+  message_type: FlashMessageTypes
 }
 /*    END NEW    */
 
-export interface ExtruderStepper {
+export interface ExtruderStepper extends StepperType<ExtruderStepperConfig> {
+  motion_queue?: string | null;
+  pressure_advance?: number;
+  smooth_time?: number;
+}
+
+export interface ExtruderStepperConfig {
+  extruder?: string;
+  pressure_advance?: number;
+  pressure_advance_smooth_time?: number;
+}
+export interface Stepper extends StepperType {}
+
+export type StepperType<T = Record<string, any>> = {
+  config: T;
   name: string;
-  pressure_advance: number;
-  smooth_time: number;
-  config_pressure_advance: number;
-  config_smooth_time: number;
+  prettyName: string;
+  key: string;
+  enabled?: boolean;
 }
 
 export interface MCU {
@@ -122,6 +158,7 @@ export interface Sensor {
   temperature: number;
   pressure?: number;
   humidity?: number;
+  gas?: number;
   target?: number;
   measured_min_temp?: number;
   measured_max_temp?: number;
@@ -143,6 +180,37 @@ export interface Endstop {
 export interface Probe {
   last_z_result: number;
   last_query: boolean;
+  name: ProbeName;
+}
+
+export type ProbeName = 'bltouch' | 'smart_effector' | 'probe'
+
+export interface BedScrews {
+  key: string;
+  name: string;
+  prettyName: string;
+  fine: number;
+  x: number;
+  y: number;
+}
+
+export interface ScrewsTiltAdjust {
+  error: boolean;
+  max_deviation?: number | null;
+  screws: ScrewsTiltAdjustScrew[]
+}
+
+export interface ScrewsTiltAdjustScrew {
+  key: string;
+  name: string;
+  prettyName: string;
+  adjustMinutes: number;
+  x: number;
+  y: number;
+  z: number;
+  sign: 'CW' | 'CCW';
+  adjust: string;
+  is_base: boolean;
 }
 
 // printer.mcu[num]
@@ -182,4 +250,29 @@ export interface SystemStats {
   cputime: number;
   memavail: number;
   sysload: number;
+}
+
+export interface BedSize {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+export interface GcodeCommands {
+  [key: string]: GcodeCommand
+}
+
+export interface GcodeCommand {
+  help?: string
+}
+
+export interface TimeEstimates {
+  progress: number;
+  printDuration: number;
+  totalDuration: number;
+  fileLeft: number;
+  slicerLeft: number;
+  actualLeft: number;
+  eta: number;
 }

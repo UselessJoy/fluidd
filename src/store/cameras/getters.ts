@@ -1,7 +1,7 @@
-import { GetterTree } from 'vuex'
-import { CameraConfig, CamerasState } from './types'
-import { RootState } from '../types'
-import { WebcamConfig } from '../webcams/types'
+import type { GetterTree } from 'vuex'
+import type { CameraConfig, CameraService, CamerasState, MoonrakerWebcamRotation } from './types'
+import type { RootState } from '../types'
+import type { WebcamConfig } from '../webcams/types'
 
 export const getters: GetterTree<CamerasState, RootState> = {
   /**
@@ -20,20 +20,24 @@ export const getters: GetterTree<CamerasState, RootState> = {
     const webcamsInConfig = rootGetters['webcams/getWebcamsInConfig'] as WebcamConfig[]
 
     return webcamsInConfig
-      .map(webcam => ({
+      .map((webcam): CameraConfig => ({
         name: webcam.name,
         location: webcam.location,
-        service: webcam.service,
+        service: webcam.service as CameraService,
+        enabled: webcam.enabled ?? true,
+        icon: webcam.icon,
         targetFps: webcam.target_fps,
+        targetFpsIdle: webcam.target_fps_idle,
         urlStream: webcam.stream_url,
         urlSnapshot: webcam.snapshot_url,
         flipX: webcam.flip_horizontal,
         flipY: webcam.flip_vertical,
-        rotation: webcam.rotation,
+        rotation: webcam.rotation as MoonrakerWebcamRotation ?? 0,
+        aspectRatio: webcam.aspect_ratio,
+        extraData: webcam.extra_data,
         source: webcam.source,
-        enabled: true,
         id: `config-${webcam.name}`
-      } as CameraConfig))
+      }))
   },
 
   /**

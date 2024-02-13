@@ -1,6 +1,5 @@
-import { AppTablePartialHeader } from '@/types/tableheaders'
-import { VuetifyThemeItem } from 'vuetify/types/services/theme'
-import { FileFilterType, FileRoot } from '../files/types'
+import type { AppTablePartialHeader } from '@/types/tableheaders'
+import type { FileFilterType } from '../files/types'
 
 export interface ConfigState {
   [key: string]: any;
@@ -22,6 +21,7 @@ export interface UiSettings {
   gcodePreview: GcodePreviewConfig;
   fileSystem: FileSystemConfig;
   toolhead: ToolheadConfig;
+  spoolman: SpoolmanConfig;
 }
 
 export interface ToolheadConfig {
@@ -30,11 +30,24 @@ export interface ToolheadConfig {
   extrudeLength: number;
 }
 
+export interface SpoolmanConfig {
+  autoSpoolSelectionDialog: boolean;
+  autoOpenQRDetectionCamera: string | null;
+  autoSelectSpoolOnMatch: boolean;
+  preferDeviceCamera: boolean;
+  warnOnNotEnoughFilament: boolean;
+  warnOnFilamentTypeMismatch: boolean;
+  selectionDialogSortOrder: {
+    key: string | null;
+    desc: boolean | null;
+  }
+}
+
 export interface HostConfig {
   endpoints: string[];
   blacklist: string[];
   hosted: boolean;
-  themePresets: SupportedTheme[];
+  themePresets: ThemePreset[];
 }
 
 export interface SupportedLocale {
@@ -53,19 +66,27 @@ export interface GeneralConfig {
   defaultToolheadMoveLength: number;
   defaultToolheadXYSpeed: number;
   defaultToolheadZSpeed: number;
+  toolheadControlStyle: ToolheadControlStyle;
   toolheadMoveDistances: number[];
+  toolheadXYMoveDistances: number[];
+  toolheadZMoveDistances: number[];
+  toolheadCircleXYMoveDistances: number[];
+  toolheadCircleZMoveDistances: number[];
+  toolheadCircleXYHomingEnabled: boolean;
   useGcodeCoords: boolean;
   zAdjustDistances: number[];
   enableVersionNotifications: boolean;
   confirmOnEstop: boolean;
   confirmOnPowerDeviceChange: boolean;
   confirmOnSaveConfigAndRestart: boolean;
+  sectionsToIgnorePendingConfigurationChanges: string[];
   dateFormat: string;
   timeFormat: string;
   textSortOrder: TextSortOrder;
   showRateOfChange: boolean;
   showRelativeHumidity: boolean;
   showBarometricPressure: boolean;
+  showGasResistance: boolean;
   showSaveConfigAndRestart: boolean;
   showUploadAndPrint: boolean;
   flipConsoleLayout: boolean;
@@ -73,7 +94,9 @@ export interface GeneralConfig {
   topNavPowerToggle: null | string;
   showManualProbeDialogAutomatically: boolean;
   showBedScrewsAdjustDialogAutomatically: boolean;
+  showScrewsTiltAdjustDialogAutomatically: boolean;
   forceMoveToggleWarning: boolean;
+  printInProgressLayout: PrintInProgressLayout;
   enableDiagnostics: boolean;
   thumbnailSize: number;
   autoOff_enable: boolean;
@@ -82,35 +105,42 @@ export interface GeneralConfig {
   led_enabled: boolean;
 }
 
+export type ToolheadControlStyle = 'cross' | 'bars' | 'circle'
+
 export type TextSortOrder = 'default' | 'numeric-prefix' | 'version'
 
 export type CameraFullscreenAction = 'embed' | 'rawstream';
 
+export type PrintInProgressLayout = 'default' | 'compact'
+
 // Config stored in moonraker db
 export interface ThemeConfig {
-  currentTheme: {[index: string]: string | Partial<VuetifyThemeItem> | undefined }; // the color list.
-  isDark: boolean; // inidicates if the theme as a whole is dark or not.
-  logo: SupportedThemeLogo; // Current logo to use.
+  color: string;
+  isDark: boolean;
+  logo: ThemeLogo;
+  backgroundLogo: boolean;
 }
 
 // Config defined in host
-export interface SupportedTheme {
+export interface ThemePreset {
   name: string;
-  logo: SupportedThemeLogo;
   color: string;
   isDark: boolean;
+  logo: ThemeLogo;
 }
 
-export interface SupportedThemeLogo {
+export interface ThemeLogo {
   src: string;
-  dynamic: boolean;
   dark?: string;
   light?: string;
 }
 
+export type RestoreViewState = 'never' | 'session' | 'local'
+
 export interface EditorConfig {
   confirmDirtyEditorClose: boolean;
   autoEditExtensions: string[];
+  restoreViewState: RestoreViewState,
   codeLens: boolean;
 }
 
@@ -175,12 +205,14 @@ export interface GcodePreviewConfig {
   extrusionLineWidth: number;
   moveLineWidth: number;
   retractionIconSize: number;
+  drawOrigin: boolean;
   drawBackground: boolean;
   showAnimations: boolean;
-  groupLowerLayers: boolean;
+  minLayerHeight: number;
   autoLoadOnPrintStart: boolean;
   autoLoadMobileOnPrintStart: boolean;
   autoFollowOnFileLoad: boolean;
+  hideSinglePartBoundingBox: boolean;
   autoZoom: boolean;
   flip: {
     horizontal: boolean;
@@ -189,5 +221,5 @@ export interface GcodePreviewConfig {
 }
 
 export interface FileSystemConfig {
-  activeFilters: Partial<Record<FileRoot, FileFilterType[]>>
+  activeFilters: Record<string, FileFilterType[]>
 }

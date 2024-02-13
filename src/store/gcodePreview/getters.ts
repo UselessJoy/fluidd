@@ -1,17 +1,9 @@
-import { GetterTree } from 'vuex'
-import {
-  BBox,
-  GcodePreviewState,
-  Layer,
-  LayerNr,
-  LayerPaths,
-  Move,
-  Point3D
-} from './types'
-import { RootState } from '../types'
-import { AppFile } from '@/store/files/types'
+import type { GetterTree } from 'vuex'
+import type { BBox, GcodePreviewState, ViewerOptions, Layer, LayerNr, LayerPaths, Move, Part, Point3D } from './types'
+import type { RootState } from '../types'
+import type { AppFile } from '@/store/files/types'
 import { binarySearch, moveToSVGPath } from '@/util/gcode-preview'
-import { state as configState } from '@/store/config/state'
+import isKeyOf from '@/util/is-key-of'
 
 export const getters: GetterTree<GcodePreviewState, RootState> = {
   /**
@@ -25,8 +17,8 @@ export const getters: GetterTree<GcodePreviewState, RootState> = {
     return state.file
   },
 
-  getViewerOption: (state) => (key: string): any => {
-    return (state.viewer as any)[key]
+  getViewerOption: (state) => (key: keyof ViewerOptions): boolean => {
+    return state.viewer[key]
   },
 
   getParserProgress: (state): number => {
@@ -34,40 +26,43 @@ export const getters: GetterTree<GcodePreviewState, RootState> = {
   },
 
   getLayers: (state, getters, rootState): Layer[] => {
+    if (state.layers.length) {
+      return state.layers
+    }
     const output = []
-    const moves = getters.getMoves
+    const moves = getters.getMoves as Move[]
 
     let z = NaN
     let zStart = 0
     let zLast = NaN
+    let zNext = NaN
 
-    const { uiSettings } = (rootState && rootState.config) ? rootState.config : configState
-    const groupLowerLayers = uiSettings.gcodePreview.groupLowerLayers
+    const { minLayerHeight } = rootState.config.uiSettings.gcodePreview
 
-    const zCmp = groupLowerLayers
-      ? (a: number, b: number) => Number.isNaN(a) || a < b
-      : (a: number, b: number) => a !== b
-
-    moves.forEach((move: Move, index: number) => {
+  
+    moves.forEach((move, index) => {
       if (move.z !== undefined && z !== move.z) {
         z = move.z
         zStart = index
       }
+      
+      if (move.e && move.e > 0 && (Number.isNaN(zLast) || z < zLast || z >= zNext)) {
+        if (['x', 'y', 'i', 'j'].some(x => isKeyOf(x, move) && move[x] !== 0)) {
+          zLast = z
+          zNext = Math.round((z + minLayerHeight) * 10000) / 10000
 
-      if (move.e && move.e > 0 && zCmp(zLast, z)) {
-        zLast = z
-
-        output.push({
-          z,
-          move: zStart,
-          filePosition: move.filePosition
-        })
+          output.push({
+            z,
+            move: zStart,
+            filePosition: move.filePosition
+          })
+        }
       }
     })
 
     // If moves exist but there are no layers, add a single "default" layer at z=0
     // This can happen for gcode that only contains travel moves (eg: 2d plotters without Z or E steppers)
-    if (output.length === 0 && moves.length > 0) {
+    if (output.length === 0 && moves.length) {
       output.push({
         z: 0,
         move: 0,
@@ -78,9 +73,13 @@ export const getters: GetterTree<GcodePreviewState, RootState> = {
     return output
   },
 
+  getParts: (state): Part[] => {
+    return state.parts
+  },
+
   getBounds: (state, getters): BBox => {
     let moves = getters.getMoves
-    const layers = getters.getLayers
+    const layers = getters.getLayers as Layer[]
 
     // ignore first and last layer (priming and parking)
     const moveRangeStart = layers[layers.length > 1 ? 1 : 0]?.move
@@ -231,9 +230,26 @@ export const getters: GetterTree<GcodePreviewState, RootState> = {
   },
 
   getLayerPaths: (state, getters) => (layerNr: LayerNr): LayerPaths => {
-    const layers = getters.getLayers
+    const layers = getters.getLayers as Layer[]
 
     return getters.getPaths(layers[layerNr]?.move ?? 0, (layers[layerNr + 1]?.move ?? Infinity) - 1)
+  },
+
+  getPartPaths: (state, getters): string[] => {
+    const parts = getters.getParts as Part[]
+
+    return parts
+      .map(part => {
+        const svgData: string[] = []
+
+        part.polygon.forEach((point, index) => {
+          svgData.push(`${index === 0 ? 'M' : 'L'}${point.x},${point.y}`)
+        })
+
+        svgData.push('z')
+
+        return svgData.join()
+      })
   },
 
   getMoveIndexByFilePosition: (state, getters) => (filePosition: number): number => {
@@ -241,11 +257,11 @@ export const getters: GetterTree<GcodePreviewState, RootState> = {
       return 0
     }
 
-    return binarySearch(getters.getMoves, (val: Move) => filePosition - (val.filePosition ?? 0), true)
+    return binarySearch(getters.getMoves, (val: Move) => filePosition - val.filePosition, true)
   },
 
   getLayerNrByFilePosition: (state, getters) => (filePosition: number): LayerNr => {
-    const layers = getters.getLayers
+    const layers = getters.getLayers as Layer[]
 
     for (let i = 0; i < layers.length - 1; i++) {
       if (filePosition < layers[i + 1].filePosition) {

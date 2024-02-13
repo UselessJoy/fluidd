@@ -1,6 +1,6 @@
-import { GetterTree } from 'vuex'
-import { MeshState, KlipperMesh, AppMeshes, MeshProfiles } from './types'
-import { RootState } from '../types'
+import type { GetterTree } from 'vuex'
+import type { MeshState, KlipperMesh, AppMeshes, MeshProfiles } from './types'
+import type { RootState } from '../types'
 import { transformMesh } from '@/util/transform-mesh'
 
 export const getters: GetterTree<MeshState, RootState> = {

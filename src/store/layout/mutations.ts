@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { MutationTree } from 'vuex'
+import type { MutationTree } from 'vuex'
 import { defaultState as getDefaultState } from './state'
-import { LayoutConfig, LayoutState, Layouts } from './types'
+import type { LayoutConfig, LayoutState, Layouts } from './types'
 
 export const mutations: MutationTree<LayoutState> = {
   /**
@@ -20,18 +20,25 @@ export const mutations: MutationTree<LayoutState> = {
   setInitLayout (state, payload: LayoutState) {
     if (payload && Object.keys(payload).length > 0) {
       const defaultState = getDefaultState()
-      const migratableLayouts = ['dashboard']
 
+      // add new layouts
       for (const [layout, defaultComponents] of Object.entries(defaultState.layouts)) {
         if (!payload.layouts[layout]) {
           payload.layouts[layout] = defaultComponents
-        } else if (migratableLayouts.includes(layout)) {
+        }
+      }
+
+      // migrate existing layouts
+      const migratableLayouts = ['dashboard']
+      for (const layout of Object.keys(payload.layouts)) {
+        const migratableLayout = migratableLayouts.find(migration => layout.startsWith(migration))
+        if (migratableLayout) {
+          const defaultComponents = defaultState.layouts[migratableLayout]
           const defaultComponentIds = Object.values(defaultComponents).flat().map(card => card.id)
           const currentComponentIds = Object.values(payload.layouts[layout]).flat().map(card => card.id)
 
           for (const [container, defaultContainerComponents] of Object.entries(defaultComponents)) {
             const currentContainerComponents = payload.layouts[layout][container] || []
-
             payload.layouts[layout][container] = [
               ...currentContainerComponents.filter(component => defaultComponentIds.includes(component.id)),
               ...defaultContainerComponents.filter(component => !currentComponentIds.includes(component.id))
@@ -39,7 +46,6 @@ export const mutations: MutationTree<LayoutState> = {
           }
         }
       }
-
       Object.assign(state, payload)
     }
   },

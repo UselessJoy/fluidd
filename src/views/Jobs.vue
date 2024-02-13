@@ -8,14 +8,14 @@
         :title="$t('app.general.title.jobs')"
         card-key="JobsPage"
         icon="$files"
-        :draggable="false"
         class="mb-2 mb-sm-4"
+        :help-tooltip="$t('app.general.tooltip.file_browser_help')"
       >
         <file-system
           :roots="'gcodes'"
           name="jobs"
           bulk-actions
-          :max-height="816"
+          max-height="816"
         />
       </collapsable-card>
     </v-col>
@@ -24,7 +24,7 @@
       cols="12"
       lg="4"
     >
-      <job-queue-card full-screen />
+      <job-queue-card fullscreen />
     </v-col>
   </v-row>
 </template>

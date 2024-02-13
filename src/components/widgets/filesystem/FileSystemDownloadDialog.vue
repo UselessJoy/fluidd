@@ -1,71 +1,69 @@
 <template>
-  <v-dialog
+  <v-snackbar
     v-model="open"
-    max-width="500"
-    persistent
+    timeout="-1"
+    multi-line
+    elevation="24"
+    bottom
+    right
+    :vertical="$vuetify.breakpoint.smAndDown"
   >
-    <v-card v-if="file">
-      <v-card-title class="card-heading py-2 px-5">
-        <v-icon left>
-          $download
-        </v-icon>
-        <span class="focus--text">
-          {{ $t('app.file_system.title.download_file') }}
-        </span>
-      </v-card-title>
-
-      <v-card-text class="py-3 px-5">
-        <div class="mb-2">
-          {{ file.filepath }}
-        </div>
-        <v-progress-linear
-          :value="file.percent"
-          color="primary"
-          class="mb-2"
-        />
-        <table>
-          <tr>
-            <td class="pr-2">
-              {{ $t('app.file_system.label.downloaded') }}:
-            </td>
-            <td>{{ file.percent }}% ({{ $filters.getReadableFileSizeString(file.loaded) }} / {{ $filters.getReadableFileSizeString(file.size) }})</td>
-          </tr>
-          <tr>
-            <td class="pr-2">
-              {{ $t('app.file_system.label.transfer_rate') }}:
-            </td>
-            <td>{{ file.speed.toFixed(2) }} {{ file.unit }}/Sec</td>
-          </tr>
-        </table>
-      </v-card-text>
-
-      <v-divider />
-
-      <v-card-actions class="py-2 px-5">
-        <v-spacer />
-        <app-btn
-          color="error"
-          text
-          @click="$emit('cancel'); open = false"
-        >
-          {{ $t('app.general.btn.cancel') }}
-        </app-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <template v-if="currentDownload">
+      <div class="mb-2">
+        {{ $t('app.file_system.title.download_file') }}: {{ currentDownload.filepath }}
+      </div>
+      <v-progress-linear
+        :value="currentDownload.percent"
+        color="primary"
+        class="mb-2"
+      />
+      <table>
+        <tr>
+          <td class="pr-2">
+            {{ $t('app.file_system.label.downloaded') }}:
+          </td>
+          <td>{{ currentDownload.percent }}% ({{ $filters.getReadableFileSizeString(currentDownload.loaded) }} / {{ $filters.getReadableFileSizeString(currentDownload.size) }})</td>
+        </tr>
+        <tr>
+          <td class="pr-2">
+            {{ $t('app.file_system.label.transfer_rate') }}:
+          </td>
+          <td>{{ $filters.getReadableDataRateString(currentDownload.speed) }}</td>
+        </tr>
+      </table>
+    </template>
+    <template #action="{ attrs }">
+      <app-btn
+        v-bind="attrs"
+        @click="handleCancelDownload"
+      >
+        {{ $t('app.general.btn.cancel') }}
+      </app-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Mixins, VModel } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { FileDownload } from '@/store/files/types'
+import type { FileDownload } from '@/store/files/types'
 
 @Component({})
 export default class FileSystemDownloadDialog extends Mixins(StateMixin) {
-  @VModel({ type: Boolean, required: true })
-    open!: boolean
+  open = !!this.currentDownload
 
-  @Prop({ type: Object })
-  readonly file!: FileDownload
+  @Watch('currentDownload')
+  onCurrentDownloadChange (val: FileDownload | null) {
+    this.open = !!val
+  }
+  
+  get currentDownload () {
+    return this.$store.state.files.download
+  }
+  
+  handleCancelDownload () {
+    this.currentDownload?.abortController.abort()
+    this.$store.dispatch('files/removeFileDownload')
+  }
 }
 </script>

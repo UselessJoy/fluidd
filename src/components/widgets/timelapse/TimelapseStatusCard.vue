@@ -3,7 +3,6 @@
     :title="$t('app.timelapse.title.timelapse_status')"
     icon="$info"
     class="mb-2 sb-sm-4"
-    :draggable="false"
   >
     <v-card-text>
       <v-row>
@@ -33,7 +32,7 @@
       <v-row>
         <v-col cols="12">
           <v-layout justify-center>
-            <app-slider
+            <app-named-slider
               v-model="selectedFrame"
               full-width
               :label="$tc('app.timelapse.label.frame')"
@@ -76,7 +75,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import FileSystem from '@/components/widgets/filesystem/FileSystem.vue'
-import { RenderStatus, TimelapseLastFrame, TimelapseSettings } from '@/store/timelapse/types'
+import type { RenderStatus, TimelapseLastFrame, TimelapseSettings } from '@/store/timelapse/types'
 import { SocketActions } from '@/api/socketActions'
 import CameraItem from '@/components/widgets/camera/CameraItem.vue'
 import FilesMixin from '@/mixins/files'

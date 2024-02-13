@@ -2,8 +2,8 @@
   <collapsable-card
     :title="$tc('app.general.title.gcode_preview')"
     icon="$cubeScan"
-    :draggable="!fullScreen"
-    :collapsable="!fullScreen"
+    :draggable="!fullscreen"
+    :collapsable="!fullscreen"
     layout-path="dashboard.gcode-preview-card"
   >
     <template #menu>
@@ -11,19 +11,19 @@
         <app-btn
           :disabled="!printerFile || printerFileLoaded"
           small
-          class="ml-1"
+          class="ms-1 my-1"
           @click="loadCurrent"
         >
           {{ $t('app.gcode.btn.load_current_file') }}
         </app-btn>
 
         <app-btn
-          v-if="!fullScreen"
+          v-if="!fullscreen"
           color=""
           fab
           x-small
           text
-          class="ml-1"
+          class="ms-1 my-1"
           @click="$filters.routeTo($router, '/preview')"
         >
           <v-icon>$fullScreen</v-icon>
@@ -31,7 +31,13 @@
       </app-btn-collapse-group>
     </template>
 
-    <v-card-text>
+    <v-card-text
+      :class="{ 'no-pointer-events': overlay }"
+      @dragover="handleDragOver"
+      @dragenter.self.prevent
+      @dragleave.self.prevent="handleDragLeave"
+      @drop.self.prevent="handleDrop"
+    >
       <gcode-preview-parser-progress-dialog
         v-if="showParserProgressDialog"
         :value="showParserProgressDialog"
@@ -47,29 +53,24 @@
         >
           <v-row>
             <v-col>
-              <app-slider
+              <app-named-slider
                 :label="$t('app.gcode.label.layer')"
                 :value="(!fileLoaded) ? 0 : currentLayer + 1"
                 :min="(!fileLoaded) ? 0 : 1"
                 :max="layerCount"
                 :disabled="!fileLoaded"
-                :locked="isMobile"
-                input-md
                 @input="setCurrentLayer($event - 1)"
               />
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <app-slider
+              <app-named-slider
                 :label="$t('app.general.label.progress')"
                 :value="moveProgress - currentLayerMoveRange.min"
                 :min="0"
                 :max="currentLayerMoveRange.max - currentLayerMoveRange.min"
                 :disabled="!fileLoaded"
-                value-suffix="moves"
-                :locked="isMobile"
-                input-md
                 @input="setMoveProgress($event + currentLayerMoveRange.min)"
               />
             </v-col>
@@ -84,6 +85,7 @@
               <v-card
                 outlined
                 class="px-2 py-1 text-center stat-square justify-center"
+                :class="{ 'text--disabled': !fileLoaded }"
               >
                 <div class="">
                   {{ $t('app.gcode.label.layers') }}
@@ -118,8 +120,6 @@
         <v-col>
           <gcode-preview
             ref="preview"
-            width="100%"
-            height="100%"
             :layer="currentLayer"
             :progress="moveProgress"
             :disabled="!fileLoaded"
@@ -127,6 +127,12 @@
           />
         </v-col>
       </v-row>
+      <app-drag-overlay
+        v-model="overlay"
+        :message="$t('app.gcode.overlay.drag_file_load')"
+        icon="$cubeScan"
+        absolute
+      />
     </v-card-text>
   </collapsable-card>
 </template>
@@ -135,10 +141,12 @@
 import { Component, Mixins, Prop, Ref, Watch } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import FilesMixin from '@/mixins/files'
+import BrowserMixin from '@/mixins/browser'
 import GcodePreview from './GcodePreview.vue'
 import GcodePreviewParserProgressDialog from './GcodePreviewParserProgressDialog.vue'
-import { AppFile } from '@/store/files/types'
-import { MinMax } from '@/store/gcodePreview/types'
+import type { AppFile } from '@/store/files/types'
+import type { MinMax } from '@/store/gcodePreview/types'
+import { getFileDataTransferDataFromDataTransfer, hasFileDataTransferTypeInDataTransfer } from '@/util/file-data-transfer'
 
 @Component({
   components: {
@@ -146,19 +154,20 @@ import { MinMax } from '@/store/gcodePreview/types'
     GcodePreview
   }
 })
-export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
-  @Prop({ type: Boolean, default: false })
-  readonly menuCollapsed!: boolean
+export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
+  @Prop({ type: Boolean })
+  readonly menuCollapsed?: boolean
 
-  @Prop({ type: Boolean, default: false })
-  readonly fullScreen!: boolean
+  @Prop({ type: Boolean })
+  readonly fullscreen?: boolean
 
   @Ref('preview')
   readonly preview!: GcodePreview
 
   currentLayer = 0
   moveProgress = 0
-
+  overlay = false
+  
   @Watch('layerCount')
   onLayerCountChanged () {
     this.currentLayer = 0
@@ -243,10 +252,6 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
     return this.$store.getters['gcodePreview/getMoves'].length > 0
   }
 
-  get isMobile (): boolean {
-    return this.$vuetify.breakpoint.mobile
-  }
-
   get parserProgress (): number {
     return this.$store.getters['gcodePreview/getParserProgress']
   }
@@ -318,10 +323,17 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
   }
 
   async loadCurrent () {
-    const file = this.printerFile as AppFile
+    const printerFile = this.printerFile
+    if (printerFile) {
+      this.loadFile(printerFile)
+    }
+  }
+
+  async loadFile (file: AppFile) {
     this.getGcode(file)
       .then(response => response?.data)
       .then(gcode => {
+        if (!gcode) return
         this.$store.dispatch('gcodePreview/loadGcode', {
           file,
           gcode
@@ -355,7 +367,7 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
   }
 
   get autoLoadOnPrintStart () {
-    if (this.isMobile) {
+    if (this.isMobileViewport) {
       return this.$store.state.config.uiSettings.gcodePreview.autoLoadMobileOnPrintStart
     }
 
@@ -363,13 +375,13 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
   }
 
   async cancelObject (id: string) {
-    const res = await this.$confirm(
+    const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_exclude_object'),
       { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
 
-    if (res) {
+    if (result) {
       const reqId = id.toUpperCase().replace(/\s/g, '_')
 
       this.sendGcode(`EXCLUDE_OBJECT NAME=${reqId}`)
@@ -378,6 +390,45 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin) {
 
   get parts () {
     return Object.values(this.$store.getters['parts/getParts'])
+  }
+
+  handleDragOver (event: DragEvent) {
+    if (
+      event.dataTransfer &&
+      hasFileDataTransferTypeInDataTransfer(event.dataTransfer, 'jobs')
+    ) {
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'link'
+      this.overlay = true
+    }
+  }
+
+  handleDragLeave () {
+    this.overlay = false
+  }
+
+  handleDrop (event: DragEvent) {
+    this.overlay = false
+    if (
+      event.dataTransfer &&
+      hasFileDataTransferTypeInDataTransfer(event.dataTransfer, 'jobs')
+    ) {
+      const files = getFileDataTransferDataFromDataTransfer(event.dataTransfer, 'jobs')
+      const path = files.path ? `gcodes/${files.path}` : 'gcodes'
+      const file = this.$store.getters['files/getFile'](path, files.items[0]) as AppFile | undefined
+      if (file) {
+        this.loadFile(file)
+      }
+    }
+  }
+
+  created () {
+    if (this.followProgress) {
+      this.currentLayer = this.fileProgressLayerNr
+      this.syncMoveProgress()
+    } else {
+      this.moveProgress = this.currentLayerMoveRange.min
+    }
   }
 }
 </script>

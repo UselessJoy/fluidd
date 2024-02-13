@@ -1,20 +1,10 @@
 <template>
   <app-dialog
     v-model="open"
-    :max-width="850"
+    :title="'commits_behind' in component ? $t('app.version.label.commit_history'): $t('app.version.label.package_list')"
+    max-width="850"
     no-actions
   >
-    <template #title>
-      <span
-        v-if="'commits_behind' in component"
-        class="focus--text"
-      >{{ $t('app.version.label.commit_history') }}</span>
-      <span
-        v-else
-        class="focus--text"
-      >{{ $t('app.version.label.package_list') }}</span>
-    </template>
-
     <v-card-text
       v-if="'commits_behind' in component && commitHistory"
       class="py-0 pl-0"
@@ -101,13 +91,13 @@
 </template>
 
 <script lang="ts">
-import { ArtifactVersion, HashVersion, OSPackage } from '@/store/version/types'
+import type { ArtifactVersion, HashVersion, OSPackage } from '@/store/version/types'
 import { Component, Vue, Prop, VModel } from 'vue-property-decorator'
 
 @Component({})
 export default class VersionInformationDialog extends Vue {
-  @VModel({ type: Boolean, required: true })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: Object })
   readonly component!: HashVersion | ArtifactVersion | OSPackage

@@ -1,12 +1,12 @@
 <template>
   <collapsable-card
-    :title="$t('app.printer.state.' + printerState)"
+    :title="$t('app.printer.title.printer_status')"
     icon="$printer3d"
-    :draggable="true"
+    draggable
     :collapsable="collapsable"
     layout-path="dashboard.printer-status-card"
   >
-    <template #title>
+    <template #title="{inLayout}">
       <v-tabs
         v-model="tab"
         background-color="transparent"
@@ -113,6 +113,16 @@ export default class PrinterStatusCard extends Mixins(StateMixin) {
   }
 
   handlePrint (filename: string) {
+    const spoolmanSupported = this.$store.getters['spoolman/getAvailable']
+    const autoSpoolSelectionDialog = this.$store.state.config.uiSettings.spoolman.autoSpoolSelectionDialog
+    if (spoolmanSupported && autoSpoolSelectionDialog) {
+      this.$store.commit('spoolman/setDialogState', {
+        show: true,
+        filename
+      })
+      return
+    }
+    
     SocketActions.printerPrintStart(filename)
   }
   

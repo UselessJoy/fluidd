@@ -4,22 +4,27 @@
     left
     offset-y
     transition="slide-y-transition"
-    :min-width="150"
+    min-width="150"
     :close-on-content-click="false"
   >
-    <template #activator="{ on, attrs }">
-      <v-btn
-        :disabled="disabled"
-        fab
-        small
-        text
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-icon>
-          $cogs
-        </v-icon>
-      </v-btn>
+    <template #activator="{ on: menu, attrs }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }">
+          <v-btn
+            :disabled="disabled"
+            fab
+            small
+            text
+            v-bind="attrs"
+            v-on="{ ...tooltip, ...menu }"
+          >
+            <v-icon>
+              $tableColumn
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t('app.general.btn.select_columns') }}</span>
+      </v-tooltip>
     </template>
     <v-list
       dense
@@ -31,17 +36,10 @@
         <v-list-item
           v-if="header.text !== '' && header.configurable"
           :key="header.value"
-          link
-          dense
           @click="handleToggleHeader(header)"
         >
           <v-list-item-action class="my-0">
-            <v-checkbox
-              :input-value="header.visible"
-              dense
-              hide-details
-              color="primary"
-            />
+            <v-checkbox :input-value="header.visible" />
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>{{ header.text }}</v-list-item-title>
@@ -55,20 +53,18 @@
 <script lang="ts">
 import { Component, Mixins, Prop } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { AppTableHeader } from '@/types'
+import type { AppTableHeader } from '@/types'
 
 @Component({})
 export default class AppColumnPicker extends Mixins(StateMixin) {
   @Prop({ type: String, required: true })
   readonly keyName!: string
 
-  @Prop({ type: Array, required: true })
+  @Prop({ type: Array<AppTableHeader>, required: true })
   readonly headers!: AppTableHeader[]
 
-  @Prop({ type: Boolean, default: false })
-  readonly disabled!: boolean
-
-  value: any[] = []
+  @Prop({ type: Boolean })
+  readonly disabled?: boolean
 
   handleToggleHeader (header: AppTableHeader) {
     header.visible = !header.visible

@@ -3,7 +3,6 @@
     :title="$t('app.timelapse.title.timelapse_settings')"
     icon="$cog"
     class=""
-    :draggable="false"
   >
     <app-setting
       :title="$t('app.timelapse.setting.enable')"
@@ -55,7 +54,7 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { TimelapseSettings } from '@/store/timelapse/types'
+import type { TimelapseSettings } from '@/store/timelapse/types'
 import { SocketActions } from '@/api/socketActions'
 
 @Component({})

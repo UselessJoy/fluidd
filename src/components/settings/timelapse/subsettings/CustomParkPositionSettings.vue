@@ -1,69 +1,74 @@
 <template>
   <div>
-    <v-divider />
-    <app-setting
-      :title="$t('app.timelapse.setting.park_custom_pos_x')"
-      :sub-title="subtitleIfBlocked(getCustomParkPosBlocked('x'))"
-    >
-      <v-text-field
-        ref="parkPosXElement"
-        :value="parkPosX"
-        :rules="[
-          $rules.required,
-          $rules.numberValid,
-          $rules.numberGreaterThanOrEqual(printerMinX),
-          $rules.numberLessThanOrEqual(printerMaxX)
-        ]"
-        :disabled="getCustomParkPosBlocked('x')"
-        hide-details="auto"
-        filled
-        dense
-        single-line
-        :suffix="$t('app.suffix.mm')"
-        @change="setParkPosX"
-      />
-    </app-setting>
+    <template v-if="['custom', 'x_only'].includes(parkpos)">
+      <v-divider />
+      <app-setting
+        :title="$t('app.timelapse.setting.park_custom_pos_x')"
+        :sub-title="subtitleIfBlocked(getCustomParkPosBlocked('x'))"
+      >
+        <v-text-field
+          ref="parkPosXElement"
+          :value="parkPosX"
+          :rules="[
+            $rules.required,
+            $rules.numberValid,
+            $rules.numberGreaterThanOrEqual(bedSize.minX),
+            $rules.numberLessThanOrEqual(bedSize.maxX)
+          ]"
+          :disabled="getCustomParkPosBlocked('x')"
+          hide-details="auto"
+          filled
+          dense
+          single-line
+          :suffix="$t('app.suffix.mm')"
+          @change="setParkPosX"
+        />
+      </app-setting>
+    </template>
 
-    <v-divider />
-    <app-setting
-      :title="$t('app.timelapse.setting.park_custom_pos_y')"
-      :sub-title="subtitleIfBlocked(getCustomParkPosBlocked('y'))"
-    >
-      <v-text-field
-        ref="parkPosYElement"
-        :value="parkPosY"
-        :rules="[
-          $rules.required,
-          $rules.numberValid,
-          $rules.numberGreaterThanOrEqual(printerMinY),
-          $rules.numberLessThanOrEqual(printerMaxY)
-        ]"
-        :disabled="getCustomParkPosBlocked('y')"
-        hide-details="auto"
-        filled
-        dense
-        single-line
-        :suffix="$t('app.suffix.mm')"
-        @change="setParkPosY"
-      />
-    </app-setting>
+    <template v-if="['custom', 'y_only'].includes(parkpos)">
+      <v-divider />
+      <app-setting
+        :title="$t('app.timelapse.setting.park_custom_pos_y')"
+        :sub-title="subtitleIfBlocked(getCustomParkPosBlocked('y'))"
+      >
+        <v-text-field
+          ref="parkPosYElement"
+          :value="parkPosY"
+          :rules="[
+            $rules.required,
+            $rules.numberValid,
+            $rules.numberGreaterThanOrEqual(bedSize.minY),
+            $rules.numberLessThanOrEqual(bedSize.maxY)
+          ]"
+          :disabled="getCustomParkPosBlocked('y')"
+          hide-details="auto"
+          filled
+          dense
+          single-line
+          :suffix="$t('app.suffix.mm')"
+          @change="setParkPosY"
+        />
+      </app-setting>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Mixins, Ref } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { ParkPosition, TimelapseSettings } from '@/store/timelapse/types'
+import type { ParkPosition, TimelapseSettings } from '@/store/timelapse/types'
 import { SocketActions } from '@/api/socketActions'
 import ParkExtrudeRetractSettings from './ParkExtrudeRetractSettings.vue'
-import { VInput } from '@/types'
+import type { VInput } from '@/types'
+import type { BedSize } from '@/store/printer/types'
 
 @Component({
   components: {
     ParkExtrudeRetractSettings
   }
 })
-export default class LayerMacroSettings extends Mixins(StateMixin) {
+export default class CustomParkPositionSettings extends Mixins(StateMixin) {
   @Ref('parkPosXElement')
   readonly parkPosXElement?: VInput
 
@@ -101,23 +106,16 @@ export default class LayerMacroSettings extends Mixins(StateMixin) {
       SocketActions.machineTimelapseSetSettings({ park_custom_pos_y: value })
     }
   }
-
-  get printerMinX () {
-    return +(this.$store.getters['printer/getPrinterConfig']().stepper_x?.position_min ?? 0)
+  get bedSize (): BedSize {
+    const bedSize = this.$store.getters['printer/getBedSize'] as BedSize | undefined
+    return bedSize ?? {
+      minX: -Infinity,
+      minY: -Infinity,
+      maxX: Infinity,
+      maxY: Infinity
+    }
   }
-
-  get printerMaxX () {
-    return +(this.$store.getters['printer/getPrinterConfig']().stepper_x?.position_max ?? Infinity)
-  }
-
-  get printerMinY () {
-    return +(this.$store.getters['printer/getPrinterConfig']().stepper_y?.position_min ?? 0)
-  }
-
-  get printerMaxY () {
-    return +(this.$store.getters['printer/getPrinterConfig']().stepper_y?.position_max ?? Infinity)
-  }
-
+  
   get settings (): TimelapseSettings {
     return this.$store.getters['timelapse/getSettings']
   }

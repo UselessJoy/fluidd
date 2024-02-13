@@ -1,13 +1,13 @@
 import _Vue from 'vue'
 import VueRouter from 'vue-router'
 import { camelCase, startCase, capitalize, isFinite } from 'lodash-es'
-import { ApiConfig, TextSortOrder } from '@/store/config/types'
-import tinycolor from '@ctrl/tinycolor'
-import { DateFormats, Globals, TimeFormats, Waits } from '@/globals'
+import type { ApiConfig, TextSortOrder } from '@/store/config/types'
+import { TinyColor } from '@ctrl/tinycolor'
+import { DateFormats, Globals, TimeFormats, Waits, type DateTimeFormat } from '@/globals'
 import i18n from '@/plugins/i18n'
 import type { TranslateResult } from 'vue-i18n'
 import store from '@/store'
-import { FileBrowserEntry } from '@/store/files/types'
+import type { FileBrowserEntry } from '@/store/files/types'
 import versionStringCompare from '@/util/version-string-compare'
 
 /**
@@ -48,7 +48,7 @@ export const Filters = {
    * Formats a time to 00h 00m 00s
    * Expects to be passed seconds.
    */
-  formatCounterTime: (seconds: number) => {
+  formatCounterSeconds: (seconds: number) => {
     seconds = Number(seconds)
     if (isNaN(+seconds) || !isFinite(seconds)) seconds = 0
     let isNeg = false
@@ -67,16 +67,27 @@ export const Filters = {
     return (isNeg) ? '-' + r : r
   },
 
-  getDateFormat: (override?: string) => {
+  getNavigatorLocales: () => {
+    return navigator.languages ?? [navigator.language]
+  },
+  
+  getAllLocales: () => {
+    return [
+      i18n.locale,
+      ...Filters.getNavigatorLocales()
+    ]
+  },
+  
+  getDateFormat: (override?: string): DateTimeFormat => {
     return {
-      locale: i18n.locale,
+      locales: Filters.getAllLocales(),
       ...DateFormats[override ?? store.state.config.uiSettings.general.dateFormat]
     }
   },
 
-  getTimeFormat: (override?: string) => {
+  getTimeFormat: (override?: string): DateTimeFormat  => {
     return {
-      locale: i18n.locale,
+      locales: Filters.getAllLocales(),
       ...TimeFormats[override ?? store.state.config.uiSettings.general.timeFormat]
     }
   },
@@ -85,7 +96,7 @@ export const Filters = {
     const date = new Date(value)
     const dateFormat = Filters.getDateFormat()
 
-    return date.toLocaleDateString(dateFormat.locale, {
+    return date.toLocaleDateString(dateFormat.locales, {
       ...dateFormat.options,
       ...options
     })
@@ -95,7 +106,7 @@ export const Filters = {
     const date = new Date(value)
     const timeFormat = Filters.getTimeFormat()
 
-    return date.toLocaleTimeString(timeFormat.locale, {
+    return date.toLocaleTimeString(timeFormat.locales, {
       ...timeFormat.options,
       ...options
     })
@@ -109,11 +120,16 @@ export const Filters = {
   },
 
   formatDateTime: (value: number | string | Date, options?: Intl.DateTimeFormatOptions) => {
-    const date = new Date(value)
     const timeFormat = Filters.getTimeFormat()
     const dateFormat = Filters.getDateFormat()
 
-    return date.toLocaleDateString(dateFormat.locale, {
+    if (timeFormat.locales !== dateFormat.locales) {
+      return Filters.formatDate(value, options) + ' ' + Filters.formatTime(value, options)
+    }
+
+    const date = new Date(value)
+
+    return date.toLocaleDateString(dateFormat.locales, {
       ...dateFormat.options,
       ...timeFormat.options,
       ...options
@@ -148,7 +164,7 @@ export const Filters = {
   },
 
   formatRelativeTime (value: number, unit: Intl.RelativeTimeFormatUnit, options?: Intl.RelativeTimeFormatOptions) {
-    const rtf = new Intl.RelativeTimeFormat(i18n.locale, {
+    const rtf = new Intl.RelativeTimeFormat(Filters.getAllLocales(), {
       numeric: 'auto',
       ...options
     })
@@ -223,7 +239,7 @@ export const Filters = {
    */
   getReadableFileSizeString (fileSizeInBytes: number) {
     let i = -1
-    const byteUnits = [' ' + i18n.t('app.metrics.KB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'), 
+    const byteUnits = [' ' + i18n.t('app.metrics.kB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'), 
                        ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'), 
                        ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')]
     if (fileSizeInBytes === 0) return `0${byteUnits[0]}`
@@ -235,6 +251,19 @@ export const Filters = {
     return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i]
   },
 
+  getReadableDataRateString (dataRateInBytesPerSec: number) {
+    let i = -1
+    const byteUnits = [' ' + i18n.t('app.metrics.kB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'), 
+                       ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'), 
+                       ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')]
+    if (dataRateInBytesPerSec === 0) return `0${byteUnits[0]}`
+    do {
+      dataRateInBytesPerSec = dataRateInBytesPerSec / 1024
+      i++
+    } while (dataRateInBytesPerSec > 1024)
+
+    return Math.max(dataRateInBytesPerSec, 0.2).toFixed(1) + byteUnits[i] + '/Sec'
+  },
   /**
    * Formats a number representing mm to human readable distance.
    */
@@ -248,22 +277,56 @@ export const Filters = {
   /**
    * Formats a number representing g to human readable weight.
    */
-  getReadableWeightString (weightInG: number) {
+  getReadableWeightString (weightInG: number | undefined | null) {
+    if (weightInG === undefined || weightInG === null) {
+      return '-'
+    }
     if (weightInG >= 1000) return (weightInG / 1000).toFixed(2) + ' ' + i18n.t('app.metrics.kg')
     return weightInG.toFixed(2) + ' ' + i18n.t('app.metrics.g')
   },
 
   /**
-   * Formats a number representing mm to human readable distance.
+   * Formats a number (in Hz) to a human readable frequency.
    */
   getReadableFrequencyString (frequencyInHz: number) {
     let i = 0
-    const frequencyUnits = [' ' + i18n.t('app.metrics.Hz'), ' ' + i18n.t('app.metrics.KHz'), ' ' + i18n.t('app.metrics.MHz'), ' ' + i18n.t('app.metrics.GHz')]
+    const frequencyUnits = [
+                              ' ' + i18n.t('app.metrics.Hz'), 
+                              ' ' + i18n.t('app.metrics.kHz'), 
+                              ' ' + i18n.t('app.metrics.MHz'), 
+                              ' ' + i18n.t('app.metrics.GHz'),
+                              ' ' + i18n.t('app.metrics.THz'),
+                            ]
     while (frequencyInHz >= 1000) {
       frequencyInHz = frequencyInHz / 1000
       i++
     }
     return frequencyInHz.toFixed() + frequencyUnits[i]
+  },
+
+  /**
+     * Formats a number (in ohms) to a human readable resistance.
+     */
+  getReadableResistanceString (resistanceInOhms: number) {
+    let i = 0
+    const resistanceUnits = [' ' + i18n.t('app.metrics.Om'), 
+                              ' ' + i18n.t('app.metrics.kOm'), 
+                              ' ' + i18n.t('app.metrics.MOm'), 
+                              ' ' + i18n.t('app.metrics.GOm'),
+                              ' ' + i18n.t('app.metrics.TOm'),
+                            ]
+    while (resistanceInOhms >= 1000) {
+      resistanceInOhms = resistanceInOhms / 1000
+      i++
+    }
+    return resistanceInOhms.toFixed(1) + resistanceUnits[i]
+  },
+
+  /**
+   * Formats a number (in hPa) to human readable atmospheric pressure.
+   */
+  getReadableAtmosphericPressureString (pressumeInHPa: number) {
+    return pressumeInHPa.toFixed(1) + ' ' + i18n.t('app.metrics.hPa')
   },
 
   /**
@@ -280,8 +343,8 @@ export const Filters = {
     if (sortBy === null || !sortBy.length) return items
     const stringCollator = new Intl.Collator(locale, { sensitivity: 'accent', usage: 'sort' })
     return items.sort((a, b) => {
-      if (a.type === 'directory' && (a.name === '..' || b.type !== 'directory')) return -1
-      if (b.type === 'directory' && (b.name === '..' || a.type !== 'directory')) return 1
+      if (a.type === 'directory' && (a.dirname === '..' || b.type !== 'directory')) return -1
+      if (b.type === 'directory' && (b.dirname === '..' || a.type !== 'directory')) return 1
 
       for (let i = 0; i < sortBy.length; i++) {
         const sortKey = sortBy[i]
@@ -315,7 +378,7 @@ export const Filters = {
 
           // If are number prefixed, compare prefixes as number
           if (sortA && sortB && sortA[0] !== sortB[0]) {
-            return Number(sortA[0]) - Number(sortB[0])
+            return +sortA[0] - +sortB[0]
           }
         } else if (textSortOrder === 'version') {
           return versionStringCompare(sortValuesAsString[0], sortValuesAsString[1])
@@ -330,21 +393,38 @@ export const Filters = {
   /**
    * Determines API urls from a base url
    */
-  getApiUrls (url: string): ApiConfig {
-    const _url = new URL(url)
-    const wsProtocol = _url.protocol === 'https:' ? 'wss://' : 'ws://'
-    const o = {
-      apiUrl: `${_url.protocol}//${_url.host}`,
-      socketUrl: `${wsProtocol}${_url.host}/websocket`
+  getApiUrls (apiUrl: string): ApiConfig {
+    if (
+      !apiUrl.startsWith('http://') &&
+      !apiUrl.startsWith('https://')
+    ) {
+      apiUrl = `http://${apiUrl}`
     }
-    return o
+
+    if (apiUrl.endsWith('/')) {
+      apiUrl = apiUrl.slice(0, -1)
+    }
+
+    const socketUrl = new URL(apiUrl)
+
+    socketUrl.protocol = socketUrl.protocol === 'https:'
+      ? 'wss://'
+      : 'ws://'
+    socketUrl.pathname += socketUrl.pathname.endsWith('/')
+      ? 'websocket'
+      : '/websocket'
+
+    return {
+      apiUrl,
+      socketUrl: socketUrl.toString()
+    }
   },
 
   /**
    * Tells us if a color is considered dark or light
    */
   isColorDark (color: string) {
-    const t = tinycolor(color).getBrightness()
+    const t = new TinyColor(color).getBrightness()
     return ((t / 255) * 100) <= 50
   },
 
@@ -358,11 +438,11 @@ export const Filters = {
 }
 
 export const Rules = {
-  required (v: any) {
+  required (v: unknown) {
     return ((v ?? '') !== '') || i18n.t('app.general.simple_form.error.required')
   },
 
-  numberValid (v: any) {
+  numberValid (v: unknown) {
     return !isNaN(+(v ?? NaN)) || i18n.t('app.general.simple_form.error.invalid_number')
   },
 
@@ -399,14 +479,14 @@ export const Rules = {
   },
 
   lengthGreaterThanOrEqual (min: number) {
-    return (v: string | any[]) => v.length >= min || i18n.t('app.general.simple_form.error.min', { min })
+    return (v: string | unknown[]) => v.length >= min || i18n.t('app.general.simple_form.error.min', { min })
   },
 
   lengthLessThanOrEqual (max: number) {
-    return (v: string | any[]) => v.length <= max || i18n.t('app.general.simple_form.error.max', { max })
+    return (v: string | unknown[]) => v.length <= max || i18n.t('app.general.simple_form.error.max', { max })
   },
 
-  numberArrayValid (v: any[]) {
+  numberArrayValid (v: unknown[]) {
     return !v.some(i => i === '' || isNaN(+(i ?? NaN))) || i18n.t('app.general.simple_form.error.arrayofnums')
   },
 

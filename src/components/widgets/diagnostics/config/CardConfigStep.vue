@@ -17,12 +17,12 @@
 
     <app-setting :title="$t('app.setting.label.icon')">
       <v-select
+        v-model="config.icon"
         filled
         dense
         single-line
         hide-details="auto"
         :items="icons"
-        :value="config.icon"
       >
         <template #item="{item}">
           <v-icon
@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { DiagnosticsCardConfig } from '@/store/diagnostics/types'
+import type { DiagnosticsCardConfig } from '@/store/diagnostics/types'
 import { Icons } from '@/globals'
 
 @Component({})

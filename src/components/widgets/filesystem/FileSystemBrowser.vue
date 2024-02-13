@@ -6,14 +6,14 @@
     </div> -->
 
     <v-data-table
-      v-model="selectedItems"
+      v-model="selected"
       :headers="headers"
       :items="files"
       :dense="dense"
-      :disable-pagination="true"
+      disable-pagination
       :loading-text="$t('app.filesystem.loading_text')"
       :loading="loading"
-      :sort-desc="true"
+      sort-desc
       :custom-sort="customSort"
       :search="search"
       :show-select="bulkActions"
@@ -25,8 +25,8 @@
       sort-by="modified"
       hide-default-footer
       class="rounded-0"
+      fixed-header
       @input="handleSelected"
-      @item-selected="handleItemSelected"
     >
       <template #item="{ item, isSelected, select }">
         <tr
@@ -37,15 +37,15 @@
             'v-data-table__selected': (isSelected && item.name !== '..')
           }"
           class="row-select px-1"
-          :draggable="draggable(item)"
+          :draggable="isItemDraggable(item)"
           @click.prevent="$emit('row-click', item, $event)"
           @contextmenu.prevent="$emit('row-click', item, $event)"
-          @drag="handleDrag(item)"
-          @dragstart="handleDragStart"
+          @dragstart="handleDragStart(item, $event)"
           @dragend="handleDragEnd"
-          @drop.prevent.stop="handleDrop(item, $event)"
-          @dragover.prevent="handleDragOver($event)"
-          @dragleave.prevent="handleDragLeave($event)"
+          @dragover="handleDragOver(item, $event)"
+          @dragenter.prevent
+          @dragleave.prevent="handleDragLeave"
+          @drop.prevent="handleDrop(item, $event)"
         >
           <td v-if="bulkActions">
             <v-simple-checkbox
@@ -70,7 +70,7 @@
               <img
                 v-else
                 :style="{'max-width': `${thumbnailSize}px`, 'max-height': `${thumbnailSize}px`}"
-                :src="getThumbUrl(item.thumbnails, item.path, thumbnailSize > 16, item.modified)"
+                :src="getThumbUrl(item, root, item.path, thumbnailSize > 16, item.modified)"
               >
             </v-layout>
           </td>
@@ -195,7 +195,7 @@
             item-value="estimated_time"
           >
             <span v-if="item.estimated_time !== undefined">
-              {{ $filters.formatCounterTime(item.estimated_time) }}
+              {{ $filters.formatCounterSeconds(item.estimated_time) }}
             </span>
           </file-row-item>
 
@@ -205,7 +205,7 @@
             item-value="history.print_duration"
           >
             <span v-if="item.history && item.history.print_duration !== undefined">
-              {{ $filters.formatCounterTime(item.history.print_duration) }}
+              {{ $filters.formatCounterSeconds(item.history.print_duration) }}
             </span>
           </file-row-item>
 
@@ -215,7 +215,7 @@
             item-value="history.total_duration"
           >
             <span v-if="item.history && item.history.total_duration !== undefined">
-              {{ $filters.formatCounterTime(item.history.total_duration) }}
+              {{ $filters.formatCounterSeconds(item.history.total_duration) }}
             </span>
           </file-row-item>
 
@@ -263,7 +263,7 @@
             :headers="headers"
             item-value="modified"
           >
-            <span v-if="item.modified !== undefined && item.modified !== null">
+            <span v-if="item.modified !== undefined && item.name !== '..'">
               {{ $filters.formatDateTime(item.modified * 1000) }}
             </span>
           </file-row-item>
@@ -272,7 +272,7 @@
             :headers="headers"
             item-value="size"
           >
-            <span v-if="item.size !== undefined && item.size !== 0">
+            <span v-if="item.size !== undefined && item.name !== '..'">
               {{ $filters.getReadableFileSizeString(item.size) }}
             </span>
           </file-row-item>
@@ -283,15 +283,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
-import {
-  AppFileWithMeta,
-  FileBrowserEntry
-} from '@/store/files/types'
-import { AppTableHeader } from '@/types'
+import { Component, Prop, Mixins, VModel, PropSync } from 'vue-property-decorator'
+import type { FileBrowserEntry, RootProperties } from '@/store/files/types'
+import type { AppTableHeader } from '@/types'
 import FilesMixin from '@/mixins/files'
-
 import FileRowItem from './FileRowItem.vue'
+import { SupportedImageFormats, SupportedVideoFormats } from '@/globals'
 
 @Component({
   components: {
@@ -299,40 +296,39 @@ import FileRowItem from './FileRowItem.vue'
   }
 })
 export default class FileSystemBrowser extends Mixins(FilesMixin) {
+  @VModel({ type: Array<FileBrowserEntry>, required: true })
+    selected!: FileBrowserEntry[]
+
   @Prop({ type: String, required: true })
   readonly root!: string
 
-  @Prop({ type: Array, required: true })
+  @Prop({ type: Array<FileBrowserEntry>, required: true })
   readonly files!: FileBrowserEntry[]
 
-  @Prop({ type: Boolean, default: false })
-  readonly dense!: boolean
+  @Prop({ type: Boolean })
+  readonly dense?: boolean
 
-  @Prop({ type: Boolean, default: false })
-  readonly loading!: boolean
+  @Prop({ type: Boolean })
+  readonly loading?: boolean
 
   // Currently defined list of headers.
-  @Prop({ type: Array, required: true })
+  @Prop({ type: Array<AppTableHeader>, required: true })
   readonly headers!: AppTableHeader[]
 
-  @Prop({ type: String, required: false })
-  readonly search!: string
+  @Prop({ type: String })
+  readonly search?: string
 
-  @Prop({ type: Boolean, required: true })
-  readonly dragState!: boolean
+  @PropSync('dragState', { type: Boolean, required: true })
+    dragStateModel!: boolean
 
-  @Prop({ type: Boolean, default: false })
-  readonly disabled!: boolean
+    @Prop({ type: Boolean })
+  readonly disabled?: boolean
 
-  @Prop({ type: Boolean, default: false })
-  readonly bulkActions!: boolean
+  @Prop({ type: Boolean })
+  readonly bulkActions?: boolean
 
-  @Prop({ type: Array, required: true })
-  readonly selected!: (FileBrowserEntry | AppFileWithMeta)[]
-
-  dragItem: FileBrowserEntry | AppFileWithMeta | null = null
-  ghost: HTMLDivElement | undefined = undefined
-  selectedItems: (FileBrowserEntry | AppFileWithMeta)[] = []
+  dragItem: FileBrowserEntry | null = null
+  ghost?: HTMLDivElement = undefined
 
   // Is the history component enabled
   get showHistory () {
@@ -340,6 +336,14 @@ export default class FileSystemBrowser extends Mixins(FilesMixin) {
       this.$store.getters['server/componentSupport']('history') &&
       this.root === 'gcodes'
     )
+  }
+
+  get rootProperties (): RootProperties {
+    return this.$store.getters['files/getRootProperties'](this.root) as RootProperties
+  }
+
+  get readonly () {
+    return this.rootProperties.readonly
   }
 
   get thumbnailSize () {
@@ -352,62 +356,57 @@ export default class FileSystemBrowser extends Mixins(FilesMixin) {
     return this.$store.state.config.uiSettings.general.textSortOrder
   }
 
+  get draggedItems () {
+    if (this.dragItem) {
+      const filteredSelectedItems = this.selected
+        .filter(item => item.name !== '..')
+      const draggedItems = filteredSelectedItems.length > 0
+          ? filteredSelectedItems
+          : [this.dragItem]
+          return draggedItems
+    }
+    return []
+  }
+  
   customSort (items: FileBrowserEntry[], sortBy: string[], sortDesc: boolean[], locale: string) {
     return this.$filters.fileSystemSort(items, sortBy, sortDesc, locale, this.textSortOrder)
   }
 
-  mounted () {
-    this.selectedItems = this.selected
-  }
-
-  // Make sure we update the selected items if it's changed.
-  @Watch('selected')
-  onSelected (selected: (FileBrowserEntry | AppFileWithMeta)[]) {
-    this.selectedItems = selected
-  }
-
-  // When the selected items change, update the parent.
-  handleSelected (selected: (FileBrowserEntry | AppFileWithMeta)[]) {
-    this.$emit('update:selected', selected)
-  }
-
-  // We ignore our [..] dir, so handle faking our checkbox states.
-  handleItemSelected (item: { item: FileBrowserEntry | AppFileWithMeta; value: boolean }) {
-    // If last two, and filtered results in 0 - set to 0.
-    if (
-      !item.value &&
-      this.selectedItems.length <= 2 &&
-      this.selectedItems.filter(fileOrFolder => (fileOrFolder.name !== '..' && item.item !== fileOrFolder)).length === 0
-    ) {
-      this.selectedItems = []
+  handleSelected (selected: FileBrowserEntry[]) {
+    if (selected.length === 1) {
+      if (selected[0].name === '..') {
+        selected = []
+      } else {
+        selected = this.files
+          .filter(item => item.name === selected[0].name || item.name === '..')
+      }
     }
-
-    // If top two, and filtered results in count -1, set to all.
-    if (
-      item.value &&
-      this.selectedItems.length + 1 >= this.files.length &&
-      this.selectedItems.filter(fileOrFolder => (fileOrFolder.name !== '..')).length + 1 === this.files.length
-    ) {
-      this.selectedItems = this.files
-    }
+    this.$emit('input', selected)
   }
 
   getItemIcon (item: FileBrowserEntry) {
+    const readonly = !this.isItemWriteable(item)
+
     if (item.type === 'file') {
       if (item.extension === 'zip') {
-        return '$fileZip'
+        return readonly ? '$fileZipLock' : '$fileZip'
+      } else if (
+        SupportedImageFormats.includes(`.${item.extension}`) ||
+        SupportedVideoFormats.includes(`.${item.extension}`)
+      ) {
+        return readonly ? '$fileImageLock' : '$fileImage'
       } else {
-        return '$file'
+        return readonly ? '$fileLock' : '$file'
       }
     } else if (item.name === '..') {
       return '$folderUp'
     } else {
-      return '$folder'
+      return readonly ? '$folderLock' : '$folder'
     }
   }
 
   // Determines if a row is currently in a draggable state or not.
-  draggable (item: FileBrowserEntry | AppFileWithMeta) {
+  isItemDraggable (item: FileBrowserEntry) {
     return (
       item.name !== '..' &&
       this.files.length > 0 &&
@@ -418,74 +417,104 @@ export default class FileSystemBrowser extends Mixins(FilesMixin) {
     )
   }
 
+  isItemWriteable (item: FileBrowserEntry) {
+    return (
+      !this.readonly &&
+      (
+        item.permissions === undefined ||
+        item.permissions.includes('w')
+      )
+    )
+  }
+
   // Fake a drag image when the user drags a file or folder.
-  handleDragStart (e: DragEvent) {
-    if (e.dataTransfer) {
+  handleDragStart (item: FileBrowserEntry, event: DragEvent) {
+    if (this.dragStateModel  !== true) {
+      this.dragItem = item
+      this.dragStateModel = true
+    }
+
+    if (event.dataTransfer) {
+      const draggedItems = this.draggedItems
+
       this.ghost = document.createElement('div')
       this.ghost.classList.add('bulk-drag')
       this.ghost.classList.add((this.$vuetify.theme.dark) ? 'theme--dark' : 'theme--light')
-      this.ghost.innerHTML = (this.selected.length > 0)
-        ? `Move ${this.selected.length} items`
-        : 'Move item'
+      this.ghost.innerHTML = draggedItems.length > 1
+        ? this.$tc('app.file_system.tooltip.items_count', draggedItems.length)
+        : item.name
       document.body.appendChild(this.ghost)
-      e.dataTransfer.dropEffect = 'move'
-      e.dataTransfer.setDragImage(this.ghost, 0, 0)
-    }
-  }
-
-  // Table row is being dragged
-  handleDrag (item: FileBrowserEntry | AppFileWithMeta) {
-    if (this.dragState !== true) {
-      this.dragItem = item
-      this.$emit('update:dragState', true)
+      event.dataTransfer.effectAllowed = 'all'
+      event.dataTransfer.setDragImage(this.ghost, 0, 0)
+      this.$emit('drag-start', item, draggedItems, event.dataTransfer)
     }
   }
 
   // File was dropped on another table row.
-  handleDrop (destination: FileBrowserEntry | AppFileWithMeta, e: DragEvent) {
-    this.handleDragLeave(e)
+  handleDrop (item: FileBrowserEntry, event: DragEvent) {
+    this.handleDragLeave(event)
     if (
-      destination.type === 'directory' &&
+      item.type === 'directory' &&
+      this.isItemWriteable(item) &&
+      event.dataTransfer &&
       this.dragItem &&
-      this.dragItem !== destination &&
-      !this.selected.includes(destination)
+      this.dragItem !== item
     ) {
-      const source = (this.selected.length === 0)
-        ? [this.dragItem]
-        : this.selected.filter(item => (item.name !== '..'))
-      this.$emit('move', source, destination)
+      const draggedItems = this.draggedItems
+      if (!draggedItems.includes(item)) {
+        this.$emit('move', draggedItems, item)
+      }
     }
   }
 
   // Handles highlighting rows as drag over them
-  handleDragOver (e: DragEvent) {
-    const element = e.target as HTMLElement
-    if (element) {
-      if (
-        element.tagName === 'TD' &&
-        element.parentElement?.classList.contains('is-directory')
-      ) {
-        const row = element.parentElement
-        if (row) row.classList.add('active')
+  handleDragOver (item: FileBrowserEntry, event: DragEvent) {
+    if (
+      item.type === 'directory' &&
+      this.isItemWriteable(item) &&
+      event.dataTransfer &&
+      this.dragItem &&
+      this.dragItem !== item &&
+      !this.draggedItems.includes(item)
+    ) {
+      event.preventDefault()
+      event.dataTransfer.dropEffect = 'move'
+      if (event.target instanceof HTMLElement) {
+        let element: HTMLElement | null = event.target
+        while (element) {
+          if (element.tagName === 'TR') {
+            element.classList.add('active')
+            return
+          }
+          element = element.parentElement
+        }
       }
     }
   }
 
   // Handles un highlighting rows as we drag out of them.
-  handleDragLeave (e: DragEvent) {
-    const element = e.target as HTMLElement
-    if (element?.tagName === 'TD') {
-      const row = element.parentElement
-      if (row) row.classList.remove('active')
+  handleDragLeave (event: DragEvent) {
+    if (event.target instanceof HTMLElement) {
+      let element: HTMLElement | null = event.target
+      while (element) {
+        if (element.tagName === 'TR') {
+          element.classList.remove('active')
+          return
+        }
+        element = element.parentElement
+      }
     }
   }
 
   // Drag ended
   handleDragEnd () {
-    const e = this.ghost as HTMLDivElement
-    document.body.removeChild(e)
+    const ghost = this.ghost
+    if (ghost) {
+      document.body.removeChild(ghost)
+      this.ghost = undefined
+    }
     this.dragItem = null
-    this.$emit('update:dragState', false)
+    this.dragStateModel = false
   }
 }
 </script>

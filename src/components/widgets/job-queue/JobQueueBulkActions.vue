@@ -1,7 +1,23 @@
 <template>
   <v-toolbar dense>
     <v-spacer />
-
+    
+    <v-tooltip bottom>
+      <template #activator="{ on, attrs }">
+        <v-btn
+          v-bind="attrs"
+          fab
+          small
+          text
+          @click="$emit('multiply')"
+          v-on="on"
+        >
+          <v-icon>$duplicate</v-icon>
+        </v-btn>
+      </template>
+      <span>{{ $t('app.general.btn.multiply') }}</span>
+    </v-tooltip>
+    
     <v-tooltip bottom>
       <template #activator="{ on, attrs }">
         <v-btn

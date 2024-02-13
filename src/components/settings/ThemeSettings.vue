@@ -9,7 +9,15 @@
       dense
       class="mb-4"
     >
-      <app-setting :title="$t('app.setting.label.theme_preset')">
+    <app-setting>
+        <template #title>
+          <span>{{ $t('app.setting.label.theme_preset') }}</span>
+          <app-inline-help
+            bottom
+            small
+            :tooltip="$t('app.setting.tooltip.theme_disclaimer')"
+          />
+        </template>
         <v-select
           v-model="themePreset"
           filled
@@ -75,6 +83,16 @@
           />
       </app-setting>
 
+      <v-divider />
+
+      <app-setting :title="$t('app.setting.label.show_logo_on_background')">
+        <v-switch
+          v-model="backgroundLogo"
+          hide-details
+          class="mb-5"
+          @click.native.stop
+        />
+      </app-setting>
     </v-card>
   </div>
 </template>
@@ -83,9 +101,9 @@
 import { Component, Mixins, Prop } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import { IroColor } from '@irojs/iro-core'
-import { SupportedTheme, ThemeConfig } from '@/store/config/types'
+import type { ThemePreset, ThemeConfig } from '@/store/config/types'
 import ThemePicker from '../ui/AppColorPicker.vue'
-import { Led } from '@/store/printer/types'
+import type { Led } from '@/store/printer/types'
 import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
 
 @Component({
@@ -95,8 +113,9 @@ import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
   }
 })
 export default class ThemeSettings extends Mixins(StateMixin) {
-  preset: SupportedTheme | null = null
+
   now_led = false
+
   get allLeds () {
     const items: Array<Led> = [
       ...this.$store.getters['printer/getAllLeds']
@@ -123,42 +142,40 @@ export default class ThemeSettings extends Mixins(StateMixin) {
   }
 
 
-  get themePreset () {
-    return this.$store.getters['config/getCurrentThemePreset']
+  get theme (): ThemeConfig {
+    return this.$store.state.config.uiSettings.theme as ThemeConfig
   }
 
-  set themePreset (d: SupportedTheme) {
-    const value: ThemeConfig = {
-      isDark: d.isDark,
-      logo: d.logo,
-      currentTheme: {
-        primary: d.color
-      }
-    }
+  get themePresets (): ThemePreset[] {
+    return this.$store.state.config.hostConfig.themePresets as ThemePreset[]
+  }
 
-    this.setTheme(d.color, d.isDark)
-    this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.theme',
-      value,
-      server: true
+  get themePreset (): ThemePreset | undefined {
+    return this.themePresets
+      .find(themePreset => themePreset.logo.src === this.theme.logo.src)
+  }
+
+  set themePreset (value: ThemePreset | undefined) {
+    if (!value) return
+    const { color, isDark, logo } = value
+    this.updateTheme({
+      color,
+      isDark,
+      logo
     })
-  }
-
-  get theme () {
-    return this.$store.getters['config/getTheme']
   }
 
   get themeColor () {
-    return this.theme.currentTheme.primary
+    return this.theme.color
   }
   
   handleChangeThemeColor (value: { channel: string; color: IroColor }) {
-    this.setTheme(value.color.hexString, this.isDark)
-    this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.theme.currentTheme.primary',
-      value: value.color.hexString,
-      server: true
-    })
+    const color = value.color.hexString
+    if (this.theme.color.toLowerCase() !== color.toLowerCase()) {
+      this.updateTheme({
+        color
+      })
+    }
   }
 
   get isDark () {
@@ -166,38 +183,30 @@ export default class ThemeSettings extends Mixins(StateMixin) {
   }
 
   set isDark (value: boolean) {
-    this.setTheme(this.themeColor, value)
-    this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.theme.isDark',
-      value,
-      server: true
+    this.updateTheme({
+      isDark: value
     })
   }
 
-  get themePresets () {
-    return this.$store.state.config.hostConfig.themePresets
+  get backgroundLogo () {
+    return this.theme.backgroundLogo
   }
 
-  setTheme (primary: string, isDark: boolean) {
-    this.$vuetify.theme.dark = isDark
-    this.$vuetify.theme.currentTheme.primary = primary
+  set backgroundLogo (value: boolean) {
+    this.updateTheme({
+      backgroundLogo: value
+    })
   }
 
-  handleReset () {
-    const d = this.$store.getters['config/getCurrentThemePreset']
-    const value: ThemeConfig = {
-      isDark: d.isDark,
-      logo: d.logo,
-      currentTheme: {
-        primary: d.color
-      }
+  updateTheme (updatedTheme: Partial<ThemeConfig>) {
+    this.$store.dispatch('config/updateTheme', updatedTheme)
+  }
+
+    handleReset () {
+      const themePreset = this.themePreset
+      if (themePreset) {
+        this.themePreset = themePreset
     }
-    this.setTheme(d.color, true)
-    this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.theme',
-      value,
-      server: true
-    })
   }
 }
 </script>

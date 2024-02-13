@@ -4,7 +4,9 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue",
-    "tests/**/*"
+    "tests/**/*",
+    "src/monaco/theme/editor.dark.theme.json",
+    "src/monaco/theme/editor.light.theme.json",
   ],
   "exclude": [],
   "compilerOptions": {

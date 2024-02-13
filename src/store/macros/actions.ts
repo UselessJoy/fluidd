@@ -1,6 +1,6 @@
-import { ActionTree } from 'vuex'
-import { Macro, MacroCategory, MacrosState } from './types'
-import { RootState } from '../types'
+import type { ActionTree } from 'vuex'
+import type { Macro, MacroCategory, MacrosState } from './types'
+import type { RootState } from '../types'
 import { SocketActions } from '@/api/socketActions'
 import { Globals } from '@/globals'
 
@@ -30,6 +30,19 @@ export const actions: ActionTree<MacrosState, RootState> = {
     SocketActions.serverWrite(Globals.MOONRAKER_DB.fluidd.ROOTS.macros.name + '.stored', state.stored)
   },
 
+  saveAllOrder ({ state, commit }, macros: Macro[]) {
+    // Commit the change...
+    macros.forEach((macro, index) => {
+      commit('setUpdateMacro', {
+        ...macro,
+        order: index
+      })
+    })
+
+    // Save to moonraker.
+    SocketActions.serverWrite(Globals.MOONRAKER_DB.fluidd.ROOTS.macros.name + '.stored', state.stored)
+  },
+  
   saveAllOn ({ state, commit }, macros) {
     // Commit the change...
     commit('setUpdateAllVisible', { macros, visible: true })

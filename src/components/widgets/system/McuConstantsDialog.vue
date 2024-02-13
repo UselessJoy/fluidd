@@ -2,7 +2,7 @@
   <app-dialog
     v-model="open"
     :title="$t('app.system_info.label.mcu_information', {mcu: mcu.name})"
-    :max-width="500"
+    max-width="500"
     no-actions
   >
     <v-card-text>
@@ -21,13 +21,13 @@
 </template>
 
 <script lang="ts">
-import { MCU } from '@/store/printer/types'
+import type { MCU } from '@/store/printer/types'
 import { Component, Prop, VModel, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class McuConstantsDialog extends Vue {
-  @VModel({ type: Boolean, default: false })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: Object, required: true })
   readonly mcu!: MCU

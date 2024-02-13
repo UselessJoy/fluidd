@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-slider
+    <app-named-slider
       v-if="fan.controllable"
       suffix="%"
       input-xs
@@ -11,9 +11,9 @@
         customRules.minFan
       ]"
       :disabled="!klippyReady"
-      :locked="isMobile"
+      :locked="isMobileViewport"
       :loading="hasWait(`${$waits.onSetFanSpeed}${fan.name}`)"
-      @change="handleChange"
+      @submit="handleChange"
     />
 
     <v-layout
@@ -41,11 +41,12 @@
 
 <script lang="ts">
 import { Component, Mixins, Prop } from 'vue-property-decorator'
-import { Fan } from '@/store/printer/types'
+import type { Fan } from '@/store/printer/types'
 import StateMixin from '@/mixins/state'
+import BrowserMixin from '@/mixins/browser'
 
 @Component({})
-export default class OutputFan extends Mixins(StateMixin) {
+export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
   @Prop({ type: Object, required: true })
   readonly fan!: Fan
 
@@ -78,11 +79,7 @@ export default class OutputFan extends Mixins(StateMixin) {
       ? this.fan.rpm.toFixed() + ' rpm'
       : undefined
   }
-
-  get isMobile () {
-    return this.$vuetify.breakpoint.mobile
-  }
-
+  
   get customRules () {
     return {
       minFan: (v: string | number) => {

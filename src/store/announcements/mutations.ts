@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { MutationTree } from 'vuex'
+import type { MutationTree } from 'vuex'
 import { defaultState } from './state'
-import { AnnouncementsState } from './types'
+import type { AnnouncementsState } from './types'
 
 export const mutations: MutationTree<AnnouncementsState> = {
   /**
@@ -27,7 +27,7 @@ export const mutations: MutationTree<AnnouncementsState> = {
         entry.date_dismissed = null
         entry.dismiss_wake = null
       } else {
-        entry.date_dismissed = new Date().getTime()
+        entry.date_dismissed = Date.now()
       }
     }
 

@@ -28,6 +28,8 @@
       <v-divider />
 
       <template v-for="filter in filters">
+        <v-divider :key="`divider-${filter.name}`" />
+
         <app-setting
           :key="`filter-${filter.name}`"
           :r-cols="3"
@@ -60,8 +62,6 @@
             </v-icon>
           </app-btn>
         </app-setting>
-
-        <v-divider :key="`divider-${filter.name}`" />
       </template>
 
       <console-filter-dialog
@@ -77,7 +77,7 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { ConsoleFilter, ConsoleFilterType } from '@/store/console/types'
+import type { ConsoleFilter } from '@/store/console/types'
 import ConsoleFilterDialog from './ConsoleFilterDialog.vue'
 
 @Component({
@@ -96,13 +96,13 @@ export default class ConsoleSettings extends Mixins(StateMixin) {
   }
 
   handleEditFilterDialog (filter: ConsoleFilter | null) {
-    const filterCopy = filter
+    const filterCopy: ConsoleFilter = filter
       ? { ...filter }
       : {
           id: '',
           enabled: true,
           name: '',
-          type: ConsoleFilterType.Contains,
+          type: 'contains',
           value: ''
         }
 

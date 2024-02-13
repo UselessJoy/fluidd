@@ -3,7 +3,7 @@
     v-model="open"
     :saveButtonText="$t('app.general.btn.begin_calibrate')"
     :title="$t('app.general.btn.calibrate')"
-    :max-width="450"
+    max-width="450"
     @save="handleSubmit()"
   >
     <v-card-text>
@@ -37,8 +37,8 @@ import ToolheadMixin from '@/mixins/toolhead'
 
 @Component({})
 export default class SaveMeshDialog extends Mixins(StateMixin, ToolheadMixin) {
-  @VModel({ type: Boolean, default: false })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: String })
   readonly profile!: string

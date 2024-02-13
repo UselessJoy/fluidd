@@ -2,81 +2,108 @@
   <collapsable-card
     :title="$t('app.general.title.temperature')"
     icon="$fire"
+    :help-tooltip="$t('app.chart.tooltip.help')"
     :lazy="false"
-    :draggable="true"
+    draggable
     layout-path="dashboard.temperature-card"
   >
-    <template #title>
-      <v-icon left>
-        $fire
-      </v-icon>
-      <span class="font-weight-light">{{ $t('app.general.title.temperature') }}</span>
-      <app-inline-help
-        bottom
-        small
-        :tooltip="$t('app.chart.tooltip.help')"
-      />
-    </template>
-
     <template #menu>
       <app-btn-collapse-group :collapsed="menuCollapsed">
-        <app-btn
-          small
-          :disabled="!klippyReady"
-          class="ml-1"
-          @click="chartVisible = !chartVisible"
-        >
-          <v-icon left>
-            $chart
-          </v-icon>
-          {{ (chartVisible) ? $t('app.chart.label.off') : $t('app.chart.label.on') }}
-        </app-btn>
-
         <temperature-presets-menu
           @applyOff="handleApplyOff"
           @applyPreset="handleApplyPreset"
         />
       </app-btn-collapse-group>
-
-      <app-btn-collapse-group
-        :collapsed="true"
-        menu-icon="$cog"
+      <v-menu
+        bottom
+        left
+        offset-y
+        transition="slide-y-transition"
+        :close-on-content-click="false"
       >
-        <v-checkbox
-          v-model="showRateOfChange"
-          :label="$t('app.setting.label.show_rate_of_change')"
-          color="primary"
-          hide-details
-          class="mx-2 mt-2 mb-2"
-        />
-        <v-checkbox
-          v-model="showRelativeHumidity"
-          :label="$t('app.setting.label.show_relative_humidity')"
-          color="primary"
-          hide-details
-          class="mx-2 mt-2 mb-2"
-        />
-        <v-checkbox
-          v-model="showBarometricPressure"
-          :label="$t('app.setting.label.show_barometric_pressure')"
-          color="primary"
-          hide-details
-          class="mx-2 mt-2 mb-2"
-        />
-      </app-btn-collapse-group>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            fab
+            x-small
+            text
+            v-bind="attrs"
+            class="ms-1 my-1"
+            v-on="on"
+          >
+            <v-icon>
+              $cog
+            </v-icon>
+          </v-btn>
+        </template>
+
+        <v-list dense>
+          <v-list-item @click="chartVisible = !chartVisible">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="chartVisible" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('app.setting.label.show_chart') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="showRateOfChange = !showRateOfChange">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="showRateOfChange" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('app.setting.label.show_rate_of_change') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="showRelativeHumidity = !showRelativeHumidity">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="showRelativeHumidity" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('app.setting.label.show_relative_humidity') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="showBarometricPressure = !showBarometricPressure">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="showBarometricPressure" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('app.setting.label.show_barometric_pressure') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="showGasResistance = !showGasResistance">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="showGasResistance" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('app.setting.label.show_gas_resistance') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </template>
 
     <temperature-targets
       @legendClick="legendToggleSelect"
       @legendPowerClick="legendTogglePowerSelect"
     />
-
     <template v-if="chartReady && chartVisible">
       <v-divider />
 
       <thermal-chart
         ref="thermalchart"
-        :height="(isMobile) ? '180px' : '260px'"
+        :height="(isMobileViewport) ? '180px' : '260px'"
       />
     </template>
   </collapsable-card>
@@ -85,12 +112,13 @@
 <script lang="ts">
 import { Component, Mixins, Prop, Ref } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import { Fan, Heater } from '@/store/printer/types'
+import BrowserMixin from '@/mixins/browser'
+import type { Fan, Heater } from '@/store/printer/types'
 
 import ThermalChart from '@/components/widgets/thermals/ThermalChart.vue'
 import TemperatureTargets from '@/components/widgets/thermals/TemperatureTargets.vue'
 import TemperaturePresetsMenu from './TemperaturePresetsMenu.vue'
-import { TemperaturePreset } from '@/store/config/types'
+import type { TemperaturePreset } from '@/store/config/types'
 
 @Component({
   components: {
@@ -99,9 +127,9 @@ import { TemperaturePreset } from '@/store/config/types'
     TemperaturePresetsMenu
   }
 })
-export default class TemperatureCard extends Mixins(StateMixin) {
-  @Prop({ type: Boolean, default: false })
-  readonly menuCollapsed!: boolean
+export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
+  @Prop({ type: Boolean })
+  readonly menuCollapsed?: boolean
 
   @Ref('thermalchart')
   readonly thermalChartElement!: ThermalChart
@@ -119,17 +147,17 @@ export default class TemperatureCard extends Mixins(StateMixin) {
     // If this has a target, toggle that too.
     if (this.chartVisible) {
       if ('target' in item) {
-        this.thermalChartElement.legendToggleSelect(item.name + 'Target')
+        this.thermalChartElement.legendToggleSelect(item.key + 'Target')
       }
-      this.thermalChartElement.legendToggleSelect(item.name)
+      this.thermalChartElement.legendToggleSelect(item.key)
     }
   }
 
   legendTogglePowerSelect (item: Heater | Fan) {
     if (this.chartVisible) {
       const name = ('speed' in item)
-        ? item.name + 'Speed'
-        : item.name + 'Power'
+        ? item.key + 'Speed'
+        : item.key + 'Power'
       this.thermalChartElement.legendToggleSelect(name)
     }
   }
@@ -182,8 +210,16 @@ export default class TemperatureCard extends Mixins(StateMixin) {
     })
   }
 
-  get isMobile () {
-    return this.$vuetify.breakpoint.mobile
+  get showGasResistance () {
+    return this.$store.state.config.uiSettings.general.showGasResistance
+  }
+  
+  set showGasResistance (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.showGasResistance',
+      value,
+      server: true
+    })
   }
 
   handleApplyPreset (preset: TemperaturePreset) {
@@ -207,19 +243,18 @@ export default class TemperatureCard extends Mixins(StateMixin) {
   }
 
   async handleApplyOff () {
-    if (['printing', 'busy', 'paused'].includes(this.$store.getters['printer/getPrinterState'])) {
-      const result = await this.$confirm(
+    const result = (
+      !['printing', 'busy', 'paused'].includes(this.$store.getters['printer/getPrinterState']) ||
+      await this.$confirm(
         this.$tc('app.general.label.heaters_busy'),
         { title: this.$tc('app.general.simple_form.msg.confirm'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
-
-      if (!result) {
-        return
-      }
+    )
+    if (result) {
+      this.sendGcode('TURN_OFF_HEATERS')
     }
-
-    this.sendGcode('TURN_OFF_HEATERS')
   }
+  
 }
 </script>

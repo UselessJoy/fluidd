@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { MutationTree } from 'vuex'
-import { PrinterState } from './types'
+import type { MutationTree } from 'vuex'
+import type { PrinterState } from './types'
 import { defaultState } from './state'
-import consola from 'consola'
+import { consola } from 'consola'
 import { get } from 'lodash-es'
 
 export const mutations: MutationTree<PrinterState> = {
@@ -69,7 +69,11 @@ export const mutations: MutationTree<PrinterState> = {
   setClearEndStops (state) {
     state.printer.endstops = {}
   },
-
+  
+  setClearScrewsTiltAdjust (state) {
+    state.printer.screws_tilt_adjust = {}
+  },
+  
   setResetCurrentFile (state) {
     const newState = defaultState().printer.current_file
     consola.debug('resetting current file', newState)

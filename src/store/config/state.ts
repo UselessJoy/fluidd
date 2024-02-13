@@ -1,4 +1,4 @@
-import { ConfigState } from './types'
+import type { ConfigState } from './types'
 import { Globals } from '@/globals'
 
 export const defaultState = (): ConfigState => {
@@ -33,13 +33,20 @@ export const defaultState = (): ConfigState => {
         defaultToolheadMoveLength: 1.0,
         defaultToolheadXYSpeed: 130,
         defaultToolheadZSpeed: 10,
+        toolheadControlStyle: 'cross',
         toolheadMoveDistances: [0.1, 1, 10, 25, 50, 100],
+        toolheadXYMoveDistances: [1, 10, 50],
+        toolheadZMoveDistances: [0.1, 1, 10],
+        toolheadCircleXYMoveDistances: [1, 10, 25, 50],
+        toolheadCircleZMoveDistances: [0.1, 1, 10, 50],
+        toolheadCircleXYHomingEnabled: false,
         useGcodeCoords: false,
         zAdjustDistances: [0.005, 0.01, 0.025, 0.050],
         enableVersionNotifications: true,
         confirmOnEstop: false,
         confirmOnPowerDeviceChange: false,
         confirmOnSaveConfigAndRestart: true,
+        sectionsToIgnorePendingConfigurationChanges: [],
         dateFormat: 'iso',
         timeFormat: 'iso',
         textSortOrder: 'default',
@@ -47,13 +54,16 @@ export const defaultState = (): ConfigState => {
         showRelativeHumidity: true,
         showBarometricPressure: true,
         showSaveConfigAndRestart: true,
+        showGasResistance: true,
         showUploadAndPrint: true,
         flipConsoleLayout: false,
         cameraFullscreenAction: 'embed',
         topNavPowerToggle: null,
         showManualProbeDialogAutomatically: true,
         showBedScrewsAdjustDialogAutomatically: true,
+        showScrewsTiltAdjustDialogAutomatically: true,
         forceMoveToggleWarning: true,
+        printInProgressLayout: 'default',
         enableDiagnostics: false,
         thumbnailSize: 32,
         autoOff_enable: false,
@@ -64,16 +74,15 @@ export const defaultState = (): ConfigState => {
       theme: {
         isDark: true,
         logo: {
-          src: '/logo_fluidd.svg',
-          dynamic: true
+          src: 'logo_fluidd.svg'
         },
-        currentTheme: {
-          primary: '#2196F3'
-        }
+        color: '#2196F3',
+        backgroundLogo: true
       },
       editor: {
         confirmDirtyEditorClose: true,
         autoEditExtensions: ['.cfg', '.conf', '.ini', '.log', '.md', '.sh', '.txt'],
+        restoreViewState: 'session',
         codeLens: true
       },
       dashboard: {
@@ -115,18 +124,21 @@ export const defaultState = (): ConfigState => {
         job_queue: [
           { value: 'time_added', visible: true },
           { value: 'time_in_queue', visible: false }
-        ]
+        ],
+        spoolman: []
       },
       gcodePreview: {
         extrusionLineWidth: 0.3,
         moveLineWidth: 0.1,
         retractionIconSize: 0.6,
+        drawOrigin: true,
         drawBackground: true,
         showAnimations: true,
-        groupLowerLayers: false,
+        minLayerHeight: 0.1,
         autoLoadOnPrintStart: false,
         autoLoadMobileOnPrintStart: false,
         autoFollowOnFileLoad: true,
+        hideSinglePartBoundingBox: false,
         autoZoom: false,
         flip: {
           horizontal: false,
@@ -134,15 +146,24 @@ export const defaultState = (): ConfigState => {
         }
       },
       fileSystem: {
-        activeFilters: {
-          gcodes: [],
-          config: []
-        }
+        activeFilters: {}
       },
       toolhead: {
         forceMove: false,
         extrudeSpeed: -1,
         extrudeLength: -1
+      },
+      spoolman: {
+        autoSpoolSelectionDialog: true,
+        autoOpenQRDetectionCamera: null,
+        autoSelectSpoolOnMatch: false,
+        preferDeviceCamera: false,
+        warnOnNotEnoughFilament: true,
+        warnOnFilamentTypeMismatch: true,
+        selectionDialogSortOrder: {
+          key: 'last_used',
+          desc: false
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
   <app-dialog
     v-model="open"
     :title="title"
-    :max-width="350"
+    max-width="350"
     @save="handleSave"
   >
     <v-card-text>
@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts">
-import { MacroCategory } from '@/store/macros/types'
+import type { MacroCategory } from '@/store/macros/types'
 import { Component, Vue, Prop, VModel } from 'vue-property-decorator'
 
 @Component({})
 export default class MacroCategoryDialog extends Vue {
-  @VModel({ type: Boolean, required: true })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: String, required: true })
   readonly title!: string

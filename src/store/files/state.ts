@@ -1,4 +1,4 @@
-import { FilesState } from './types'
+import type { FilesState } from './types'
 
 export const defaultState = (): FilesState => {
   return {
@@ -10,20 +10,8 @@ export const defaultState = (): FilesState => {
       used: 0,
       free: 0
     },
-    rootFiles: {
-      gcodes: [],
-      config: [],
-      config_examples: [],
-      docs: [],
-      logs: [],
-      timelapse: []
-    },
-    gcodes: [],
-    config: [],
-    config_examples: [],
-    docs: [],
-    logs: [],
-    timelapse: []
+    rootFiles: {},
+    pathFiles: {}
   }
 }
 

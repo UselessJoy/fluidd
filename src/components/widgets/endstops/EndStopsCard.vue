@@ -11,7 +11,7 @@
         fab
         x-small
         text
-        class="ml-1"
+        class="ms-1 my-1"
         @click="queryEndstops"
       >
         <v-icon>$refresh</v-icon>
@@ -51,27 +51,28 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import { SocketActions } from '@/api/socketActions'
-import { Endstop, Probe } from '@/store/printer/types'
+import type { Endstop, Probe } from '@/store/printer/types'
 
 @Component({
   components: {}
 })
 export default class EndStopsCard extends Mixins(StateMixin) {
   get endstops (): Endstop[] {
-    return this.$store.getters['printer/getEndstops']
+    return this.$store.getters['printer/getEndstops'] as Endstop[]
   }
 
-  get probe (): Probe {
-    return this.$store.getters['printer/getProbe']
+  get probe (): Probe | undefined {
+    return this.$store.getters['printer/getProbe'] as Probe | undefined
   }
 
   get endstopsAndProbes () {
     const endstopsAndProbes = [...this.endstops]
+    const probe = this.probe
 
-    if (this.hasProbe) {
+    if (probe !== undefined) {
       endstopsAndProbes.push({
         name: 'Probe',
-        state: this.probe.last_query ? 'triggered' : 'open'
+        state: probe.last_query ? 'triggered' : 'open'
       })
     }
 
@@ -90,7 +91,7 @@ export default class EndStopsCard extends Mixins(StateMixin) {
   queryEndstops () {
     SocketActions.printerQueryEndstops()
 
-    if (this.hasProbe) {
+    if (this.probe !== undefined) {
       this.sendGcode('QUERY_PROBE', this.$waits.onQueryProbe)
     }
   }

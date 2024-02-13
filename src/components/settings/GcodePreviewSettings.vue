@@ -19,9 +19,9 @@
 
       <v-divider />
 
-      <app-setting :title="$t('app.setting.label.group_lower_layers')">
+      <app-setting :title="$t('app.setting.label.draw_background')">
         <v-switch
-          v-model="groupLowerLayers"
+          v-model="drawBackground"
           hide-details
           class="mb-5"
           @click.native.stop
@@ -30,12 +30,31 @@
 
       <v-divider />
 
-      <app-setting :title="$t('app.setting.label.draw_background')">
+      <app-setting :title="$t('app.setting.label.draw_origin')">
         <v-switch
-          v-model="drawBackground"
+          v-model="drawOrigin"
           hide-details
           class="mb-5"
           @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting :title="$t('app.setting.label.default_min_layer_height')">
+        <v-text-field
+          :value="minLayerHeight"
+          :rules="[
+            $rules.required,
+            $rules.numberValid,
+            $rules.numberGreaterThanOrEqual(0.1)
+          ]"
+          filled
+          dense
+          single-line
+          hide-details="auto"
+          :suffix="$t('app.suffix.mm')"
+          @change="setMinLayerHeight"
         />
       </app-setting>
 
@@ -155,6 +174,17 @@
 
       <v-divider />
 
+      <app-setting :title="$t('app.setting.label.hide_single_part_bounding_box')">
+        <v-switch
+          v-model="hideSinglePartBoundingBox"
+          hide-details
+          class="mb-5"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
       <app-setting :title="$t('app.setting.label.reset')">
         <app-btn
           outlined
@@ -236,7 +266,19 @@ export default class GcodePreviewSettings extends Vue {
       server: true
     })
   }
-
+  
+  get drawOrigin () {
+    return this.$store.state.config.uiSettings.gcodePreview.drawOrigin
+  }
+  
+  set drawOrigin (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.gcodePreview.drawOrigin',
+      value,
+      server: true
+    })
+  }
+  
   get drawBackground () {
     return this.$store.state.config.uiSettings.gcodePreview.drawBackground
   }
@@ -261,14 +303,14 @@ export default class GcodePreviewSettings extends Vue {
     })
   }
 
-  get groupLowerLayers () {
-    return this.$store.state.config.uiSettings.gcodePreview.groupLowerLayers
+  get minLayerHeight  () {
+    return this.$store.state.config.uiSettings.gcodePreview.minLayerHeight
   }
 
-  set groupLowerLayers (value: boolean) {
+  setMinLayerHeight (value: number) {
     this.$store.dispatch('config/saveByPath', {
-      path: 'uiSettings.gcodePreview.groupLowerLayers',
-      value,
+      path: 'uiSettings.gcodePreview.minLayerHeight',
+      value: +value,
       server: true
     })
   }
@@ -311,6 +353,17 @@ export default class GcodePreviewSettings extends Vue {
       value,
       server: true
     })
+  }
+
+  get hideSinglePartBoundingBox () {
+      return this.$store.state.config.uiSettings.gcodePreview.hideSinglePartBoundingBox
+    }
+    set hideSinglePartBoundingBox (value: boolean) {
+      this.$store.dispatch('config/saveByPath', {
+        path: 'uiSettings.gcodePreview.hideSinglePartBoundingBox',
+        value,
+        server: true
+      })
   }
 
   handleReset () {

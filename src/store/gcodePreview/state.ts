@@ -1,8 +1,10 @@
-import { GcodePreviewState } from './types'
+import type { GcodePreviewState } from './types'
 
 export const defaultState = (): GcodePreviewState => {
   return {
     moves: [],
+    layers: [],
+    parts: [],
     file: undefined,
     parserProgress: 0,
     parserWorker: null,
@@ -14,6 +16,7 @@ export const defaultState = (): GcodePreviewState => {
       showMoves: true,
       showExtrusions: true,
       showRetractions: true,
+      showParts: true,
       followProgress: false
     }
   }

@@ -108,7 +108,7 @@
 
               <v-divider />
 
-              <app-slider
+              <app-named-slider
                 v-model="metric.style.fillOpacity"
                 class="px-4 py-3"
                 :label="$t('app.setting.label.fill_opacity')"
@@ -158,7 +158,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { DiagnosticsCardConfig, Metric } from '@/store/diagnostics/types'
+import type { DiagnosticsCardConfig, Metric } from '@/store/diagnostics/types'
 import MetricsCollectorConfig from './MetricsCollectorConfig.vue'
 import { defaultState } from '@/store/layout/state'
 

@@ -2,10 +2,10 @@
   <app-dialog
     v-model="open"
     :title="$t('app.gcode.label.exclude_object')"
-    :max-width="500"
+    max-width="500"
     no-actions
   >
-    <v-card-text class="py-3 px-5">
+    <v-card-text>
       <v-simple-table>
         <tbody>
           <tr
@@ -48,8 +48,8 @@ import StateMixin from '@/mixins/state'
 
 @Component({})
 export default class ExcludeObjectDialog extends Mixins(StateMixin) {
-  @VModel({ type: Boolean, default: false })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   get parts () {
     const parts = this.$store.getters['parts/getParts']
@@ -65,13 +65,13 @@ export default class ExcludeObjectDialog extends Mixins(StateMixin) {
   }
 
   async cancelObject (name: string) {
-    const res = await this.$confirm(
+    const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_exclude_object'),
       { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
 
-    if (res) {
+    if (result) {
       const reqId = name.toUpperCase().replace(/\s/g, '_')
 
       this.sendGcode(`EXCLUDE_OBJECT NAME=${reqId}`)

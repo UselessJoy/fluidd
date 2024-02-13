@@ -10,7 +10,7 @@
           v-if="isManualProbeActive"
           :disabled="!klippyReady || printerPrinting"
           small
-          class="ml-1"
+          class="ml-1 my-1"
           @click="manualProbeDialogOpen = true"
         >
           {{ $t('app.tool.tooltip.manual_probe') }}
@@ -196,7 +196,7 @@
           </app-btn>
 
           <app-btn
-            v-if="!printerPrinting && printerSupportsQgl"
+            v-if="printerSupportsQgl"
             :loading="hasWait($waits.onQGL)"
             :disabled="printerPrinting || printerBusy"
             block
@@ -303,7 +303,7 @@ import { Component, Mixins, Watch } from 'vue-property-decorator'
 import SaveMeshDialog from './SaveMeshDialog.vue'
 import StateMixin from '@/mixins/state'
 import ToolheadMixin from '@/mixins/toolhead'
-import { KlipperMesh, ProcessedMesh } from '@/store/mesh/types'
+import type { KlipperMesh, ProcessedMesh } from '@/store/mesh/types'
 
 @Component({
   components: {

@@ -36,80 +36,100 @@
       </v-tooltip>
     </template>
 
-    <v-list flat>
+    <v-list dense>
       <v-list-item-group
         v-model="selectedFilterTypes"
         multiple
-        active-class=""
       >
-        <template v-for="(filter, i) in filters">
-          <v-list-item
-            :key="`filter-${i}`"
-            :disabled="disabled"
-            :value="filter.value"
-          >
-            <template #default="{ active }">
-              <v-list-item-action>
-                <v-checkbox :input-value="active" />
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ filter.text }}
-                </v-list-item-title>
-                <v-list-item-subtitle v-if="filter.desc !== undefined">
-                  {{ filter.desc }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </template>
-          </v-list-item>
-        </template>
+        <v-list-item
+          v-for="filter in filters"
+          :key="`filter-${filter.type}`"
+          :value="filter.type"
+        >
+          <template #default="{ active }">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="active" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ filter.text }}
+              </v-list-item-title>
+              <v-list-item-subtitle v-if="filter.desc !== undefined">
+                {{ filter.desc }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </template>
+        </v-list-item>
       </v-list-item-group>
     </v-list>
   </v-menu>
 </template>
 
 <script lang="ts">
-import { FileFilterType, FileRoot } from '@/store/files/types'
+import type { FileFilterType, RootProperties } from '@/store/files/types'
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
-interface FileFilter {
-  value: FileFilterType;
-  text: string;
-  desc?: string;
+type FileFilter = {
+  type: FileFilterType,
+  text: string,
+  desc?: string,
 }
 
 @Component({})
 export default class FileSystemFilterMenu extends Vue {
   @Prop({ type: String, required: true })
-  readonly root!: FileRoot
+  readonly root!: string
 
-  @Prop({ type: Boolean, default: false })
-  readonly disabled!: boolean
+  @Prop({ type: Boolean })
+  readonly disabled?: boolean
 
-  availableFilters: FileFilter[] = [
-    {
-      value: 'print_start_time',
-      text: this.$tc('app.file_system.filters.label.print_start_time'),
-      desc: this.$tc('app.file_system.filters.label.print_start_time_desc')
-    },
-    {
-      value: 'hidden_files',
-      text: this.$tc('app.file_system.filters.label.hidden_files')
-    },
-    {
-      value: 'klipper_backup_files',
-      text: this.$tc('app.file_system.filters.label.klipper_backup_files')
-    }
-  ]
-
-  get rootFilterTypes (): FileFilterType[] {
-    return this.$store.getters['files/getRootProperties'](this.root).filterTypes
+  get rootProperties (): RootProperties {
+    return this.$store.getters['files/getRootProperties'](this.root) as RootProperties
   }
 
-  get filters (): FileFilter[] {
-    const filterTypes = this.rootFilterTypes
+  get filters () {
+    const filters: FileFilter[] = []
+    const rootFilterTypes = this.rootProperties.filterTypes
+    if (rootFilterTypes.includes('print_start_time') && this.supportsHistoryComponent) {
+      filters.push({
+        type: 'print_start_time',
+        text: this.$tc('app.file_system.filters.label.print_start_time'),
+        desc: this.$tc('app.file_system.filters.label.print_start_time_desc')
+      })
+    }
+    if (rootFilterTypes.includes('hidden_files')) {
+      filters.push({
+        type: 'hidden_files',
+        text: this.$tc('app.file_system.filters.label.hidden_files_folders')
+      })
+    }
+    if (rootFilterTypes.includes('klipper_backup_files')) {
+      filters.push({
+        type: 'klipper_backup_files',
+        text: this.$tc('app.file_system.filters.label.klipper_backup_files')
+      })
+    }
+    if (rootFilterTypes.includes('moonraker_backup_files')) {
+      filters.push({
+        type: 'moonraker_backup_files',
+        text: this.$tc('app.file_system.filters.label.moonraker_backup_files')
+      })
+    }
+    if (rootFilterTypes.includes('rolled_log_files')) {
+      filters.push({
+        type: 'rolled_log_files',
+        text: this.$tc('app.file_system.filters.label.rolled_log_files')
+      })
+    }
 
-    return this.availableFilters.filter(f => filterTypes.includes(f.value))
+    if (rootFilterTypes.includes('crowsnest_backup_files')) {
+      filters.push({
+        type: 'crowsnest_backup_files',
+        text: this.$tc('app.file_system.filters.label.crowsnest_backup_files')
+      })
+    }
+    
+    return filters
   }
 
   get selectedFilterTypes (): FileFilterType[] {
@@ -119,5 +139,18 @@ export default class FileSystemFilterMenu extends Vue {
   set selectedFilterTypes (value: FileFilterType[]) {
     this.$emit('change', value)
   }
+
+  get supportsHistoryComponent () {
+    return this.$store.getters['server/componentSupport']('history')
+  }
 }
 </script>
+
+<style lang="scss" scoped>
+:deep(.v-list-item--active::before) {
+  opacity: 0;
+}
+:deep(.v-list-item--active:hover::before) {
+  opacity: 0.08;
+}
+</style>

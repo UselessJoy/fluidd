@@ -4,11 +4,11 @@
     app
     clipped-left
     extension-height="46"
-    :color="theme.currentTheme.appbar"
+    :color="$vuetify.theme.currentTheme.appbar"
     :height="$globals.HEADER_HEIGHT"
   >
     <router-link
-      v-show="!isMobile"
+      v-if="!isMobileViewport"
       to="/"
       class="toolbar-logo"
     >
@@ -17,7 +17,7 @@
 
     <div class="toolbar-title">
       <app-btn
-        v-if="isMobile"
+        v-if="isMobileViewport"
         fab
         small
         :elevation="0"
@@ -44,7 +44,7 @@
       </div> -->
       <!--    END NEW    -->
       <div
-        v-if="socketConnected && klippyReady && authenticated && showSaveConfigAndRestart && saveConfigPending"
+        v-if="socketConnected && klippyReady && authenticated && showSaveConfigAndRestartForPendingChanges"
         class="mr-1"
       >
         <app-save-config-and-restart-btn
@@ -54,7 +54,7 @@
         />
       </div>
 
-      <div v-if="socketConnected && !isMobile && authenticated">
+      <div v-if="socketConnected && !isMobileViewport && authenticated">
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
             <app-btn
@@ -198,8 +198,9 @@ import StateMixin from '@/mixins/state'
 import ServicesMixin from '@/mixins/services'
 import FilesMixin from '@/mixins/files'
 import { SocketActions } from '@/api/socketActions'
-import { OutputPin } from '@/store/printer/types'
-import { Device } from '@/store/power/types'
+import type { OutputPin } from '@/store/printer/types'
+import type { Device } from '@/store/power/types'
+import BrowserMixin from '@/mixins/browser'
 
 @Component({
   components: {
@@ -209,7 +210,7 @@ import { Device } from '@/store/power/types'
     AppUploadAndPrintBtn
   }
 })
-export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin) {
+export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin, BrowserMixin) {
   menu = false
   userPasswordDialogOpen = false
   pendingChangesDialogOpen = false
@@ -235,27 +236,40 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     return this.$store.getters['version/hasUpdates']
   }
 
-  get saveConfigPending () {
-    return this.$store.getters['printer/getSaveConfigPending']
+  get saveConfigPending (): boolean {
+    return this.$store.getters['printer/getSaveConfigPending'] as boolean
+  }
+
+  get saveConfigPendingItems (): Record<string, Record<string, string>> {
+    return this.$store.getters['printer/getSaveConfigPendingItems'] as Record<string, Record<string, string>>
+  }
+
+  get showSaveConfigAndRestartForPendingChanges (): boolean {
+    if (!this.showSaveConfigAndRestart || !this.saveConfigPending) {
+      return false
+    }
+    const sectionsToIgnore = this.sectionsToIgnorePendingConfigurationChanges
+    return (
+      sectionsToIgnore.length === 0 ||
+      Object.keys(this.saveConfigPendingItems)
+        .filter(key => !sectionsToIgnore.includes(key))
+        .length > 0
+    )
   }
 
   get devicePowerComponentEnabled () {
     return this.$store.getters['server/componentSupport']('power')
   }
 
-  get theme () {
-    return this.$store.getters['config/getTheme']
-  }
-
-  get isMobile () {
-    return this.$vuetify.breakpoint.mobile
-  }
-
   get inLayout (): boolean {
     return (this.$store.state.config.layoutMode)
   }
   get showSaveConfigAndRestart (): boolean {
-    return this.$store.state.config.uiSettings.general.showSaveConfigAndRestart
+       return this.$store.state.config.uiSettings.general.showSaveConfigAndRestart as boolean
+  }
+  
+  get sectionsToIgnorePendingConfigurationChanges (): string[] {
+    return this.$store.state.config.uiSettings.general.sectionsToIgnorePendingConfigurationChanges as string[]
   }
 
   get showUploadAndPrint (): boolean {
@@ -281,8 +295,7 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
       }
 
       default: {
-        const devices = this.$store.state.power.devices as Device[]
-        const device = devices.find(device => device.device === topNavPowerToggle)
+        const device = this.$store.getters['power/getDeviceByName'](topNavPowerToggle) as Device
         return {
           type: 'moonraker' as const,
           name: topNavPowerToggle,
@@ -333,9 +346,9 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   }
 
   handleResetLayout () {
-    const pathLayouts = {
+    const pathLayouts: Record<string, string>  = {
       '/diagnostics': 'diagnostics'
-    } as Record<string, string>
+    }
 
     const pathLayout = pathLayouts[this.$route.path]
     let layoutDefaultState
@@ -376,16 +389,16 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     if (!device) return
 
     const confirmOnPowerDeviceChange = this.$store.state.config.uiSettings.general.confirmOnPowerDeviceChange
-    let res: boolean | undefined = true
-    if (confirmOnPowerDeviceChange) {
-      res = await this.$confirm(
+    const result = (
+      !confirmOnPowerDeviceChange ||
+      await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_power_device_toggle'),
         { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
-    }
+    )
 
-    if (res) {
+    if (result) {
       switch (type) {
         case 'moonraker': {
           const state = (device.status === 'on') ? 'off' : 'on'

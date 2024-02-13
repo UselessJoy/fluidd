@@ -27,7 +27,23 @@
         >
           <v-icon>$close</v-icon>
         </app-btn>
-        <v-toolbar-title>{{ filename }}</v-toolbar-title>
+        <v-toolbar-title>
+          {{ filename }}
+          <v-icon
+            v-if="readonly"
+            small
+            class="ml-1"
+          >
+            $lock
+          </v-icon>
+          <v-icon
+            v-else-if="updatedContent !== lastSavedContent"
+            small
+            class="ml-1"
+          >
+            $circle
+          </v-icon>
+        </v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
           <app-btn
@@ -99,10 +115,12 @@
         v-if="contents !== undefined && !useTextOnlyEditor"
         ref="editor"
         v-model="updatedContent"
+        :path="path"
         :filename="filename"
         :readonly="readonly"
         :code-lens="codeLens"
         @ready="editorReady = true"
+        @save="emitSave(false)"
       />
 
       <file-editor-text-only
@@ -117,11 +135,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop, Ref, VModel } from 'vue-property-decorator'
+import { Component, Mixins, Prop, Ref, VModel, Watch } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
+import BrowserMixin from '@/mixins/browser'
 import FileEditor from './FileEditor.vue'
 import FileEditorTextOnly from './FileEditorTextOnly.vue'
-import isMobile from '@/util/is-mobile'
 import isWebAssemblySupported from '@/util/is-web-assembly-supported'
 
 @Component({
@@ -130,12 +148,15 @@ import isWebAssemblySupported from '@/util/is-web-assembly-supported'
     FileEditorTextOnly
   }
 })
-export default class FileEditorDialog extends Mixins(StateMixin) {
-  @VModel({ type: Boolean, required: true })
-    open!: boolean
+export default class FileEditorDialog extends Mixins(StateMixin, BrowserMixin) {
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: String, required: true })
   readonly root!: string
+
+  @Prop({ type: String, required: true })
+  readonly path!: string
 
   @Prop({ type: String, required: true })
   readonly filename!: string
@@ -143,11 +164,11 @@ export default class FileEditorDialog extends Mixins(StateMixin) {
   @Prop({ type: String, required: true })
   readonly contents!: string
 
-  @Prop({ type: Boolean, default: false })
-  readonly loading!: boolean
+  @Prop({ type: Boolean })
+  readonly loading?: boolean
 
-  @Prop({ type: Boolean, default: false })
-  readonly readonly!: boolean
+  @Prop({ type: Boolean })
+  readonly readonly?: boolean
 
   @Ref('editor')
   readonly editor?: FileEditor
@@ -164,8 +185,11 @@ export default class FileEditorDialog extends Mixins(StateMixin) {
     )
   }
 
-  get isMobile () {
-    return isMobile()
+  @Watch('ready')
+  onReady (value: boolean) {
+    if (value) {
+      this.editor?.focus()
+    }
   }
 
   get isWebAssemblySupported () {
@@ -173,15 +197,11 @@ export default class FileEditorDialog extends Mixins(StateMixin) {
   }
 
   get useTextOnlyEditor () {
-    return this.isMobile || !this.isWebAssemblySupported
+    return this.isMobileUserAgent  || !this.isWebAssemblySupported
   }
 
   get isUploading (): boolean {
     return this.$store.state.files.uploads.length > 0
-  }
-
-  get rootProperties () {
-    return this.$store.getters['files/getRootProperties'](this.root)
   }
 
   get configMap () {
@@ -210,25 +230,23 @@ export default class FileEditorDialog extends Mixins(StateMixin) {
   }
 
   async emitClose () {
-    if (this.showDirtyEditorWarning) {
-      const result = await this.$confirm(
+    const result = (
+      !this.showDirtyEditorWarning ||
+      await this.$confirm(
         this.$tc('app.general.simple_form.msg.unsaved_changes'),
         { title: this.$tc('app.general.label.unsaved_changes'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
-
-      if (!result) {
-        return
-      }
+    )
+    if (result) {
+      this.open = false
     }
-
-    this.open = false
   }
 
-  handleBeforeUnload (e: Event) {
+  handleBeforeUnload (event: Event) {
     if (this.showDirtyEditorWarning) {
-      e.preventDefault() // show browser-native "Leave site?" modal
-      return ((e || window.event).returnValue = true) // fallback
+      event.preventDefault() // show browser-native "Leave site?" modal
+      return ((event || window.event).returnValue = true) // fallback
     }
   }
 

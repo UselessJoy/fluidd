@@ -1,5 +1,4 @@
-import { findLastKey } from 'lodash-es'
-import { PrinterState } from './types'
+import type { PrinterState } from './types'
 
 /**
  * Maintains the state of the printer, by way of moonraker notifications.
@@ -35,6 +34,7 @@ export const defaultState = (): PrinterState => {
           fan: {},
           printer: {
             max_accel_to_decel: 500,
+            minimum_cruise_ratio: 0.5,
             max_accel: 1000,
             max_velocity: 100,
             square_corner_velocity: 3,
@@ -108,9 +108,12 @@ export const defaultState = (): PrinterState => {
         estimated_print_time: 0,
         homed_axes: '',
         max_accel: 0,
-        max_accel_to_decel: 0,
+        max_accel_to_decel: null,
+        minimum_cruise_ratio: null,
         max_velocity: 0,
         position: [0, 0, 0, 0],
+        axis_minimum: [],
+        axis_maximum: [],
         print_time: 0,
         square_corner_velocity: 0,
         extruder: ''
@@ -131,6 +134,9 @@ export const defaultState = (): PrinterState => {
         filament_total: 0,
         thumbnails: []
       },
+      gcode: {
+        commands: null
+      },
       gcode_move: {
         gcode_position: [0, 0, 0, 0],
         homing_origin: [],
@@ -148,9 +154,7 @@ export const defaultState = (): PrinterState => {
         current_screw: 0,
         accepted_screws: 0
       },
-      fan: {
-        speed: 0
-      },
+      screws_tilt_adjust: {},
       webhooks: {
         state: '',
         state_message: ''

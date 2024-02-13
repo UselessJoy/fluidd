@@ -3,7 +3,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { loadWASM } from 'onigasm'
 import onigasmWasm from 'onigasm/lib/onigasm.wasm?url'
 
-import { IGrammarDefinition, Registry } from 'monaco-textmate'
+import { Registry, type IGrammarDefinition } from 'monaco-textmate'
 import { wireTmGrammars } from 'monaco-editor-textmate'
 import getVueApp from '@/util/get-vue-app'
 import themeDark from '@/monaco/theme/editor.dark.theme.json'
@@ -11,12 +11,13 @@ import themeLight from '@/monaco/theme/editor.light.theme.json'
 
 import { MonacoLanguageImports } from '@/dynamicImports'
 
-type CodeLensSupportedService = 'klipper' | 'moonraker' | 'moonraker-telegram-bot'
+type CodeLensSupportedService = 'klipper' | 'moonraker' | 'moonraker-telegram-bot' | 'crowsnest'
 
 const isCodeLensSupportedService = (service: string) : service is CodeLensSupportedService => [
   'klipper',
   'moonraker',
-  'moonraker-telegram-bot'
+  'moonraker-telegram-bot',
+  'crowsnest'
 ].includes(service)
 
 const getDocsSection = (service: CodeLensSupportedService, sectionName: string) => {
@@ -41,6 +42,16 @@ const getDocsSection = (service: CodeLensSupportedService, sectionName: string) 
   }
 
   return sectionName
+}
+type PartialFoldingRange = Pick<monaco.languages.FoldingRange, 'start' | 'end'>
+
+const toFoldingRanges = (ranges: PartialFoldingRange[], kind: monaco.languages.FoldingRangeKind): monaco.languages.FoldingRange[] => {
+  return ranges
+    .map(({ start, end }) => ({
+      start,
+      end,
+      kind
+    }))
 }
 
 async function setupMonaco () {
@@ -106,11 +117,11 @@ async function setupMonaco () {
       const sections = linesContent.reduce((ranges, lineContent, index) => {
         const section = /^\[([^\]]+)\]/.exec(lineContent)
         if (section) {
-          const [sectionName] = section[1].split(' ')
+          const [sectionName] = section[1].split(' ', 1)
 
           const referenceSection = getDocsSection(service, sectionName)
 
-          return ranges.concat({
+          ranges.push({
             referenceSection,
             range: {
               startLineNumber: index + 1,
@@ -149,20 +160,19 @@ async function setupMonaco () {
         const isSection = /^\[([^\]]+)\]/.test(lineContent)
 
         if (isSection) {
-          return sectionBlocks.concat({
+          sectionBlocks.push({
             start: index + 1,
             end: index + 1
           })
-        }
-
-        const isNotComment = /^\s*[^#;]/.test(lineContent)
-
-        if (isNotComment && sectionBlocks.length > 0) {
-          sectionBlocks[sectionBlocks.length - 1].end = index + 1
+        } else {
+          const isNotComment = /^\s*[^#;]/.test(lineContent)
+          if (isNotComment && sectionBlocks.length > 0) {
+            sectionBlocks[sectionBlocks.length - 1].end = index + 1
+          }
         }
 
         return sectionBlocks
-      }, [] as Array<{ start: number, end: number }>)
+      }, [] as PartialFoldingRange[])
 
       const commentBlocks = linesContent.reduce((commentBlocks, lineContent, index) => {
         lineContent = lineContent.trim()
@@ -176,7 +186,7 @@ async function setupMonaco () {
             if (lastCommentBlock && !lastCommentBlock.complete) {
               lastCommentBlock.end = index + 1
             } else {
-              return commentBlocks.concat({
+              commentBlocks.push({
                 start: index + 1,
                 end: index + 1,
                 complete: false
@@ -188,26 +198,134 @@ async function setupMonaco () {
         }
 
         return commentBlocks
-      }, [] as Array<{start: number, end: number, complete: boolean}>)
+      }, [] as Array<PartialFoldingRange & { complete: boolean }>)
 
       return [
-        ...sectionBlocks.map(section => ({
-          start: section.start,
-          end: section.end,
-          kind: monaco.languages.FoldingRangeKind.Region
-        })),
-        ...commentBlocks.map(section => ({
-          start: section.start,
-          end: section.end,
-          kind: monaco.languages.FoldingRangeKind.Comment
-        }))
+        ...toFoldingRanges(sectionBlocks, monaco.languages.FoldingRangeKind.Region),
+        ...toFoldingRanges(commentBlocks, monaco.languages.FoldingRangeKind.Comment)
+      ]
+    }
+  })
+
+  monaco.languages.registerFoldingRangeProvider('gcode', {
+    provideFoldingRanges: (model) => {
+      const linesContent = model.getLinesContent()
+
+      const layerBlocks = linesContent.reduce((layerBlocks, lineContent, index) => {
+        const isLayer = /^\s*SET_PRINT_STATS_INFO .*CURRENT_LAYER=/i.test(lineContent)
+
+        if (isLayer) {
+          layerBlocks.push({
+            start: index + 1,
+            end: index + 1
+          })
+        } else {
+          const isNotComment = /^\s*[^;]/.test(lineContent)
+          if (isNotComment && layerBlocks.length > 0) {
+            layerBlocks[layerBlocks.length - 1].end = index + 1
+          }
+        }
+
+        return layerBlocks
+      }, [] as PartialFoldingRange[])
+
+      const objectBlocks = linesContent.reduce((objectBlocks, lineContent, index) => {
+        lineContent = lineContent.trim()
+
+        if (lineContent.length > 0) {
+          const isObject = /^\s*EXCLUDE_OBJECT_(START|END) /i.exec(lineContent)
+
+          const lastObjectBlock = objectBlocks.length > 0 ? objectBlocks[objectBlocks.length - 1] : undefined
+
+          if (isObject) {
+            switch (isObject[1].toUpperCase()) {
+              case 'START':
+                objectBlocks.push({
+                  start: index + 1,
+                  end: index + 1,
+                  complete: false
+                })
+                break
+              case 'END':
+                if (lastObjectBlock) {
+                  lastObjectBlock.complete = true
+                }
+                break
+            }
+          } else {
+            if (lastObjectBlock && !lastObjectBlock.complete) {
+              lastObjectBlock.end = index + 1
+            }
+          }
+        }
+
+        return objectBlocks
+      }, [] as Array<PartialFoldingRange & { complete: boolean }>)
+
+      const thumbnailBlocks = linesContent.reduce((thumbnailBlocks, lineContent, index) => {
+        if (lineContent.startsWith('; thumbnail')) {
+          const type = lineContent.substring(11).split(' ')[1]
+
+          switch (type) {
+            case 'begin':
+              thumbnailBlocks.push({
+                start: index + 1,
+                end: index + 1
+              })
+              break
+            case 'end':
+              if (thumbnailBlocks.length > 0) {
+                const lastThumbnailBlock = thumbnailBlocks[thumbnailBlocks.length - 1]
+
+                if (lastThumbnailBlock.start === lastThumbnailBlock.end) {
+                  lastThumbnailBlock.end = index
+                }
+              }
+              break
+          }
+        }
+
+        return thumbnailBlocks
+      },  [] as Array<PartialFoldingRange>)
+
+      const commentBlocks = linesContent.reduce((commentBlocks, lineContent, index) => {
+        lineContent = lineContent.trim()
+
+        if (lineContent.length > 0) {
+          const isComment = lineContent.startsWith(';')
+
+          const lastCommentBlock = commentBlocks.length > 0 ? commentBlocks[commentBlocks.length - 1] : undefined
+
+          if (isComment) {
+            if (lastCommentBlock && !lastCommentBlock.complete) {
+              lastCommentBlock.end = index + 1
+            } else {
+              commentBlocks.push({
+                start: index + 1,
+                end: index + 1,
+                complete: false
+              })
+            }
+          } else if (lastCommentBlock) {
+            lastCommentBlock.complete = true
+          }
+        }
+
+        return commentBlocks
+      }, [] as Array<PartialFoldingRange & { complete: boolean }>)
+
+      return [
+        ...toFoldingRanges(layerBlocks, monaco.languages.FoldingRangeKind.Region),
+        ...toFoldingRanges(objectBlocks, monaco.languages.FoldingRangeKind.Region),
+        ...toFoldingRanges(commentBlocks, monaco.languages.FoldingRangeKind.Comment),
+        ...toFoldingRanges(thumbnailBlocks, monaco.languages.FoldingRangeKind.Comment)
       ]
     }
   })
 
   // Defined the themes.
-  monaco.editor.defineTheme('dark-converted', themeDark as any)
-  monaco.editor.defineTheme('light-converted', themeLight as any)
+  monaco.editor.defineTheme('dark-converted', themeDark as monaco.editor.IStandaloneThemeData)
+  monaco.editor.defineTheme('light-converted', themeLight as monaco.editor.IStandaloneThemeData)
 
   // Wire it up.
   await wireTmGrammars(monaco, registry, grammars)

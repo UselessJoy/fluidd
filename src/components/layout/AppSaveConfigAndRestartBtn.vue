@@ -6,7 +6,8 @@
     :loading="loading"
     @click="$emit('click')"
   >
-    <v-icon class="mr-1">
+    <v-icon class="mr-1"
+      color="warning">
       $save
     </v-icon>
     <span>{{ $t('app.general.btn.save_config_and_restart') }}</span>
@@ -22,7 +23,7 @@
         fab
         small
         text
-        color=""
+        color="warning"
         :elevation="0"
         :disabled="disabled"
         :loading="loading"
@@ -41,11 +42,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class AppSaveConfigAndRestartBtn extends Vue {
-  @Prop({ type: Boolean, default: false })
-  readonly disabled!: boolean
+  @Prop({ type: Boolean })
+  readonly disabled?: boolean
 
-  @Prop({ type: Boolean, default: false })
-  readonly loading!: boolean
+  @Prop({ type: Boolean })
+  readonly loading?: boolean
 
   get isExpanded () {
     return this.$vuetify.breakpoint.mdAndUp

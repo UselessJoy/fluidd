@@ -2,86 +2,83 @@
   <app-dialog
     v-model="open"
     :title="filter.id ? $t('app.general.label.edit_filter') : $t('app.general.label.add_filter')"
-    :max-width="500"
+    max-width="500"
     @save="handleSave"
   >
-    <app-setting
-      :title="$t('app.setting.label.enable')"
-      :r-cols="8"
-    >
-      <v-switch
-        v-model="filter.enabled"
-        class="mt-0"
-        hide-details="auto"
-      />
-    </app-setting>
-
+    <div class="overflow-y-auto">
+      <app-setting
+        :title="$t('app.setting.label.enable')"
+        :r-cols="8"
+      >
+        <v-switch
+          v-model="filter.enabled"
+          class="mt-0"
+          hide-details="auto"
+        />
+      </app-setting>    
+      <v-divider />
+      <app-setting
+        :title="$t('app.general.label.name')"
+        :r-cols="8"
+      >
+        <v-text-field
+          v-model="filter.name"
+          filled
+          dense
+          class="mt-0"
+          hide-details="auto"
+          :rules="[
+            $rules.required,
+            customRules.uniqueName
+          ]"
+        />
+      </app-setting>
     <v-divider />
-
-    <app-setting
-      :title="$t('app.general.label.name')"
-      :r-cols="8"
-    >
-      <v-text-field
-        v-model="filter.name"
-        filled
-        dense
-        class="mt-0"
-        hide-details="auto"
-        :rules="[
-          $rules.required,
-          customRules.uniqueName
-        ]"
-      />
-    </app-setting>
-
+      <app-setting
+        :title="$t('app.setting.label.type')"
+        :r-cols="8"
+      >
+        <v-select
+          v-model="filter.type"
+          filled
+          dense
+          single-line
+          hide-details="auto"
+          :items="types"
+          item-value="value"
+          item-text="text"
+        />
+      </app-setting>
     <v-divider />
-
-    <app-setting
-      :title="$t('app.setting.label.type')"
-      :r-cols="8"
-    >
-      <v-select
-        v-model="filter.type"
-        filled
-        dense
-        single-line
-        hide-details="auto"
-        :items="types"
-        item-value="value"
-        item-text="text"
-      />
-    </app-setting>
-
-    <v-divider />
-
-    <app-setting
-      :title="type.text"
-      :r-cols="8"
-    >
-      <v-text-field
-        v-model="filter.value"
-        filled
-        dense
-        class="mt-0"
-        hide-details="auto"
-        :rules="[
-          $rules.required,
-          ...type.rules
-        ]"
-      />
-    </app-setting>
+      <app-setting
+        :title="type.text"
+        :r-cols="8"
+      >
+        <v-text-field
+          v-model="filter.value"
+          filled
+          dense
+          spellcheck="false"
+          class="mt-0"
+          hide-details="auto"
+          :rules="[
+            $rules.required,
+            ...type.rules
+          ]"
+        />
+      </app-setting>
+    </div>
   </app-dialog>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, VModel } from 'vue-property-decorator'
-import { ConsoleFilter, ConsoleFilterType } from '@/store/console/types'
+import type { ConsoleFilter } from '@/store/console/types'
 
 @Component({})
 export default class ConsoleFilterDialog extends Vue {
-  @VModel({ type: Boolean, required: true })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: Object, required: true })
   readonly filter!: ConsoleFilter
@@ -96,17 +93,17 @@ export default class ConsoleFilterDialog extends Vue {
     return [
       {
         text: this.$t('app.setting.label.contains'),
-        value: ConsoleFilterType.Contains,
+        value: 'contains',
         rules: []
       },
       {
         text: this.$t('app.setting.label.starts_with'),
-        value: ConsoleFilterType.StartsWith,
+        value: 'starts-with',
         rules: []
       },
       {
         text: this.$t('app.setting.label.expression'),
-        value: ConsoleFilterType.Expression,
+        value: 'expression',
         rules: [
           this.$rules.regExpPatternValid
         ]

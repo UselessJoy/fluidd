@@ -1,11 +1,8 @@
-import consola from 'consola'
+import type { FileWithPath } from '@/types'
+import { consola } from 'consola'
 
-type EntryWithPath = {
+type FileSystemEntryWithPath = {
   entry: FileSystemEntry,
-  path: string
-}
-export type FileWithPath = {
-  file: File,
   path: string
 }
 
@@ -26,6 +23,15 @@ const readEntriesAsync = async (directoryReader: FileSystemDirectoryReader) => {
     return new Promise<FileSystemEntry[]>((resolve, reject) => directoryReader.readEntries(resolve, reject))
   } catch (e) {
     consola.error('[FileSystemDirectoryReader] readEntries', e)
+  }
+}
+
+export const hasFilesInDataTransfer = (dataTransfer: DataTransfer) => {
+  if (dataTransfer.items.length) {
+    return [...dataTransfer.items]
+      .every(x => x.kind === 'file')
+  } else {
+    return dataTransfer.files.length > 0
   }
 }
 
@@ -51,19 +57,21 @@ export const getFilesWithPathFromHTMLInputElement = async (input: HTMLInputEleme
 
 export const convertFilesToFilesWithPath = (files: File[] | FileList) => {
   return [...files]
-    .map(file => ({
+    .map((file): FileWithPath => ({
       file,
-      path: file.webkitRelativePath.slice(0, -file.name.length)
-    } as FileWithPath))
+      path: file.webkitRelativePath === file.name
+        ? ''
+        : file.webkitRelativePath.slice(0, -file.name.length - 1)
+    }))
 }
 
 export const getFilesFromFileSystemEntries = async (entries: readonly FileSystemEntry[]) => {
   const files: FileWithPath[] = []
   const items = entries
-    .map(entry => ({
+    .map((entry): FileSystemEntryWithPath => ({
       entry,
       path: ''
-    } as EntryWithPath))
+    }))
 
   let item = items.pop()
   while (item) {
@@ -83,7 +91,9 @@ export const getFilesFromFileSystemEntries = async (entries: readonly FileSystem
         for (const entry of subEntries) {
           items.push({
             entry,
-            path: item.path + item.entry.name + '/'
+            path: item.path
+              ? `${item.path}/${item.entry.name}`
+              : item.entry.name
           })
         }
       }

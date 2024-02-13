@@ -1,6 +1,6 @@
-import { ActionTree } from 'vuex'
-import { HistoryItem, HistoryState } from './types'
-import { RootState } from '../types'
+import type { ActionTree } from 'vuex'
+import type { HistoryItem, HistoryState } from './types'
+import type { RootState } from '../types'
 import { SocketActions } from '@/api/socketActions'
 import { Globals } from '@/globals'
 
@@ -47,13 +47,9 @@ export const actions: ActionTree<HistoryState, RootState> = {
   /**
    * Update the store with history
    */
-  async onHistoryList ({ commit, rootGetters }, payload) {
+  async onHistoryList ({ commit }, payload) {
     if (payload) {
       commit('setHistoryList', payload)
-
-      if (rootGetters['files/isRootAvailable']('gcodes')) {
-        SocketActions.serverFilesGetDirectory('gcodes', 'gcodes')
-      }
     }
   },
 

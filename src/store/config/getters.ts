@@ -1,12 +1,10 @@
-import { GetterTree } from 'vuex'
-import vuetify from '@/plugins/vuetify'
-import { ConfigState, SupportedTheme, TemperaturePreset, ThemeConfig } from './types'
-import { RootState } from '../types'
-import { Heater, Fan } from '../printer/types'
-import tinycolor from '@ctrl/tinycolor'
-import { AppTableHeader } from '@/types'
-import { AppTablePartialHeader } from '@/types/tableheaders'
-import { RootFile } from '../files/types'
+import type { GetterTree } from 'vuex'
+import type { ConfigState, TemperaturePreset } from './types'
+import type { RootState } from '../types'
+import type { Heater, Fan } from '../printer/types'
+import type { AppTableHeader } from '@/types'
+import type { AppTablePartialHeader } from '@/types/tableheaders'
+import type { MoonrakerRootFile } from '../files/types'
 import md5 from 'md5'
 
 export const getters: GetterTree<ConfigState, RootState> = {
@@ -72,37 +70,11 @@ export const getters: GetterTree<ConfigState, RootState> = {
     })
   },
 
-  /**
-   * Returns our current theme data.
-   * Should augment vuetifies default.
-   */
-  getTheme: (state) => {
-    const v = vuetify.framework.theme
-    const o = state.uiSettings.theme
-
-    const r: ThemeConfig = {
-      ...state.uiSettings.theme,
-      currentTheme: {
-        ...v.currentTheme,
-        ...o.currentTheme
-      }
-    }
-
-    for (const key in r.currentTheme) {
-      // Currently used for the offset in the logo.
-      r.currentTheme[key + 'Offset'] = tinycolor(o.currentTheme.primary as string)
-        .desaturate(5)
-        .darken(10)
-        .toHexString()
-    }
-    return r
-  },
-
   // getScrewImage: (state) => {
   //   return state.printer.screw_image.imageCreated
   // },
   getScrewImage: (state, getters, rootState, rootGetters) => (filename: string, extensions: string[]) => {
-    const files = rootGetters['files/getRootFiles']('config') as RootFile[]
+    const files = rootGetters['files/getRootFiles']('config') as MoonrakerRootFile[] | undefined
     if (files) {
       for (const extension of extensions) {
         const path = `.fluidd-screw-image/${filename}${extension}`
@@ -115,7 +87,7 @@ export const getters: GetterTree<ConfigState, RootState> = {
   },
   
   getCustomThemeFile: (state, getters, rootState, rootGetters) => (filename: string, extensions: string[]) => {
-    const files = rootGetters['files/getRootFiles']('config') as RootFile[]
+    const files = rootGetters['files/getRootFiles']('config') as MoonrakerRootFile[] | undefined
 
     if (files) {
       for (const extension of extensions) {
@@ -126,29 +98,6 @@ export const getters: GetterTree<ConfigState, RootState> = {
         }
       }
     }
-  },
-
-  /**
-   * Returns a default theme preset for first init / when reset
-   */
-  getDefaultThemePreset: (state) => {
-    if (state.hostConfig.themePresets.length > 0) {
-      return state.hostConfig.themePresets[0] // First entry represents default
-    }
-    return {
-      name: 'Fluidd',
-      logo: {
-        src: '/logo_fluidd.svg',
-        changeWithTheme: true
-      },
-      color: '#2196F3'
-    }
-  },
-
-  getCurrentThemePreset: (state, getters) => {
-    const presets = state.hostConfig.themePresets
-    const theme = getters.getTheme
-    return presets.find((preset: SupportedTheme) => preset.logo.src === theme.logo.src)
   },
 
   getMergedTableHeaders: (state, getters) => (headers: AppTableHeader[], key: string) => {

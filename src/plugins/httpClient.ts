@@ -1,17 +1,18 @@
 import _Vue from 'vue'
-import { EventBus, FlashMessageTypes } from '@/eventBus'
-import consola from 'consola'
-import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { EventBus} from '@/eventBus'
+import { consola } from 'consola'
+import axios, { AxiosError, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios'
 import { Globals } from '@/globals'
+import type { Store } from 'vuex'
+import type { RootState } from '@/store/types'
 
-const createHttpClient = (store: any) => {
+const createHttpClient = (store: Store<RootState>) => {
   // Create a base instance with sane defaults.
-  const httpClient = Axios.create({
+  const httpClient = axios.create({
     withAuth: true,
     timeout: Globals.NETWORK_REQUEST_TIMEOUT
   })
-  httpClient.prototype.CancelToken = Axios.CancelToken
-  httpClient.prototype.isCancel = Axios.isCancel
+  httpClient.defaults.headers.common['Content-Type'] = 'application/json'
 
   // For these paths, we force remove the withAuth flag.
   const unauthenticatedPaths = [
@@ -26,19 +27,12 @@ const createHttpClient = (store: any) => {
       '/access/login'
     ],
     502: [
-      '/access/oneshot_token'
+      '/access/oneshot_token',
+      '/access/user'
     ]
   }
 
-  const requestInterceptor = async (config: AxiosRequestConfig) => {
-    if (!config.headers) {
-      config.headers = {}
-    }
-
-    // Common headers.
-    config.headers.Accept = 'application/json'
-    config.headers['Content-Type'] = 'application/json'
-
+  const requestInterceptor = async (config: InternalAxiosRequestConfig) => {
     // Check our auth token.
     // If the token is about to expire...
     // Attempt to refresh the token.
@@ -68,8 +62,8 @@ const createHttpClient = (store: any) => {
       // determine a user is trusted or authenticated in some way.
         if (
           store.state.config.apiUrl &&
-        response.config.baseURL === store.state.config.apiUrl &&
-        response.config.withAuth
+          response.config.baseURL === store.state.config.apiUrl &&
+          response.config.withAuth
         ) {
         // Set authenticated to true.
           store.commit('auth/setAuthenticated', true)
@@ -98,32 +92,32 @@ const createHttpClient = (store: any) => {
       message = error.response.data
     }
 
-    const url = error.config.url || ''
+    const url = error.config?.url || ''
     switch (error.response.status) {
       case 500:
         consola.debug(error.response.status, error.message, message)
-        EventBus.$emit(message || 'Server error', { type: FlashMessageTypes.error })
+        EventBus.$emit(message || 'Server error', { type: 'error' })
         break
       case 502:
       case 400:
         consola.debug(error.response.status, error.message, message)
         if (!handledErrorRequests[error.response.status].includes(url)) {
-          EventBus.$emit(message || 'Server error', { type: FlashMessageTypes.error })
+          EventBus.$emit(message || 'Server error', { type: 'error' })
         }
         break
       case 401:
-        if (error.config.withAuth) {
+        if (error.config?.withAuth) {
         // logout.
           store.dispatch('auth/logout')
         }
         break
       case 404:
         consola.debug(error.response.status, error.message, message)
-        EventBus.$emit(message || 'Server error', { type: FlashMessageTypes.warning })
+        EventBus.$emit(message || 'Server error', { type: 'warning' })
         break
       default:
         consola.debug(error.response.status, error.message)
-        EventBus.$emit(message || 'Server error', { type: FlashMessageTypes.error })
+        EventBus.$emit(message || 'Server error', { type: 'error' })
     }
 
     return Promise.reject(error)
@@ -145,11 +139,18 @@ declare module 'axios' {
 }
 
 export const HttpClientPlugin = {
-  install (Vue: typeof _Vue, options?: any) {
+  install (Vue: typeof _Vue, options?: HttpClientPluginOptions) {
+    if (!options?.store) {
+      throw new Error('store is required')
+    }
     const httpClient = createHttpClient(options.store)
     Vue.prototype.$httpClient = httpClient
     Vue.$httpClient = httpClient
   }
+}
+
+interface HttpClientPluginOptions {
+  store?: Store<RootState>
 }
 
 declare module 'vue/types/vue' {

@@ -10,6 +10,27 @@
 
     <v-spacer />
 
+    <v-tooltip
+      v-if="root === 'gcodes'"
+      bottom
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          v-bind="attrs"
+          fab
+          small
+          text
+          v-on="on"
+          @click="$emit('enqueue')"
+        >
+          <v-icon>
+            $enqueueJob
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>{{ $t('app.general.btn.add_to_queue') }}</span>
+    </v-tooltip>
+
     <v-tooltip bottom>
       <template #activator="{ on, attrs }">
         <v-btn
@@ -51,18 +72,15 @@
 <script lang="ts">
 import { Component, Mixins, Prop } from 'vue-property-decorator'
 import StatesMixin from '@/mixins/state'
-import FileSystemMenu from './FileSystemMenu.vue'
-import FileSystemFilterMenu from './FileSystemFilterMenu.vue'
 
-@Component({
-  components: {
-    FileSystemMenu,
-    FileSystemFilterMenu
-  }
-})
+@Component({})
 export default class FileSystemBulkActions extends Mixins(StatesMixin) {
   // The current path
-  @Prop({ type: String, required: false })
+  @Prop({ type: String })
   readonly path!: string
+
+  @Prop({ type: String, required: true })
+  readonly root!: string
+
 }
 </script>

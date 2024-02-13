@@ -1,5 +1,5 @@
 import getFilePaths from './get-file-paths'
-import { FileChangeItem, KlipperFile, KlipperFileWithMeta, AppFile, AppFileWithMeta } from '@/store/files/types'
+import type { FileChangeItem, KlipperFile, KlipperFileWithMeta, AppFile, AppFileWithMeta } from '@/store/files/types'
 
 /**
  * Takes file change item and formats to represent an app file.
@@ -26,6 +26,7 @@ export default (root: string, file: FileChangeItem | KlipperFile | KlipperFileWi
     filename: paths.filename,
     extension: paths.filename.split('.').pop() || '',
     name: paths.filename,
-    path: paths.path
+    path: paths.path,
+    modified: new Date(file.modified).getTime()
   }
 }

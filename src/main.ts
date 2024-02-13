@@ -4,7 +4,7 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 // Global Registrations
 import './registerComponentHooks'
-import './consola'
+import './setupConsola'
 
 // Common, 1st party.
 import Vue from 'vue'
@@ -12,7 +12,7 @@ import { Globals } from './globals'
 import i18n from '@/plugins/i18n'
 import router from './router'
 import store from './store'
-import consola from 'consola'
+import { consola } from 'consola'
 
 // 3rd party.
 import vuetify from './plugins/vuetify'
@@ -23,7 +23,7 @@ import { InlineSvgPlugin } from 'vue-inline-svg'
 
 // Init.
 import { appInit } from './init'
-import { InitConfig } from './store/config/types'
+import type { InitConfig } from './store/config/types'
 
 // Import plugins
 import { HttpClientPlugin } from './plugins/httpClient'
@@ -35,11 +35,9 @@ import App from './App.vue'
 
 // Register global directives.
 import Blur from '@/directives/blur'
-import SortableDataTable from '@/directives/sortableDataTable'
 
 // Directives...
 Vue.directive('blur', Blur)
-Vue.directive('sortableDataTable', SortableDataTable)
 
 // v-chart component asynchronously loaded from a split chunk
 Vue.component('EChart', () => import('./vue-echarts-chunk'))

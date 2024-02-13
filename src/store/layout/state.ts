@@ -1,6 +1,6 @@
-import { LayoutState } from './types'
+import type { LayoutState } from './types'
 import { v4 as uuidv4 } from 'uuid'
-import { DiagnosticsCardContainer } from '@/store/diagnostics/types'
+import type { DiagnosticsCardContainer } from '@/store/diagnostics/types'
 
 /**
  * Maintains the state of our page layouts.
@@ -15,6 +15,7 @@ export const defaultState = (): LayoutState => {
       dashboard: {
         container1: [
           { id: 'printer-status-card', enabled: true, collapsed: false },
+          { id: 'spoolman-card', enabled: true, collapsed: false },
           { id: 'camera-card', enabled: true, collapsed: false },
           { id: 'toolhead-card', enabled: true, collapsed: false },
           { id: 'macros-card', enabled: true, collapsed: false },
@@ -24,6 +25,7 @@ export const defaultState = (): LayoutState => {
         ],
         container2: [
           { id: 'temperature-card', enabled: true, collapsed: false },
+          { id: 'sensors-card', enabled: true, collapsed: false },
           { id: 'console-card', enabled: true, collapsed: false },
           { id: 'jobs-card', enabled: true, collapsed: false },
           { id: 'job-queue-card', enabled: false, collapsed: false },

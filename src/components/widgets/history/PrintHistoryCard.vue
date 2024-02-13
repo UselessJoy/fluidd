@@ -9,7 +9,7 @@
       <app-btn-collapse-group :collapsed="menuCollapsed">
         <app-btn
           small
-          class="ma-1"
+          class="ms-1 my-1"
           @click="handleLoadAll"
         >
           <v-icon
@@ -22,7 +22,7 @@
         </app-btn>
         <app-btn
           small
-          class="ma-1"
+          class="ms-1 my-1"
           @click="handleRemoveAll"
         >
           <v-icon
@@ -49,20 +49,18 @@ import { SocketActions } from '@/api/socketActions'
   }
 })
 export default class PrinterHistoryCard extends Vue {
-  @Prop({ type: Boolean, default: false })
-  readonly menuCollapsed!: boolean
+  @Prop({ type: Boolean })
+  readonly menuCollapsed?: boolean
 
-  handleRemoveAll () {
-    this.$confirm(
+  async handleRemoveAll () {
+    const result = await this.$confirm(
       this.$tc('app.history.msg.confirm_jobs'),
       { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
         buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
     )
-      .then(res => {
-        if (res) {
-          SocketActions.serverHistoryDeleteJob('all')
-        }
-      })
+    if (result) {
+      SocketActions.serverHistoryDeleteJob('all')
+    }
   }
 
   handleLoadAll () {

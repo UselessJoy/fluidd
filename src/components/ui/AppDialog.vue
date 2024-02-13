@@ -1,10 +1,8 @@
 <template>
   <v-dialog
     v-model="open"
-    :width="width"
-    :max-width="maxWidth"
-    :persistent="persistent"
-    scrollable
+    :scrollable="scrollable"
+    v-bind="$attrs"
   >
     <v-form
       ref="form"
@@ -12,8 +10,17 @@
       :disabled="disabled"
       @submit.prevent="handleSave"
     >
-      <v-card>
-        <v-card-title class="card-heading py-2">
+      <v-card
+          :class="{
+            'collapsable-card': titleShadow
+          }"
+        >
+          <v-card-title
+            class="card-heading py-2"
+            :class="{
+              'collapsable-card-title': titleShadow
+            }"
+          >
           <slot name="title">
             <span class="focus--text">{{ title }}</span>
           </slot>
@@ -23,16 +30,13 @@
           v-if="subTitle || hasSubTitleSlot"
           class="card-heading pb-2 secondary--text"
         >
-          <slot name="subTitle">
+          <slot name="sub-title">
             {{ subTitle }}
           </slot>
         </v-card-subtitle>
 
         <v-divider />
-
-        <div class="card-content">
-          <slot />
-        </div>
+        <slot />
 
         <template v-if="!noActions">
           <v-divider />
@@ -66,13 +70,13 @@
 </template>
 
 <script lang="ts">
-import { VForm } from '@/types'
+import type { VForm } from '@/types'
 import { Component, Vue, Prop, VModel, Ref, PropSync } from 'vue-property-decorator'
 
 @Component({})
 export default class AppDialog extends Vue {
-  @VModel({ type: Boolean, required: true })
-    open!: boolean
+  @VModel({ type: Boolean })
+    open?: boolean
 
   @Prop({ type: Boolean })
   readonly disabled?: boolean
@@ -98,20 +102,17 @@ export default class AppDialog extends Vue {
   @Prop({ type: Boolean })
   readonly saveButtonLoading?: boolean
 
-  @Prop({ type: Number })
-  readonly width?: number
-
-  @Prop({ type: Number })
-  readonly maxWidth?: number
-
-  @Prop({ type: Boolean })
-  readonly persistent?: boolean
+  @Prop({ type: Boolean, default: true })
+  readonly scrollable?: boolean
 
   @Prop({ type: Boolean })
   readonly noActions?: boolean
-
+  
+  @Prop({ type: Boolean })
+  readonly titleShadow?: boolean
+  
   @PropSync('valid', { type: Boolean })
-  readonly validModel?: boolean
+    validModel?: boolean
 
   @Ref('form')
   readonly form!: VForm
@@ -139,9 +140,3 @@ export default class AppDialog extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.card-content {
-  overflow-y: auto;
-}
-</style>

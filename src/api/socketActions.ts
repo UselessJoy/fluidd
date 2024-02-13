@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { Globals, Waits } from '@/globals'
-import { NotifyOptions } from '@/plugins/socketClient'
-import consola from 'consola'
-import { TimelapseWritableSettings } from '@/store/timelapse/types'
+import type { NotifyOptions } from '@/plugins/socketClient'
+import { consola } from 'consola'
+import type { TimelapseWritableSettings } from '@/store/timelapse/types'
 
 const baseEmit = (method: string, options: NotifyOptions) => {
   if (!Vue.$socket) {
@@ -466,7 +466,7 @@ export const SocketActions = {
   /**
    * Writes data to moonraker's DB.
    */
-  async serverWrite (key: string, value: any, namespace: string = Globals.MOONRAKER_DB.fluidd.NAMESPACE) {
+  async serverWrite (key: string, value: unknown, namespace: string = Globals.MOONRAKER_DB.fluidd.NAMESPACE) {
     baseEmit(
       'server.database.post_item', {
         params: {
@@ -512,7 +512,10 @@ export const SocketActions = {
   async serverTemperatureStore () {
     baseEmit(
       'server.temperature_store', {
-        dispatch: 'charts/initTempStore'
+        dispatch: 'charts/initTempStore',
+        params: {
+          include_monitors: true
+        }
       }
     )
   },
@@ -624,11 +627,20 @@ export const SocketActions = {
    * Expects the full path including root.
    * Optionally pass the just the filename and path.
    */
-  async serverFilesMetaData (filepath: string) {
+  async serverFilesMetadata (filepath: string) {
     baseEmit(
       'server.files.metadata', {
         dispatch: 'files/onFileMetaData',
         params: { filename: filepath }
+      }
+    )
+  },
+
+  async serverFilesMetascan (filepath: string) {
+    baseEmit(
+      'server.files.metascan', {
+        dispatch: 'files/onFileMetaData',
+        params: { filename: filepath}
       }
     )
   },
@@ -638,7 +650,7 @@ export const SocketActions = {
    * for brevity.
    */
   async serverFilesGetDirectory (root: string, path: string) {
-    const wait = `${Waits.onFileSystem}${path}`
+    const wait = `${Waits.onFileSystem}/${root}/${path}/`
     baseEmit(
       'server.files.get_directory',
       {
@@ -650,7 +662,7 @@ export const SocketActions = {
   },
 
   async serverFilesListRoot (root: string) {
-    const wait = `${Waits.onFileSystem}${root}`
+    const wait = `${Waits.onFileSystem}/${root}/`
     baseEmit(
       'server.files.list',
       {
@@ -662,7 +674,7 @@ export const SocketActions = {
   },
 
   async serverFilesMove (source: string, dest: string) {
-    const wait = Waits.onFileSystem
+    const wait = `${Waits.onFileSystem}/${source}/`
     baseEmit(
       'server.files.move', {
         dispatch: 'void',
@@ -676,7 +688,7 @@ export const SocketActions = {
   },
 
   async serverFilesCopy (source: string, dest: string) {
-    const wait = Waits.onFileSystem
+    const wait = `${Waits.onFileSystem}/${source}/`
     baseEmit(
       'server.files.copy', {
         dispatch: 'void',
@@ -690,7 +702,7 @@ export const SocketActions = {
   },
 
   async serverFilesZip (dest: string, items: string[], store_only?: boolean) {
-    const wait = Waits.onFileSystem
+    const wait = `${Waits.onFileSystem}/${dest}/`
     baseEmit(
       'server.files.zip', {
         dispatch: 'void',
@@ -709,7 +721,7 @@ export const SocketActions = {
    * Root should be included in the path.
    */
   async serverFilesPostDirectory (path: string) {
-    const wait = Waits.onFileSystem
+    const wait = `${Waits.onFileSystem}/${path}/`
     baseEmit(
       'server.files.post_directory', {
         dispatch: 'void',
@@ -722,7 +734,7 @@ export const SocketActions = {
   },
 
   async serverFilesDeleteFile (path: string) {
-    const wait = Waits.onFileSystem
+    const wait = `${Waits.onFileSystem}/${path}/`
     baseEmit(
       'server.files.delete_file', {
         dispatch: 'void',
@@ -735,7 +747,7 @@ export const SocketActions = {
   },
 
   async serverFilesDeleteDirectory (path: string, force = false) {
-    const wait = Waits.onFileSystem
+    const wait = `${Waits.onFileSystem}/${path}/`
     baseEmit(
       'server.files.delete_directory', {
         dispatch: 'void',
@@ -768,10 +780,59 @@ export const SocketActions = {
     )
   },
 
+  async serverLogsRollover (application?: string) {
+    baseEmit(
+      'server.logs.rollover', {
+        dispatch: 'server/onLogsRollOver',
+        params: {
+          application
+        }
+      }
+    )
+  },
+
   async serverWebcamsList () {
     baseEmit(
       'server.webcams.list', {
         dispatch: 'webcams/onWebcamsList'
+      }
+    )
+  },
+  
+  async serverSensorsList () {
+    baseEmit(
+      'server.sensors.list', {
+        dispatch: 'sensors/onSensorsList'
+      }
+    )  
+  },
+
+  async serverSpoolmanGetSpoolId () {
+    baseEmit(
+      'server.spoolman.get_spool_id', {
+        dispatch: 'spoolman/onActiveSpool'
+      }
+    )
+  },
+
+  async serverSpoolmanPostSpoolId (spoolId: number | undefined) {
+    baseEmit(
+      'server.spoolman.post_spool_id', {
+        params: { spool_id: spoolId },
+        dispatch: 'spoolman/onActiveSpool'
+      }
+    )
+  },
+
+  async serverSpoolmanProxyGetAvailableSpools () {
+    baseEmit(
+      'server.spoolman.proxy', {
+        params: {
+          request_method: 'GET',
+          path: '/v1/spool',
+          use_v2_response: true
+        },
+        dispatch: 'spoolman/onAvailableSpools'
       }
     )
   }

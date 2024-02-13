@@ -1,14 +1,13 @@
-import { ActionTree } from 'vuex'
-import { PrinterState } from './types'
-import { RootState } from '../types'
+import type { ActionTree } from 'vuex'
+import type { PrinterState } from './types'
+import type { RootState } from '../types'
 import { handlePrintStateChange, handleCurrentFileChange, handleExcludeObjectChange } from '../helpers'
 import { handleAddChartEntry, handleSystemStatsChange, handleMcuStatsChange } from '../chart_helpers'
 import { SocketActions } from '@/api/socketActions'
 import { Globals } from '@/globals'
-import consola from 'consola'
-import { DiagnosticsCardContainer } from '@/store/diagnostics/types'
+import { consola } from 'consola'
+import type { DiagnosticsCardContainer } from '@/store/diagnostics/types'
 import sandboxedEval from '@/plugins/sandboxedEval'
-import { EventBus, FlashMessageTypes } from '@/eventBus'
 // let retryTimeout: number
 
 export const actions: ActionTree<PrinterState, RootState> = {
@@ -121,7 +120,7 @@ export const actions: ActionTree<PrinterState, RootState> = {
     // and prepopulate our store.
     let intendedSubscriptions = {}
     payload.objects.forEach((k: string) => {
-      if (!k.includes('menu') && !k.includes('gcode_macro')) {
+      if (!k.includes('menu')) {
         intendedSubscriptions = { ...intendedSubscriptions, [k]: null }
       }
       let key = k
@@ -133,9 +132,24 @@ export const actions: ActionTree<PrinterState, RootState> = {
   },
 
   async onPrinterObjectsSubscribe ({ commit, dispatch }, payload) {
+    // Initial printer status
+    const status = payload.status
+
+    if ('screws_tilt_adjust' in status) {
+      status.screws_tilt_adjust = {}
+    }
+
+    if ('toolhead' in status) {
+      if ('max_accel_to_decel' in status.toolhead) {
+        status.toolhead.minimum_cruise_ratio = null
+      } else {
+        status.toolhead.max_accel_to_decel = null
+      }
+    }
+
     // Accept notifications, and commit the first subscribe.
     commit('socket/setAcceptNotifications', true, { root: true })
-    await dispatch('onNotifyStatusUpdate', payload.status)
+    await dispatch('onNotifyStatusUpdate', status)
 
     SocketActions.serverGcodeStore()
     SocketActions.printerGcodeHelp()
@@ -172,13 +186,8 @@ export const actions: ActionTree<PrinterState, RootState> = {
 
       for (const key in payload) {
         const val = payload[key]
-        // Skip anything we need here.
-        if (
-          !key.includes('gcode_macro')
-        ) {
-          // Commit the value.
-          commit('printer/setSocketNotify', { key, payload: val }, { root: true })
-        }
+        // Commit the value.
+        commit('printer/setSocketNotify', { key, payload: val }, { root: true })
       }
 
       // Add a temp chart entry
@@ -235,8 +244,8 @@ export const actions: ActionTree<PrinterState, RootState> = {
 
       if (typeof data !== 'string') throw new Error('Metrics collector returned invalid data')
       data = JSON.parse(data)
-    } catch (err: any) {
-      data = Object.fromEntries(collectors.map(collector => [collector, err?.message ?? 'Unknown Error']))
+    } catch (err) {
+      data = Object.fromEntries(collectors.map(collector => [collector, (err instanceof Error && err.message) ?? 'Unknown Error']))
     }
 
     data.date = new Date()
