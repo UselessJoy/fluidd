@@ -42,7 +42,7 @@
                 v-for="(param, i) in paramList"
                 :key="param"
                 v-model="params[param].value"
-                :label="param"
+                :label="params_locale[param]"
                 outlined
                 dense
                 hide-details="auto"
@@ -146,8 +146,7 @@ export default class MacroBtn extends Mixins(StateMixin) {
     for (const option of this.opt)
     {
       const partision_option = option.split('.')
-      partision_option[1] = partision_option[1].replace('_', ' ')
-      this.params_locale[partision_option[0]] = partision_option[1]
+      this.params_locale[partision_option[0]] = partision_option[1].replace(/_/g, ' ')
     }
     if (this.isMacroWithRawParam) {
       this.$set(this.params, 'message', { value: '', reset: '' })

@@ -60,7 +60,7 @@
           outlined
           dense
           :label="$t('app.general.label.extrude_speed')"
-          :suffix="$t('app.metrics.mm/s')"
+          :suffix="$t('app.suffix.mm/s')"
           @focus="$event.target.select()"
         />
       </v-col>

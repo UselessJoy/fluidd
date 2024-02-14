@@ -101,6 +101,23 @@
       @upload="handleUpload"
     />
 
+    <v-tooltip bottom>
+      <template #activator="{ on, attrs }">
+        <v-btn
+          v-bind="attrs"
+          :disabled="disabled"
+          fab
+          small
+          text
+          @click="$emit('refresh')"
+          v-on="on"
+        >
+          <v-icon>$refresh</v-icon>
+        </v-btn>
+      </template>
+      <span>{{ $t('app.general.btn.refresh') }}</span>
+    </v-tooltip>
+
     <div
       style="max-width: 160px;"
       class="ml-1"

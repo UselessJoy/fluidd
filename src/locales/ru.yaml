@@ -214,7 +214,7 @@ app:
   general:
     btn:
       abort: Отменить
-      access_point: Точка Доступа
+      access_point: Точка доступа
       yes: Подтвердить
       no: Отмена
       off_now: Выключить сейчас

@@ -6,7 +6,7 @@
     >
       <app-named-slider
         :label="$t('app.general.label.pressure_advance')"
-        suffix="s"
+        :suffix="$t('app.time.s')"
         :value="selectedExtruderStepper?.pressure_advance || 0"
         overridable
         :reset-value="selectedExtruderStepper?.config?.pressure_advance || 0"
@@ -25,7 +25,7 @@
     >
       <app-named-slider
         :label="$t('app.general.label.smooth_time')"
-        suffix="s"
+        :suffix="$t('app.time.s')"
         :value="selectedExtruderStepper?.smooth_time || 0"
         :reset-value="selectedExtruderStepper?.config?.pressure_advance_smooth_time || 0"
         :disabled="!klippyReady"
