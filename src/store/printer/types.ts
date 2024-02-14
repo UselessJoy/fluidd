@@ -45,6 +45,8 @@ export interface SafetyPrinting {
   safety_enabled: boolean;
   is_hood_open: boolean;
   is_doors_open: boolean;
+  luft_timeout: number;
+  luft_overload: boolean;
 }
 
 export interface LedControl {

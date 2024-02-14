@@ -97,7 +97,9 @@ export const defaultState = (): PrinterState => {
       safety_printing: {
         safety_enabled: false,
         is_doors_open: false,
-        is_hood_open: false
+        is_hood_open: false,
+        luft_timeout: 3.0,
+        luft_overload: false
       },
       virtual_sdcard: {
         file_position: 0,
