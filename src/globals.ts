@@ -165,7 +165,7 @@ const mdiFilamentChange = 'm 23.5,18.5 -3,-3 v 2 h -4 v 2 h 4 v 2 z m -9,0 3,3 v
  * Global, static constants.
  */
 export const Globals = Object.freeze({
-  APP_NAME: 'fluidd',
+  APP_NAME: 'Гелиос',
   HEADER_HEIGHT: 56,
   DEFAULTS: {
     CAMERA_URL: '/webcam?action=stream',

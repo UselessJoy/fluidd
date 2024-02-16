@@ -346,6 +346,16 @@ export const SocketActions = {
       }
     )
   },
+
+  async turnOffHeaters () {
+    baseEmit(
+      'printer.turn_off_heaters', {
+        dispatch: 'void',
+        params: {
+        }
+      }
+    )
+  },
   /*    END NEW    */
 
   async printerPrintStart (path: string) {

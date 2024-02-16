@@ -119,6 +119,7 @@ import ThermalChart from '@/components/widgets/thermals/ThermalChart.vue'
 import TemperatureTargets from '@/components/widgets/thermals/TemperatureTargets.vue'
 import TemperaturePresetsMenu from './TemperaturePresetsMenu.vue'
 import type { TemperaturePreset } from '@/store/config/types'
+import { SocketActions } from '@/api/socketActions'
 
 @Component({
   components: {
@@ -252,7 +253,8 @@ export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
       )
     )
     if (result) {
-      this.sendGcode('TURN_OFF_HEATERS')
+      SocketActions.turnOffHeaters()
+      //this.sendGcode('TURN_OFF_HEATERS')
     }
   }
   
