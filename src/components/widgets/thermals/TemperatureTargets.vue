@@ -67,7 +67,7 @@
               class="legend-item toggle"
               @click="$emit('legendPowerClick', item)"
             >
-              <span>{{ getRateOfChange(item) }}<small>&deg;C/s</small></span>
+              <span>{{ getRateOfChange(item) }}<small>{{ $t('app.temptarget.temp_rate_of_change') }}</small></span>
             </span>
           </td>
           <td class="temp-actual">
@@ -142,7 +142,7 @@
               class="legend-item toggle"
               @click="$emit('legendPowerClick', item)"
             >
-              <span>{{ getRateOfChange(item) }}<small>&deg;C/s</small></span>
+              <span>{{ getRateOfChange(item) }}<small>{{ $t('app.temptarget.temp_rate_of_change') }}</small></span>
             </span>
           </td>
           <td class="temp-actual">
@@ -207,7 +207,7 @@
             class="text-no-wrap"
           >
             <span class="legend-item">
-              {{ getRateOfChange(item) }}<small>&deg;C/s</small>
+              {{ getRateOfChange(item) }}<small>{{ $t('app.temptarget.temp_rate_of_change') }}</small>
             </span>
           </td>
           <td class="temp-actual">

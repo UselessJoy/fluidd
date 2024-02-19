@@ -710,10 +710,17 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
         if (supportedSensors.includes(type)) {
           const name = nameFromSplit ?? item
-          const prettyName = Vue.$filters.startCase(name)
           const color = Vue.$colorset.next(getKlipperType(item), item)
           const config = getters.getPrinterSettings(item)
-
+          let pretty = ""
+          if (config.locale)
+          {
+            pretty = config.locale
+          }
+          else{
+            pretty = Vue.$filters.startCase(name)
+          }
+          const prettyName = pretty
           groups[name] = {
             ...state.printer[item],
             ...getters.getExtraSensorData(config?.sensor_type?.toLowerCase(), name),
