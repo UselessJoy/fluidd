@@ -1,6 +1,7 @@
 import type { ActionTree } from 'vuex'
 import type {
   Spool,
+  SpoolmanProxyResponse,
   SpoolmanState,
   WebsocketBasePayload,
   WebsocketFilamentPayload,
@@ -72,7 +73,7 @@ export const actions: ActionTree<SpoolmanState, RootState> = {
       return
     }
 
-    const spools = [...getters.getAvailableSpools]
+    const spools = [...getters.getAvailableSpools as Spool[]]
     for (const spool of spools) {
       if (spool.filament.id === payload.id) {
         spools[spools.indexOf(spool)] = {
@@ -91,7 +92,7 @@ export const actions: ActionTree<SpoolmanState, RootState> = {
       return
     }
 
-    const spools = [...getters.getAvailableSpools]
+    const spools = [...getters.getAvailableSpools as Spool[]]
     for (const spool of spools) {
       if (spool.filament.vendor?.id === payload.id) {
         spools[spools.indexOf(spool)] = {
@@ -107,10 +108,10 @@ export const actions: ActionTree<SpoolmanState, RootState> = {
     commit('setAvailableSpools', spools)
   },
 
-  async onAvailableSpools ({ commit, dispatch }, payload) {
-    if ('response' in payload) {
-      if (payload.error) {
-        EventBus.$emit(payload.error.message ?? payload.error, { type: 'error' })
+  async onAvailableSpools ({ commit, dispatch }, payload: SpoolmanProxyResponse<Spool[]>) {
+    if ('error' in payload && 'response' in payload) {
+      if (payload.error != null) {
+        EventBus.$emit(typeof payload.error === 'string' ? payload.error : payload.error.message, { type: 'error' })
         return
       }
 
@@ -148,9 +149,9 @@ export const actions: ActionTree<SpoolmanState, RootState> = {
       state.socket = new WebSocket(spoolmanUrl)
       state.socket.onerror = err => consola.warn(`${logPrefix} received websocket error`, err)
       state.socket.onmessage = event => {
-        let data
+        let data: WebsocketBasePayload
         try {
-          data = JSON.parse(event.data) as WebsocketBasePayload
+          data = JSON.parse(event.data)
         } catch (err) {
           consola.error(`${logPrefix} failed to decode websocket message`, err, event.data)
           return

@@ -44,6 +44,8 @@ app:
   filesystem:
     logs: Логи
     docs: Документация
+    gcodes: G-коды
+    media: Внешние накопители
     config_examples: Примеры конфигурации
     loading_text: Загрузка...
   language:
@@ -142,12 +144,13 @@ app:
   file_system:
     filters:
       label:
-        print_start_time: Фильтровать напечатанное
-        print_start_time_desc: Фильтровывать уже напечатанные элементы.
-        hidden_files_folders: Фильтровать скрытые файлы и папки
-        klipper_backup_files: Фильтровать резервные копии Klipper
-        rolled_log_files: Фильтровать файлы перезаписанных логов
-        moonraker_backup_files: Отфильтровать файлы резервных копий Moonraker
+        print_start_time: Отфильтровать напечатанные файлы
+        gcodes_files: Позывать только g-code файлы
+        print_start_time_desc: Скрыть уже напечатанные элементы.
+        hidden_files_folders: Не покаызвать скрытые файлы и папки
+        klipper_backup_files: Скрыть резервные копии Klipper
+        rolled_log_files: Скрыть файлы перезаписанных логов
+        moonraker_backup_files: Скрыть файлы резервных копий Moonraker
     label:
       dir_name: Имя папки
       disk_usage: Использование дискового пространства
@@ -161,7 +164,7 @@ app:
     msg:
       confirm: Вы уверены? Это приведет к удалению всех файлов и папок внутри.
       not_found: Файлы не найдены
-      processing: Обработка...
+      processing: Обработка
     title:
       add_dir: Добавить папку
       add_file: Добавить файл
@@ -213,6 +216,9 @@ app:
         drag_file_load: <strong>Перетащите</strong> файл gcode сюда для загрузки
   general:
     btn:
+      continue_print: Продолжить печать
+      later: Позже
+      delete_print: Отменить печать
       abort: Отменить
       access_point: Точка доступа
       yes: Подтвердить
@@ -261,7 +267,8 @@ app:
       remove: Удалить
       remove_all: Удалить всё
       rename: Переименовать
-      reprint: Перепечатать
+      reprint: Последние печати
+      interrupt_print: Возобновить печать
       reset_file: Сбросить файл
       reset_layout: Сбросить компановку интерфейса
       reset_default_layout: Сбросить компановку интерфейса
@@ -274,6 +281,7 @@ app:
       return_dashboard: Вернуться к дашборду
       save: Сохранить
       save_as: Сохранить как
+      save_as_default_color: Сохранить цвет по умолчанию
       save_restart: Сохранить и перезагрузить
       save_config_and_restart: Сохранить настройки и перезагрузить
       select_columns: Выбрать столбцы
@@ -426,19 +434,19 @@ app:
       wrong_password: Ой, что-то пошло не так. Пароль введен верно?
       bed_screws_adjust: >-
         Нажмите <b>Скорректировать</b>, если требуется корректировка текущего винта;
-        в противном случае, нажмите <b>Принять</b>, чтобы продолжить
+        в противном случае, нажмите <b>Принять</b>, чтобы продолжить.
       welcome_back: >-
         С возвращением.<br>Войдите в систему, чтобы подключится к принтеру.
       offline_ready: Fluidd теперь готов к работе в автономном режиме.
       needs_refresh: Доступен новый контент. Пожалуйста, нажмите кнопку <b>Обновить</b>,
         чтобы обновить.
-      pending_configuration_sections_deleted: Следующие разделы помечены для удаления.
+      pending_configuration_sections_deleted: Следующие разделы помечены для удаления
       rolledover_logs: >-
         Логи следующих приложений были перезаписаны: %{applications}
     simple_form:
       error:
         arrayofnums: Только цифры
-        credentials: Недействительные данные
+        credentials: Недействительные учетные данные
         exists: Уже существует
         invalid_number: Неверный номер
         invalid_url: Невалидный URL
@@ -451,11 +459,10 @@ app:
         invalid_aspect: Недопустимое соотношение сторон
       msg:
         confirm: Вы уверены?
-        confirm_cancel_print: Вы уверены, что хотите отменить текущую печать?
-        confirm_change_wifi_mode: Вы уверены, что хотите переключить режим работы Wi-fi? <br> Соединение будет прервано.
-        confirm_rebuild_interrupted_gcode: Печать была прервана. Продолжить печать?
+        confirm_change_wifi_mode: Вы уверены, что хотите переключить режим работы Wi-fi? <br> Соединение с принтером может быть прервано.
+        confirm_rebuild: Печать была прервана. Продолжить печать?
         confirm_exclude_object: Вы уверены, что хотите исключить этот объект из печати?
-        confirm_forcemove_toggle: Вы уверены? Это может повредить принтер
+        confirm_forcemove_toggle: Вы уверены? Это может повредить принтер.
         confirm_reboot_host: Вы уверены? Это приведёт к перезагрузке вашей хост системы.
         confirm_shutdown_host: Вы уверены? Это приведёт к выключению вашей хост системы.
         confirm_service_start: Вы уверены, что хотите запустить службу %{name}?
@@ -468,8 +475,15 @@ app:
         power_off: Печать закончена, принтер будет выключен после охлаждения экструдера
         no_file_preview: >-
           %{name} в настоящее время не может быть просмотрен.
-        confirm_delete: Вы уверены? Это удалит выбранный элемент." | "Вы уверены?
+        confirm_delete: Вы уверены? Это удалит выбранный элемент. | Вы уверены?
           Это удалит {count} выбранных элементов.
+        confirm_clear_mesh: Принтер в настоящее время занят. Вы уверены, что хотите
+          очистить сетку стола?
+        confirm_load_bedmesh_profile: Принтер в настоящее время занят. Вы уверены,
+          что хотите загрузить профиль %{name}?
+        confirm_cancel_print: Вы уверены, что хотите отменить текущую печать?
+        confirm_emergency_stop: Вы уверены, что хотите аварийно остановить принтер?
+        confirm_remove_user: Вы уверены, что хотите удалить пользователя %{username}?
     table:
       header:
         actions: Действия
@@ -500,7 +514,7 @@ app:
         time_added: Время добавления
         time_in_queue: Время в очереди
     title:
-      add_chart: Добавить график
+      add_chart: Добавить диаграмму
       add_printer: Добавить принтер
       bedmesh: Профиль высот стола
       bedmesh_controls: Управление профилями высот стола
@@ -509,7 +523,7 @@ app:
       configure: Конфигурация
       console: Консоль
       diagnostics: Диагностика
-      edit_chart: Редактировать график
+      edit_chart: Редактировать диаграмму
       endstops: Концевики
       fans_outputs: Вентиляторы и выходы
       gcode_preview: Предпросмотр GCode
@@ -535,7 +549,7 @@ app:
       tune: Юстировка стола
       job_queue: Очередь заданий
     tooltip:
-      browse_metrics: Посмотреть доступные метрики
+      browse_metrics: Просмотр доступных метрики
       estop: Аварийная остановка
       managed_by_moonraker: Управляется вашей конфигурацией moonraker
       notifications: Оповещения
@@ -567,6 +581,17 @@ app:
       gcode_start_byte: стартовый байт gcode
       gcode_end_byte: конечный байт gcode
       object_height: высота объекта
+  history_jobs:
+    state:
+      completed: Завершен
+      klippy_shutdown: Выключение Klipper
+      cancelled: Отменен
+      interrupted: Прерван
+      error: Ошибка
+      server_exit: Ошибка сервера
+      klippy_disconnect: Потеря соединения с klipper
+      in_progress: В прогрессе
+      printing: Печатается
   printer:
     state:
       startup: Запускается
@@ -594,10 +619,11 @@ app:
       add_user: Добавить пользователя
       reset: Сбросить
       select_theme: Выбрать тему
+      select_color: Выбрать цвет
     camera_type_options:
       mjpegadaptive: Адаптивный MJPEG
       mjpegstream: MJPEG поток
-      hlsstream: HLS поток
+      hlsstream: Поток HLS
       video: IP Камера
       iframe: Страница HTTP
       webrtc_gortc: WebRTC (go2rtc)
@@ -615,7 +641,7 @@ app:
       all_off: Всё выключить
       all_on: Всё включить
       aspect_ratio: Соотношение сторон
-      aspect_ratio_format: '[width : height]'
+      aspect_ratio_format: '[ширина : высота]'
       auto_edit_extensions: Расширения для автоматического открытия в режиме редактирования
       auto_follow_on_file_load: Автоматически наблюдать за прогрессом печати при загрузке
         файла
@@ -651,7 +677,7 @@ app:
       default_toolhead_move_length: Длина перемещения головки по умолчанию
       default_toolhead_xy_speed: Скорость головки для осей XY по умолчанию
       default_toolhead_z_speed: Скорость головки для оси Z по умолчанию
-      dotted: Штрихованная
+      dotted: Пунктирный
       draw_background: Отображать фон
       enable: Вкл.
       enable_diagnostics: Включить диагностику
@@ -666,7 +692,7 @@ app:
       fps_target: Целевой FPS
       fps_idle_target: Цель FPS, когда она не в фокусе
       height: Высота
-      gcode_coords: Испрользовать координаты GCode
+      gcode_coords: Использовать координаты GCode
       icon: Иконка
       invert_x_control: Инвертировать управление по оси X
       invert_y_control: Инвертировать управление по оси Y
@@ -718,7 +744,7 @@ app:
       time_format: Формат времени
       text_sort_order: Порядок сортировки текста
       force_move_toggle_warning: Требовать подтверждение при активации "FORCE_MOVE"
-      show_manual_probe_dialog_automatically: Автоматически показывать диалоговое
+      show_manual_probe_dialog_automatically: Автоматически показывать диалоговоеGCode
         окно "Ручная настройка стола"
       show_bed_screws_adjust_dialog_automatically: Автоматически показывать диалоговое
         окно "Регулировка винтов стола"
@@ -734,6 +760,8 @@ app:
       toolhead_z_move_distances: Значения расстояния инструмента по оси Z
       toolhead_control_style: Стиль управления инструментом
       toolhead_xy_move_distances: Расстояния инструмента по осям XY
+      hide_single_part_bounding_box: Скрыть рамку ограничения части при печати одной
+        части
     timer_options:
       duration: Только продолжительность
       filament: Оценка филамента
@@ -757,9 +785,9 @@ app:
       gcode_coords: Использовать GCode положение вместо положение инструментальной
         головки на панели управления
       show_manual_probe_dialog_automatically: Автоматически отображает вспомогательное
-        диалоговое окно при запуске инструмента ручного зондирования.
+        диалоговое окно при запуске инструмента ручного зондирования
       show_bed_screws_adjust_dialog_automatically: Автоматически отображает вспомогательное
-        диалоговое окно при запуске инструмента BED_SCREWS_ADJUST.
+        диалоговое окно при запуске инструмента BED_SCREWS_ADJUST
       theme_disclaimer: Эти темы содержат названия брендов и логотипы, которые являются
         интеллектуальной собственностью соответствующих владельцев. <br> Включение
         этих названий и логотипов производится с разрешения брендов. <br> Однако следует
@@ -779,6 +807,7 @@ app:
     label:
       capacity: Емкость
       cpu_desc: Описание CPU
+      constants: Константы
       distribution_codename: Кодовое название
       distribution_like: Тип дистрибутива
       distribution_name: Дистрибутив
@@ -806,6 +835,9 @@ app:
       version: Версия
       virtualization: Виртуализация
       network: Сеть
+      awake_time: Время бодрствования
+      load: нагрузка
+      memory_used: используемая память
   tool:
     btn:
       home_x: X
@@ -815,13 +847,23 @@ app:
       bed_screws_adjust: Регулировка винтов
       manual_probe: Ручная регулировка стола
       screws_tilt_adjust: Винты регулировки наклона
+      load_filament: Заправить филамент
+      unload_filament: Ретракт филамента
+      screws_tilt_calculate: Расчет поворота винтов
+      bed_tilt_calculate: Расчет поворота стола(?)
+      delta_calibrate: Дельта-калибровка
+      probe_calibrate: Калибровка пробы
+      quad_gantry_level: QGL
+      z_endstop_calibrate: Калибровка концевика оси Z
+      z_tilt_adjust: Регулировка наклона оси Z
+      probe_accuracy: Probe Accuracy
     tooltip:
       absolute_positioning: Абсолютная позиция
       extruder_disabled: Экструдер отключён, температура ниже чем (%{min}<small>°C</small>)
       home_xy: Домой XY
       home_z: Домой Z
       manual_probe: Ручная регулировка стола
-      z_tilt_adjust: Z Регулировка наклона
+      z_tilt_adjust: Регулировка наклона оси Z
       quad_gantry_level: QGL
       motors_off: Моторы выкл.
       relative_positioning: Относительная позиция
@@ -842,14 +884,13 @@ app:
         экструдер должен обеспечить </span>
         объем потока %{estimatedVolumetricFlow} мм³/сек
       stats_extruded_length: >-
-        <span class="secondary--text">При экструзии </span>%{extrudeLength} мм филамента при
-        %{extrudeFactor} % потоке<span class="secondary--text">,
-        обеспечивает </span>
-        выходную длину из сопла на %{estimatedExtrudedLength} мм
+        Экструзия %{extrudeLength} мм филамента при %{extrudeFactor} % потоке<span
+        class="secondary--text">, обеспечит</span> ожидаемую длину вывода %{estimatedExtrudedLength}
+        мм
       stats_max_speed: >-
-        <span class="secondary--text">При высоте слоя </span>
-        %{layerHeight} мм
-        максимальная скорость печати составляет %{estimatedMaxSpeed} мм/сек
+        <span class="secondary--text">При предполагаемой высоте слоя</span> %{layerHeight}
+        мм<span class="secondary--text">, ожидаемая максимальная скорость печати составляет</span>
+        %{estimatedMaxSpeed} мм/с
   version:
     btn:
       check_for_updates: Проверить обновления
@@ -935,10 +976,10 @@ app:
     btn:
       manage_spools: Менеджер катушек
       scan_code: Сканировать код
-      select: Выбор
+      select: Выбрать | Выбрать для {macro}
     title:
       spoolman: Spoolman
-      spool_selection: Выбор катушки
+      spool_selection: Выбор катушки | Выбор катушки для макроса {macro}
       scan_spool: Сканировать катушку
     label:
       change_spool: Изменить катушку
@@ -953,6 +994,7 @@ app:
       material: Тип
       remaining_weight: Оставшийся вес
       vendor: Производитель
+      active_spool: Активная катушка
     msg:
       no_spool: >-
         Вы не выбрали катушку.
@@ -982,6 +1024,7 @@ app:
       info:
         howto: Покажите QR-код вашей катушки камере. Это окно закроется, как только
           будет обнаружена катушка.
+      not_connected: Сервер Spoolman недоступен.
     setting:
       auto_open_qr_camera: Автоматически открывать камеру для обнаружения QR-кода
       auto_select_spool_on_match: Автоматически фиксировать выбор катушки при совпадении

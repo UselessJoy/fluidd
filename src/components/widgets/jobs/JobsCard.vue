@@ -19,7 +19,7 @@
     </template>
 
     <file-system
-      roots="gcodes"
+      :roots="['gcodes', 'media']"
       name="dashboard"
       dense
       :height="400"

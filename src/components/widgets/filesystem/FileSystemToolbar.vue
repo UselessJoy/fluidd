@@ -138,6 +138,14 @@
       #extension
     >
       <v-tabs>
+        <!-- <v-tab
+          v-for="(root, index) in roots"
+          v-if="root === 'media' ? hasMediaFiles() : true"
+          :key="index"
+          @change="$emit('root-change', root)"
+        >
+          {{ $t('app.filesystem.'+root) }}
+        </v-tab> -->
         <v-tab
           v-for="(root, index) in roots"
           :key="index"
@@ -152,6 +160,7 @@
 
 <script lang="ts">
 import { Component, Prop, Mixins, PropSync } from 'vue-property-decorator'
+import { SocketActions } from '@/api/socketActions'
 import StatesMixin from '@/mixins/state'
 import FileSystemAddMenu from './FileSystemAddMenu.vue'
 import FileSystemFilterMenu from './FileSystemFilterMenu.vue'
@@ -231,6 +240,10 @@ export default class FileSystemToolbar extends Mixins(StatesMixin) {
 
   handleUpload (files: FileList | File[], print: boolean) {
     this.$emit('upload', files, print)
+  }
+
+  hasMediaFiles() {
+    return SocketActions.serverHasMedia()
   }
 }
 </script>

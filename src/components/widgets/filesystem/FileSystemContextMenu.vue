@@ -207,7 +207,7 @@ export default class FileSystemContextMenu extends Mixins(StateMixin, FilesMixin
 
   get canPrint () {
     return (
-      this.root === 'gcodes' &&
+      (this.root === 'gcodes' || this.root === 'media') &&
       !Array.isArray(this.file) &&
       this.file.type !== 'directory' &&
       this.rootProperties.accepts.includes(`.${this.file.extension}`)
@@ -239,7 +239,7 @@ export default class FileSystemContextMenu extends Mixins(StateMixin, FilesMixin
 
   get canPreheat () {
     return (
-      this.root === 'gcodes' &&
+      (this.root === 'gcodes' || this.root === 'media') &&
       !Array.isArray(this.file) &&
       'first_layer_extr_temp' in this.file &&
       'first_layer_bed_temp' in this.file
@@ -256,7 +256,7 @@ export default class FileSystemContextMenu extends Mixins(StateMixin, FilesMixin
 
   get canPreviewGcode () {
     return (
-      this.root === 'gcodes' &&
+      (this.root === 'gcodes' || this.root === 'media') &&
       !Array.isArray(this.file) &&
       this.file.type === 'file' &&
       this.file.extension === 'gcode'

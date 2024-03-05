@@ -6,12 +6,12 @@ viewBox="0 0 24 24"
 width="40px" height="40px"
 shape-rendering="geometricPrecision" 
 text-rendering="geometricPrecision"
-class="color-primary">
-<path class="color-primary" d="M8,15c0-2.2091,1.79086-4,4-4s4,1.7909,4,4" transform="matrix(0-1.310655 1 0-1 27.72786)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<line class="color-primary" x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-1 0 0 0.722072 14 3.745195)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-<line class="color-primary" x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-1 0 0 0.722072 14 20.297191)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-<line class="color-primary" x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-.809017 0.587785 0.424423 0.584169 9.37671 5.285188)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-<line class="color-primary" x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-.309017 0.951057 0.686731 0.223133 7.135242 9.667573)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-<line class="color-primary" x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(.309017 0.951057 0.686731-.223133 7.135242 14.922407)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-<line class="color-primary" x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(.809017 0.587785 0.424423-.584169 9.37671 19.243148)" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+>
+<path  d="M8,15c0-2.2091,1.79086-4,4-4s4,1.7909,4,4" transform="matrix(0-1.310655 1 0-1 27.72786)" fill="none" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line  x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-1 0 0 0.722072 14 3.745195)" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round"/>
+<line  x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-1 0 0 0.722072 14 20.297191)" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round"/>
+<line  x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-.809017 0.587785 0.424423 0.584169 9.37671 5.285188)" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round"/>
+<line  x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(-.309017 0.951057 0.686731 0.223133 7.135242 9.667573)" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round"/>
+<line  x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(.309017 0.951057 0.686731-.223133 7.135242 14.922407)" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round"/>
+<line  x1="0" y1="4.171585" x2="0" y2="-4.171585" transform="matrix(.809017 0.587785 0.424423-.584169 9.37671 19.243148)" stroke="var(--v-primary-base, #FFD700)" stroke-width="2" stroke-linecap="round"/>
 </svg>

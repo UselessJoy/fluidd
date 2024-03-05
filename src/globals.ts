@@ -462,6 +462,7 @@ export const Waits = Object.freeze({
   onTimelapseSaveFrame: 'onTimelapseSaveFrame',
   onManualProbe: 'onManualProbe',
   onProbeCalibrate: 'onProbeCalibrate',
+  onProbeAccuracy: 'onProbeAccuracy',
   onZEndstopCalibrate: 'onZEndstopCalibrate',
   onQueryEndstops: 'onQueryEndstops',
   onQueryProbe: 'onQueryProbe',
@@ -509,6 +510,11 @@ export const SupportedImageFormats = Object.freeze([
   '.tif',
   '.tiff',
   '.webp'
+])
+
+export const SupportedMarkdownFormats = Object.freeze([
+  '.md',
+  '.mardown'
 ])
 
 export const SupportedVideoFormats = Object.freeze([

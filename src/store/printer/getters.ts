@@ -143,6 +143,14 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.autooff.timeAutoOff
   },
 
+  getShowInterrupt: (state) => {
+    return state.printer.virtual_sdcard.show_interrupt
+  },
+
+  getHasInterruptedFile: (state) => {
+    return state.printer.virtual_sdcard.has_interrupted_file
+  },
+
   getKlipperLangs: (state) => {
     return state.printer.locale.langs
   },
@@ -624,33 +632,12 @@ export const getters: GetterTree<PrinterState, RootState> = {
         supportedTypes.includes(type) &&
         (!filterByPrefix.includes(type) || !name.startsWith('_'))
       ) {
-        let pretty =""
-       /* if (name === 'fan')
-        {
-          pretty = i18n.tc('app.components.fans.part_fan')
-        }
-        else if (name === 'heater_fan')
-        {
-          pretty = i18n.tc('app.components.fans.heater_fan')
-        }
-        else if (name === 'neopixel')
-        {
-          pretty = i18n.tc('app.components.neopixel')
-        }
-        else{
-          pretty = Vue.$filters.startCase(name)
-        }*/
-        //const prettyName = pretty
-        /*name === 'fan'
-          ? i18n.tc('app.components.fans.part_fan') // If we know its the part fan.
-          : Vue.$filters.startCase(name)*/
-
         const color = (applyColor.includes(type))
           ? Vue.$colorset.next(getKlipperType(pin), pin)
           : undefined
-
+        let pretty =""
         const config = getters.getPrinterSettings(pin)
-        if (config.locale)
+        if (config?.locale)
         {
           pretty = config.locale
         }
@@ -667,6 +654,13 @@ export const getters: GetterTree<PrinterState, RootState> = {
           color,
           type,
           controllable: (controllable.includes(type))
+        }
+        
+        if (leds.includes(type)){
+          output = {
+            ...output,
+            default_color: [config.initial_red, config.initial_green, config.initial_blue, config.initial_white]
+          }
         }
 
         if (fans.includes(type)) {

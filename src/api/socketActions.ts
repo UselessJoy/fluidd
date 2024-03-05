@@ -671,6 +671,16 @@ export const SocketActions = {
     )
   },
 
+  async serverHasMedia () {
+    baseEmit(
+      'server.files.has_media',
+      {
+        dispatch: 'void',
+        params: { root: "media" }
+      }
+    )
+  },
+
   async serverFilesListRoot (root: string) {
     const wait = `${Waits.onFileSystem}/${root}/`
     baseEmit(

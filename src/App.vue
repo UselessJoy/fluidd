@@ -33,10 +33,20 @@
     :title = "$tc('app.general.label.power')"
     :color = "'card-heading'"
     :message = "$tc(`app.general.simple_form.msg.power_off`)"
-    :icon="'$error'"
-    :buttonTrueText= "$tc('app.general.btn.off_now')"
-    :buttonFalseText="$tc('app.general.btn.no')"
-    ></auto-close-confirm>
+    :icon="'$warning'"
+    :buttons="autooffConfirmButtons"
+    @result="onResultAutoOff"
+    />
+    <auto-close-confirm
+    v-if="showInterrupt"
+    v-model="showInterrupt"
+    :title = "$tc('app.general.label.power')"
+    :color = "'card-heading'"
+    :message = "$tc(`app.general.simple_form.msg.confirm_rebuild`)"
+    :icon="'$warning'"
+    :buttons="interruptConfirmButtons"
+    @result="onResultInterrupt"
+    />
     <template v-if="hasScrewImage && showModal">
       <div class="parent_modal_div">
         <v-card class="modal v-dialog"
@@ -143,7 +153,6 @@ import type { FlashMessage } from '@/types'
 import { getFilesFromDataTransfer, hasFilesInDataTransfer } from './util/file-system-entry'
 import type { ThemeConfig } from '@/store/config/types'
 import ActionCommandPromptDialog from './components/common/ActionCommandPromptDialog.vue'
-
 @Component<App>({
   metaInfo () {
     return {
@@ -175,6 +184,16 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
     text: undefined,
     type: undefined
   }
+  interruptConfirmButtons = [
+    {type: 'yes', text:  this.$tc('app.general.btn.continue_print'), color: 'primary'}, 
+    {type: 'accept', text:  this.$tc('app.general.btn.later'), color: 'primary'}, 
+    {type: 'no', text: this.$tc('app.general.btn.delete_print'), color: 'grey'}
+  ]
+
+  autooffConfirmButtons = [
+    {type: 'yes', text: this.$tc('app.general.btn.yes'), color: 'primary'}, 
+    {type: 'no', text: this.$tc('app.general.btn.no'), color: 'grey'}
+  ]
   // Our app is in a loading state when the socket isn't quite ready, or
   // our translations are loading.
   get theme (): ThemeConfig {
@@ -335,94 +354,62 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
   get autoOff(): boolean {
     return this.$store.getters['printer/getAutoOff']
   }
+
+  get showInterrupt(): boolean {
+    return this.$store.getters['printer/getShowInterrupt']
+  }
+
   get timeAutoOff(): number {
     return Math.round(this.$store.getters['printer/getTimeAutoOff'])
   }
+
   get hasScrewImage(): boolean {
     return this.$store.getters['printer/getIsScrewImage']
   }
+
   get screwImage () {
     return this.$store.getters['config/getScrewImage']('screw_image', ['.png', '.jpg', '.jpeg'])
   }
-
-  // get openEndstops() {
-  //   return this.$store.getters['printer/getSafetyPrinting'].open
-  // }
-
-  // get status_safety_printing() {
-  //   return this.$store.getters['printer/getSafetyPrinting'].safety
-  // }
 
   get printingPaused() {
     return this.$store.getters['printer/getPrintingIsPaused']
   }
 
-  @Watch('printerState')
-  async onNewPrinterState (value: string) {
-    if (value == "interrupt")
-    {
-      this.$confirm(
-        this.$tc('app.general.simple_form.msg.confirm_rebuild_interrupted_gcode'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
-      ).then(res => {
-          if (res) {
-            this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
-            SocketActions.printerPrintRebuild()
-          }
-          else
-          {
-            this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
-            // SocketActions.deleteInterruptedFile()
-          }
-        })
+  onResultAutoOff(result: string) {
+    if (result == "yes"){
+      SocketActions.machineShutdown()
+    }
+    else{
+      SocketActions.offAutoOff()
     }
   }
 
-  // @Watch('printingPaused')
-  // async onPrintingPaused (value: string) {
-  //   if (!this.status_safety_printing || !this.openEndstops) {
-  //     this.flashMessageState.open = false
-  //     return
-  //   }
-  //   // if (value == 'paused' && this.openEndstops) {
-  //   //   EventBus.$emit(this.$tc('app.general.msg.safety_printing_open_doors_or_cap'), { type: FlashMessageTypes.warning})
-  //   // }
-  // }
-
-  get lastEventtimeKlipperMessage(): number {
-    return this.$store.getters['printer/getLastEventtimeKlipperMessage']
+  onResultInterrupt(result: string) {
+    if (result == "yes"){
+      this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
+      SocketActions.printerPrintRebuild()
+    }
+    else if (result == "accept"){
+      this.sendGcode("SDCARD_PASS_FILE")
+    }
+    else {
+      this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
+      SocketActions.deleteInterruptedFile()
+    }
   }
+
   get klipperMessage(): KlipperMessage {
     return this.$store.getters['printer/getKlipperMessage']
   }
+
   @Watch('klipperMessage', {deep: true})
   async onOpenMessage (value: KlipperMessage) {
-    if (value.last_message_eventtime == .0) {
+    if (value.last_message_eventtime == .0 || !value.is_open) {
       return
     }
-    EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: 10000})
+    EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: 5000})
   }
-  // @Watch('autoOff')
-  // async onAutoOff (value: boolean) {
-  //   if (!value) {
-  //       this.$emit('click')
-  //       return
-  //    }
-  //   //  this.autoOffEnable = true
-  //   this.$confirm(
-  //     this.$tc(`app.general.simple_form.msg.power_off`),
-  //     { title: this.$tc('app.general.label.power'), color: 'card-heading', icon: '$error', 
-  //       buttonTrueText: this.$tc('app.general.btn.off_now'),  buttonFalseText: this.$tc('app.general.btn.no')}
-  //     ).then(res => {
-  //       if (res) {
-  //         this.hostShutdown()
-  //       }
-  //       else {
-  //         SocketActions.offAutoOff()
-  //       }
-  //     })
-  // }
+
   @Watch('hasScrewImage')
    async onScrewImage (value: boolean) {
      if (!value) {
@@ -437,6 +424,7 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
     this.showModal = false
   }
   /*    END NEW    */
+
   get customBackgroundImage () {
     return this.$store.getters['config/getCustomThemeFile']('background', ['.png', '.jpg', '.jpeg', '.gif'])
   }

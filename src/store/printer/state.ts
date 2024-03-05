@@ -75,7 +75,8 @@ export const defaultState = (): PrinterState => {
       messages: {
         last_message_eventtime: .0,
         message: "",
-        message_type: ""
+        message_type: "",
+        is_open: false
       },
       screw_image: {
         imageCreated: false
@@ -104,7 +105,10 @@ export const defaultState = (): PrinterState => {
       virtual_sdcard: {
         file_position: 0,
         is_active: false,
-        progress: 0
+        progress: 0,
+        has_interrupted_file: false,
+        interrupted_file: null,
+        show_interrupt: false
       },
       toolhead: {
         estimated_print_time: 0,

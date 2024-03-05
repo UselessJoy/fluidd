@@ -57,10 +57,31 @@
       <v-divider />
 
       <template v-for="(component, i) in components">
-        <app-setting
-          :key="`component-${component.key}-${component.name}`"
-          :title="packageTitle(component)"
-        >
+        <app-setting :key="`component-${component.key}-${component.name}`">
+          <template #title>
+            {{ packageTitle(component) }}
+            <v-tooltip
+              v-if="'remote_url' in component"
+              bottom
+            >
+              <template #activator="{ attrs, on }">
+                <a
+                  v-bind="attrs"
+                  :href="component.remote_url"
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-icon
+                    small
+                    right
+                  >
+                    $openInNew
+                  </v-icon>
+                </a>
+              </template>
+              <span>{{ component.remote_url }}</span>
+            </v-tooltip>
+          </template>
           <template #sub-title>
             <span v-if="component.key !== 'system' && 'full_version_string' in component">
               {{ component.full_version_string }}
@@ -83,7 +104,6 @@
           >
             <template #activator="{ attrs, on }">
               <app-btn
-                v-if="hasUpdate(component.key) && !inError(component)"
                 v-bind="attrs"
                 color="primary"
                 icon
@@ -97,8 +117,8 @@
               </app-btn>
             </template>
             <span v-if="'name' in component">{{ $t('app.version.tooltip.release_notes') }}</span>
-            <span v-if="'commits_behind' in component">{{ $t('app.version.tooltip.commit_history') }}</span>
-            <span v-if="'package_list' in component">{{ $t('app.version.tooltip.packages') }}</span>
+            <span v-else-if="'commits_behind' in component">{{ $t('app.version.tooltip.commit_history') }}</span>
+            <span v-else-if="'package_list' in component">{{ $t('app.version.tooltip.packages') }}</span>
           </v-tooltip>
 
           <version-status
@@ -216,11 +236,11 @@ export default class VersionSettings extends Mixins(StateMixin) {
     return (dirty || !valid)
   }
 
-  packageUrl (component: HashVersion | OSPackage | ArtifactVersion) {
-    if (component.key === 'klipper') return 'https://github.com/UselessJoy/gelios-klipper/commits/master'
-    if (component.key === 'moonraker') return 'https://github.com/UselessJoy/gelios-moonraker/commits/master'
-    if (component.key === 'fluidd' && 'name' in component && component.name === 'fluidd') return 'https://github.com/UselessJoy/gelios-fluidd/releases/'
-  }
+  // packageUrl (component: HashVersion | OSPackage | ArtifactVersion) {
+  //   if (component.key === 'klipper') return 'https://github.com/UselessJoy/gelios-klipper/commits/master'
+  //   if (component.key === 'moonraker') return 'https://github.com/UselessJoy/gelios-moonraker/commits/master'
+  //   if (component.key === 'fluidd' && 'name' in component && component.name === 'fluidd') return 'https://github.com/UselessJoy/gelios-fluidd/releases/'
+  // }
 
   // Will attempt to update the requirec component based on its type.
   handleUpdateComponent (key: string) {
@@ -268,6 +288,9 @@ export default class VersionSettings extends Mixins(StateMixin) {
   }
 
   getBaseUrl (component: HashVersion | ArtifactVersion) {
+    if ('remote_url' in component && component.remote_url) {
+      return component.remote_url
+    }
     if ('owner' in component) {
       return `https://github.com/${component.owner}/${component.key}`
     }

@@ -2,7 +2,7 @@ import type { GetterTree } from 'vuex'
 import type { AppDirectory, AppFileWithMeta, FileBrowserEntry, FilesState, RootProperties } from './types'
 import type { RootState } from '../types'
 import type { HistoryItem } from '../history/types'
-import { SupportedImageFormats, SupportedVideoFormats } from '@/globals'
+import { SupportedImageFormats, SupportedMarkdownFormats, SupportedVideoFormats } from '@/globals'
 
 export const getters: GetterTree<FilesState, RootState> = {
   /**
@@ -87,6 +87,7 @@ export const getters: GetterTree<FilesState, RootState> = {
   getRootProperties: () => (root: string): RootProperties => {
     const canView = [
       ...SupportedImageFormats,
+      ...SupportedMarkdownFormats,
       ...SupportedVideoFormats
     ]
     switch (root) {
@@ -96,7 +97,15 @@ export const getters: GetterTree<FilesState, RootState> = {
           accepts: ['.gcode', '.g', '.gc', '.gco', '.ufp', '.nc'],
           canView,
           canConfigure: true,
-          filterTypes: ['hidden_files', 'print_start_time']
+          filterTypes: ['hidden_files', 'print_start_time', 'gcodes_files']
+        }
+      case 'media':
+        return {
+          readonly: false,
+          accepts: ['.gcode', '.g', '.gc', '.gco', '.ufp', '.nc'],
+          canView,
+          canConfigure: true,
+          filterTypes: ['hidden_files', 'print_start_time', 'gcodes_files']
         }
       case 'config':
         return {

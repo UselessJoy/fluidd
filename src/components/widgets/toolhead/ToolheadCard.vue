@@ -248,7 +248,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       const ignoreMinExtrudeTemp = loadFilamentMacro.variables?.ignore_min_extrude_temp ?? false
       tools.push({
         name: loadFilamentMacro.name.toUpperCase(),
-        label: loadFilamentMacro.name === 'm701' ? 'M701 (Load Filament)' : undefined,
+        label: this.$tc("app.tool.title.load_filament"), //loadFilamentMacro.name === 'm701' ? 'M701 (Load Filament)' : undefined,
         icon: '$loadFilament',
         disabled: !(ignoreMinExtrudeTemp || this.extruderReady)
       })
@@ -258,7 +258,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       const ignoreMinExtrudeTemp = unloadFilamentMacro.variables?.ignore_min_extrude_temp ?? false
       tools.push({
         name: unloadFilamentMacro.name.toUpperCase(),
-        label: unloadFilamentMacro.name === 'm702' ? 'M702 (Unload Filament)' : undefined,
+        label: this.$tc("app.tool.title.unload_filament"), //unloadFilamentMacro.name === 'm702' ? 'M702 (Unload Filament)' : undefined,
         icon: '$unloadFilament',
         disabled: !(ignoreMinExtrudeTemp || this.extruderReady)
       })
@@ -281,6 +281,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     if (this.printerSupportsBedScrewsAdjust) {
       tools.push({
         name: 'BED_SCREWS_ADJUST',
+        label: this.$tc("app.tool.title.bed_screws_adjust"),
         disabled: !this.allHomed || this.isBedScrewsAdjustActive,
         wait: this.$waits.onBedScrewsAdjust
       })
@@ -288,6 +289,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     if (this.printerSupportsBedTiltCalibrate) {
       tools.push({
         name: 'BED_TILT_CALIBRATE',
+        label: this.$tc("app.tool.title.bed_tilt_calculate"),
         disabled: !this.allHomed || this.isManualProbeActive,
         wait: this.$waits.onBedTiltCalibrate
       })
@@ -295,39 +297,51 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     if (this.printerSupportsDeltaCalibrate) {
       tools.push({
         name: 'DELTA_CALIBRATE',
+        label: this.$tc("app.tool.title.delta_calibrate"),
         disabled: !this.allHomed || this.isManualProbeActive,
         wait: this.$waits.onDeltaCalibrate
       })
     }
     tools.push({
       name: 'MANUAL_PROBE',
+      label: this.$tc("app.tool.title.manual_probe"),
       disabled: !this.allHomed || this.isManualProbeActive,
       wait: this.$waits.onManualProbe
     })
     if (this.printerSupportsProbeCalibrate) {
       tools.push({
+        name: 'PROBE_ACCURACY',
+        label: this.$tc("app.tool.title.probe_accuracy"),
+        disabled: !this.allHomed,
+        wait: this.$waits.onProbeAccuracy
+      })
+      tools.push({
         name: 'PROBE_CALIBRATE',
+        label: this.$tc("app.tool.title.probe_calibrate"),
         disabled: !this.allHomed,
         wait: this.$waits.onProbeCalibrate
-      })
-    }
-    if (this.printerSupportsBedScrewsCalculate) {
-      tools.push({
-        name: 'SCREWS_TILT_CALCULATE',
-        disabled: !this.allHomed || this.isManualProbeActive,
-        wait: this.$waits.onBedScrewsCalculate
       })
     }
     if (this.printerSupportsQuadGantryLevel) {
       tools.push({
         name: 'QUAD_GANTRY_LEVEL',
+        label: this.$tc("app.tool.title.quad_gantry_level"),
         disabled: !this.allHomed || this.isManualProbeActive,
         wait: this.$waits.onQGL
+      })
+    }
+    if (this.printerSupportsBedScrewsCalculate) {
+      tools.push({
+        name: 'SCREWS_TILT_CALCULATE',
+        label: this.$tc("app.tool.title.screws_tilt_calculate"),
+        disabled: !this.allHomed || this.isManualProbeActive,
+        wait: this.$waits.onBedScrewsCalculate
       })
     }
     if (this.printerSupportsZEndstopCalibrate) {
       tools.push({
         name: 'Z_ENDSTOP_CALIBRATE',
+        label: this.$tc("app.tool.title.z_endstop_calibrate"),
         disabled: !this.allHomed || this.isManualProbeActive,
         wait: this.$waits.onZEndstopCalibrate
       })
@@ -335,6 +349,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     if (this.printerSupportsZTiltAdjust) {
       tools.push({
         name: 'Z_TILT_ADJUST',
+        label: this.$tc("app.tool.title.z_tilt_adjust"),
         disabled: !this.allHomed || this.isManualProbeActive,
         wait: this.$waits.onZTilt
       })
@@ -413,7 +428,8 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       !this.$store.state.config.uiSettings.general.forceMoveToggleWarning ||
       await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_forcemove_toggle'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
+          buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
     )
     if (result) {

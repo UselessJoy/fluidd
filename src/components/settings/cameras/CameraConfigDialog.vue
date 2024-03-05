@@ -16,7 +16,9 @@
           hide-details="auto"
         />
       </app-setting>
+
       <v-divider />
+
       <app-setting :title="$t('app.general.label.name')">
         <v-text-field
           v-model="camera.name"
@@ -140,30 +142,29 @@
           single-line
           hide-details="auto"
           :rules="[
-            $rules.required,
-            $rules.aspectRatioValid
+            $rules.required
           ]"
         />
       </app-setting>
 
       <v-divider />
 
-        <app-setting :title="$t('app.setting.label.camera_url_snapshot')">
-          <v-text-field
-            v-model="camera.urlSnapshot"
-            type="url"
-            spellcheck="false"
-            class="mt-5"
-            filled
-            dense
-            single-line
-            hide-details="auto"
-            :rules="[
-              $rules.required
-            ]"
-          />
-        </app-setting>
-        
+      <app-setting :title="$t('app.setting.label.camera_url_snapshot')">
+        <v-text-field
+          v-model="camera.urlSnapshot"
+          type="url"
+          spellcheck="false"
+          class="mt-5"
+          filled
+          dense
+          single-line
+          hide-details="auto"
+          :rules="[
+            $rules.required
+          ]"
+        />
+      </app-setting>
+
       <template v-if="camera.service === 'iframe'">
         <v-divider />
 

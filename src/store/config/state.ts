@@ -81,7 +81,7 @@ export const defaultState = (): ConfigState => {
       },
       editor: {
         confirmDirtyEditorClose: true,
-        autoEditExtensions: ['.cfg', '.conf', '.ini', '.log', '.md', '.sh', '.txt'],
+        autoEditExtensions: ['.cfg', '.conf', '.ini', '.log', '.sh', '.txt'],
         restoreViewState: 'session',
         codeLens: true
       },
@@ -113,6 +113,29 @@ export const defaultState = (): ConfigState => {
           { value: 'history.filament_used', visible: false },
           { value: 'slicer_version', visible: false },
           { value: 'history.print_duration', visible: false },
+          { value: 'chamber_temp', visible: false },
+          { value: 'first_layer_extr_temp', visible: false },
+          { value: 'first_layer_bed_temp', visible: false }
+        ],
+        media_dashboard: [
+          { value: 'first_layer_extr_temp', visible: false },
+          { value: 'first_layer_bed_temp', visible: false },
+          { value: 'chamber_temp', visible: false },
+          { value: 'estimated_time', visible: false },
+          { value: 'nozzle_diameter', visible: false },
+          { value: 'slicer_version', visible: false },
+          { value: 'slicer', visible: false },
+          { value: 'filament_name', visible: false },
+          { value: 'filament_type', visible: false },
+          { value: 'filament_total', visible: false },
+          { value: 'filament_weight_total', visible: false },
+          { value: 'object_height', visible: false },
+          { value: 'first_layer_height', visible: false },
+          { value: 'layer_height', visible: false }
+        ],
+        media_jobs: [
+          { value: 'first_layer_height', visible: false },
+          { value: 'slicer_version', visible: false },
           { value: 'chamber_temp', visible: false },
           { value: 'first_layer_extr_temp', visible: false },
           { value: 'first_layer_bed_temp', visible: false }

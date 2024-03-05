@@ -1,5 +1,5 @@
 <template>
-  <!-- <v-row
+  <v-row
     no-gutters
     justify-space-between
   >
@@ -8,9 +8,9 @@
       cols="5"
       class="text-body-1 py-0"
     >
-      {{ led.prettyName }} 
-    </v-col> -->
-    <!-- <v-col class="ml-auto py-0 text-right"> -->
+      {{ led.prettyName }}
+    </v-col>
+    <v-col class="ml-auto py-0 text-right">
       <app-color-picker
         :primary="primaryColor"
         :white="whiteColor"
@@ -19,8 +19,8 @@
         dot
         @change="handleColorChange"
       />
-    <!-- </v-col>
-  </v-row> -->
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">

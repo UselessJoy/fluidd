@@ -8,6 +8,7 @@
   >
     <template #title="{inLayout}">
       <v-tabs
+        v-if="!inLayout"
         v-model="tab"
         background-color="transparent"
         mobile-breakpoint="0"
@@ -28,9 +29,17 @@
         >
           {{ $t('app.general.btn.reprint') }}
         </v-tab>
+        <v-btn
+          v-if="hasInterruptedFile && !(printerPrinting || printerPaused)"
+          color="primary"
+          text
+          style="border-radius: 0px; height: inherit;"
+        >
+          {{ $t('app.general.btn.interrupt_print') }}
+        </v-btn>
       </v-tabs>
     </template>
-
+    
     <template #menu>
       <status-controls
         v-if="printerPrinting || printerPaused || filename"
@@ -95,6 +104,10 @@ export default class PrinterStatusCard extends Mixins(StateMixin) {
     return this.$store.state.printer.printer.print_stats.filename
   }
 
+  get hasInterruptedFile() {
+    return this.$store.getters['printer/getHasInterruptedFile']
+  }
+
   @Watch('filename')
   onPrinterPrinting (val: string) {
     this.init(val)
@@ -120,12 +133,16 @@ export default class PrinterStatusCard extends Mixins(StateMixin) {
         show: true,
         filename
       })
+
       return
     }
-    
+
     SocketActions.printerPrintStart(filename)
   }
-  
+
+  reprintInterrupt() {
+    SocketActions.printerPrintRebuild()
+  }
 }
 </script>
 

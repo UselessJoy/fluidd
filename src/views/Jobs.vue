@@ -12,7 +12,7 @@
         :help-tooltip="$t('app.general.tooltip.file_browser_help')"
       >
         <file-system
-          :roots="'gcodes'"
+          :roots="['gcodes', 'media']"
           name="jobs"
           bulk-actions
           max-height="816"

@@ -97,6 +97,12 @@ export default class FileSystemFilterMenu extends Vue {
         desc: this.$tc('app.file_system.filters.label.print_start_time_desc')
       })
     }
+    if (rootFilterTypes.includes('gcodes_files')) {
+      filters.push({
+        type: 'gcodes_files',
+        text: this.$tc('app.file_system.filters.label.gcodes_files')
+      })
+    }
     if (rootFilterTypes.includes('hidden_files')) {
       filters.push({
         type: 'hidden_files',
@@ -133,7 +139,11 @@ export default class FileSystemFilterMenu extends Vue {
   }
 
   get selectedFilterTypes (): FileFilterType[] {
-    return this.$store.state.config.uiSettings.fileSystem.activeFilters[this.root] ?? []
+    const selectedFilters = this.$store.state.config.uiSettings.fileSystem.activeFilters[this.root] as FileFilterType[] ?? []
+    const filters = new Set(this.filters
+      .map(filter => filter.type))
+    return selectedFilters
+      .filter(selectedFilter => filters.has(selectedFilter))
   }
 
   set selectedFilterTypes (value: FileFilterType[]) {

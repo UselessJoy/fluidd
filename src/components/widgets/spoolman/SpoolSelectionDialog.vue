@@ -146,7 +146,12 @@
               v-for="header in visibleHeaders.filter(h => h.value !== 'filament_name')"
               :key="header.value"
             >
-              {{ item[header.value] }}
+              <template v-if="header.value === 'last_used'">
+                {{ item[header.value] ? $filters.formatRelativeTimeToNow(item[header.value]) : $tc('app.setting.label.never') }}
+              </template>
+              <template v-else>
+                {{ item[header.value] }}
+              </template>
             </td>
           </tr>
         </template>
@@ -267,10 +272,7 @@
         spools.push({
           ...spool,
           filament_name: filamentName,
-          filament_material: spool.filament.material,
-        last_used: spool.last_used 
-          ? this.$filters.formatRelativeTimeToNow(spool.last_used) 
-          : this.$tc('app.setting.label.never')
+          filament_material: spool.filament.material
         })
       }
       return spools
@@ -368,7 +370,8 @@
         // no spool selected
         const confirmation = await this.$confirm(
           this.$tc('app.spoolman.msg.no_spool'),
-          { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning' }
+          { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
+            buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
         )
         if (!confirmation) {
           return
@@ -386,7 +389,8 @@
               // filament materials don't match
               const confirmation = await this.$confirm(
                 this.$tc('app.spoolman.msg.mismatched_filament'),
-                { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning' }
+                { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
+                  buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
               )
               if (!confirmation) {
                 return
@@ -404,7 +408,8 @@
           // missing file metadata
           const confirmation = await this.$confirm(
             this.$tc('app.spoolman.msg.no_required_length'),
-            { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning' }
+            { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
+              buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
           )
           if (!confirmation) {
             return
@@ -420,7 +425,8 @@
           // not enough filament
           const confirmation = await this.$confirm(
             this.$tc('app.spoolman.msg.no_filament'),
-            { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning' }
+            { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
+              buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
           )
           if (!confirmation) {
             return

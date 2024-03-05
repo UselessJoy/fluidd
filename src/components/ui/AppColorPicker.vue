@@ -302,7 +302,8 @@ export default class AppColorPicker extends Vue {
     window.addEventListener('mouseup', this.stopMouseDrag)
   }
 
-  stopMouseDrag () {
+  stopMouseDrag (event: MouseEvent) {
+    this.lastPointerPosition = { x: event.clientX, y: event.clientY }
     window.removeEventListener('mousemove', this.mouseMove)
     window.removeEventListener('mouseup', this.stopMouseDrag)
   }

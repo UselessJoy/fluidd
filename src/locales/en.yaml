@@ -44,6 +44,8 @@ app:
   filesystem:
     logs: logs
     docs: docs
+    gcodes: G-codes
+    media: Media
     config_examples: config_examples
     loading_text: Loading...
   language:
@@ -140,6 +142,7 @@ app:
     filters:
       label:
         crowsnest_backup_files: Filter Crowsnest backup files
+        gcodes_files: Filter non-gcodes files
         print_start_time: Filter printed
         print_start_time_desc: Filters out items you've already printed.
         hidden_files_folders: Filter hidden files and folders
@@ -259,6 +262,7 @@ app:
       remove_all: Remove all
       rename: Rename
       reprint: Re-Print
+      interrupt_print: Interrupt print
       reset_file: Clear File
       reset_layout: Reset to Default Layout
       reset_default_layout: Reset Default Layout
@@ -272,6 +276,7 @@ app:
       return_dashboard: Return to the dashboard
       save: Save
       save_as: Save As
+      save_as_default_color: Save as default color
       save_restart: Save & Restart
       save_config_and_restart: Save config & restart
       select_columns: Select columns
@@ -439,6 +444,8 @@ app:
         invalid_aspect: Invalid Aspect Ratio
       msg:
         confirm: Are you sure?
+        confirm_change_wifi_mode: Are you sure you want to change wi-fi node? Connection can be lost
+        confirm_rebuild: Printing was interrupted. Continue print?
         confirm_cancel_print: Are you sure you want to cancel the current print?
         confirm_clear_mesh: The printer is currently busy. Are you sure you want to clear the bed mesh?
         confirm_delete: Are you sure? This will delete the selected item. | Are you sure? This will delete the {count} selected items.
@@ -562,6 +569,17 @@ app:
     tooltip:
       help: >-
         Queue jobs by dragging files from the Jobs and dropping them here<br>Adjust the order of queued jobs by dragging them up or down
+  history_jobs:
+    state:
+      completed: Completed
+      klippy_shutdown: Klippy Shutdown
+      cancelled: Cancelled
+      interrupted: Interrupted
+      error: error
+      server_exit: server_exit
+      klippy_disconnect: klippy_disconnect
+      in_progress: in_progress
+      printing: printing
   printer:
     state:
       startup: Startup
@@ -588,6 +606,7 @@ app:
       add_user: Add user
       reset: Reset
       select_theme: Select Theme
+      select_color: Select Color
     camera_type_options:
       mjpegadaptive: MJPEG Adaptive
       mjpegstream: MJPEG Stream
@@ -752,6 +771,7 @@ app:
     label:
       awake_time: awake time
       capacity: Capacity
+      constants: Constants
       cpu_desc: CPU Description
       distribution_codename: Codename
       distribution_like: Distribution Like
@@ -791,6 +811,16 @@ app:
       bed_screws_adjust: Bed Screws Adjust
       manual_probe: Manual Probe
       screws_tilt_adjust: Screws Tilt Adjust
+      load_filament: Load filament
+      unload_filament: Unload filament
+      screws_tilt_calculate: Screws tilt calculate
+      bed_tilt_calculate: bed_tilt_calculate
+      delta_calibrate: delta_calibrate
+      probe_calibrate: probe_calibrate
+      quad_gantry_level: QGL
+      z_endstop_calibrate: z_endstop_calibrate
+      z_tilt_adjust: z_tilt_adjust
+      probe_accuracy: Probe Accuracy
     tooltip:
       absolute_positioning: Absolute Positioning
       extruder_disabled: extruder disabled, below min_extrude_temp (%{min}<small>°C</small>)

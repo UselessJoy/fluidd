@@ -190,7 +190,8 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
         this.$t(
           `app.general.simple_form.msg.confirm_service_${action}`,
           { name: service.name })?.toString(),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error' }
+        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
       )
     )
     if (result) {

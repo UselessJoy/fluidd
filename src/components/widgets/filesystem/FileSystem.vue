@@ -117,6 +117,7 @@
       :type="filePreviewState.type"
       :width="filePreviewState.width"
       :readonly="filePreviewState.readonly"
+      :path="currentPath"
       @remove="handleRemove"
       @download="handleDownload"
     />
@@ -327,6 +328,25 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
         }
       ]
     }
+    else if (this.currentRoot === 'media') {
+      headers = [
+        ...headers,
+        { text: this.$t('app.general.table.header.height'), value: 'object_height', configurable: true },
+        { text: this.$t('app.general.table.header.first_layer_height'), value: 'first_layer_height', configurable: true },
+        { text: this.$t('app.general.table.header.layer_height'), value: 'layer_height', configurable: true },
+        { text: this.$t('app.general.table.header.filament_name'), value: 'filament_name', configurable: true },
+        { text: this.$t('app.general.table.header.filament_type'), value: 'filament_type', configurable: true },
+        { text: this.$t('app.general.table.header.filament'), value: 'filament_total', configurable: true },
+        { text: this.$t('app.general.table.header.filament_weight_total'), value: 'filament_weight_total', configurable: true },
+        { text: this.$t('app.general.table.header.nozzle_diameter'), value: 'nozzle_diameter', configurable: true },
+        { text: this.$t('app.general.table.header.slicer'), value: 'slicer', configurable: true },
+        { text: this.$t('app.general.table.header.slicer_version'), value: 'slicer_version', configurable: true },
+        { text: this.$t('app.general.table.header.estimated_time'), value: 'estimated_time', configurable: true },
+        { text: this.$t('app.general.table.header.first_layer_bed_temp'), value: 'first_layer_bed_temp', configurable: true },
+        { text: this.$t('app.general.table.header.first_layer_extr_temp'), value: 'first_layer_extr_temp', configurable: true },
+        { text: this.$t('app.general.table.header.chamber_temp'), value: 'chamber_temp', configurable: true },
+      ]
+    }
     // Final headers. All roots have these.
     headers = [
       ...headers,
@@ -373,7 +393,6 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       if (this.currentRoot === 'timelapse' && file.type === 'file' && file.extension === 'jpg') {
         return false
       }
-
       for (const filter of this.filters) {
         switch (filter) {
           case 'hidden_files':
@@ -406,7 +425,12 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
               return false
             }
             break
-
+          case 'gcodes_files':
+            if (file.type === 'file' && !this.rootProperties.accepts.includes("."+file.extension))
+            {
+              return false
+            }
+            break
         }
       }
       return true
@@ -863,9 +887,11 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
   }
 
   handleCreateZip (file: FileBrowserEntry | FileBrowserEntry[]) {
+    const date = new Date()
+    const timestamp = `${date.getFullYear()}${date.getMonth()}${date.getDate()}-${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
     const dest = Array.isArray(file)
-      ? `${this.currentPath}/${Date.now()}.zip`
-      : `${this.currentPath}/${file.name}_${Date.now()}.zip`
+      ? `${this.currentPath}/${timestamp}.zip`
+      : `${this.currentPath}/${file.name}-${timestamp}.zip`
     const items = (Array.isArray(file) ? file : [file])
       .map(item => `${this.currentPath}/${item.name}`)
     SocketActions.serverFilesZip(dest, items)

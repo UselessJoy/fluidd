@@ -12,7 +12,7 @@
           {{ icon }}
         </v-icon>
       </template>
-      <span>{{ job.status }}</span>
+      <span>{{ $tc(`app.history_jobs.state.${job.status}`) }}</span>
     </v-tooltip>
   </span>
 </template>

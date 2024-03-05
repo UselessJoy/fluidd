@@ -77,10 +77,13 @@
       <v-divider />
 
       <app-setting v-if="now_led == ledEnabled && now_led == true" :title="$t('app.setting.label.lighting_color')">
-        <OutputItem v-for="(item, i) in allLeds"
-            :key="item.key"
-            :item="item"
-          />
+        <AppColorPickerDialog v-for="(item, i) in allLeds"
+          :led="item"
+          :v-model ="open"
+          :buttonColor="themeColor"
+          :title="$t('app.setting.btn.select_color')"
+          @change="handleChangeThemeColor"
+        />
       </app-setting>
 
       <v-divider />
@@ -105,15 +108,16 @@ import type { ThemePreset, ThemeConfig } from '@/store/config/types'
 import ThemePicker from '../ui/AppColorPicker.vue'
 import type { Led } from '@/store/printer/types'
 import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
-
+import AppColorPickerDialog from '../ui/AppColorPickerDialog.vue'
 @Component({
   components: {
     ThemePicker,
-    OutputItem
+    OutputItem,
+    AppColorPickerDialog
   }
 })
 export default class ThemeSettings extends Mixins(StateMixin) {
-
+  open = false
   now_led = false
 
   get allLeds () {
@@ -122,7 +126,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
     ]
     return items
   }
-  
+
   get ledEnabled (): boolean {
     return this.now_led = this.$store.getters['printer/getLedControl'].enabled
   }
@@ -178,6 +182,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
     }
   }
 
+
   get isDark () {
     return this.theme.isDark
   }
@@ -202,10 +207,10 @@ export default class ThemeSettings extends Mixins(StateMixin) {
     this.$store.dispatch('config/updateTheme', updatedTheme)
   }
 
-    handleReset () {
-      const themePreset = this.themePreset
-      if (themePreset) {
-        this.themePreset = themePreset
+  handleReset () {
+    const themePreset = this.themePreset
+    if (themePreset) {
+      this.themePreset = themePreset
     }
   }
 }

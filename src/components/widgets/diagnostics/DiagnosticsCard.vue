@@ -95,6 +95,9 @@ export default class DiagnosticsCard extends Mixins(BrowserMixin) {
       legend: {
         show: false
       },
+      textStyle: {
+        fontFamily: 'Roboto'
+      },
       tooltip: {
         ...tooltip,
         trigger: 'axis',
