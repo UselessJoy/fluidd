@@ -133,7 +133,7 @@ export const getters: GetterTree<FilesState, RootState> = {
         }
       case 'logs':
         return {
-          readonly: true,
+          readonly: false,
           accepts: [],
           canView,
           canConfigure: false,

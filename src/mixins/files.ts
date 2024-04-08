@@ -140,13 +140,13 @@ export default class FilesMixin extends Vue {
    * @param path The path to the file.
    * @returns The url for the requested file
    */
-  createFileUrl (filename: string, path: string, date?: number) {
+  createFileUrl (filename: string, path?: string, date?: number) {
     const filepath = (path) ? `${path}/${filename}` : `${filename}`
 
     return `${this.apiUrl}/server/files/${encodeURI(filepath)}?date=${date || Date.now()}`
   }
 
-  async createFileUrlWithToken (filename: string, path: string, date?: number) {
+  async createFileUrlWithToken (filename: string, path?: string, date?: number) {
     const url = this.createFileUrl(filename, path, date)
 
     return this.isTrustedUser

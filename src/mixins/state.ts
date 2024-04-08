@@ -101,11 +101,17 @@ export default class StateMixin extends Vue {
     return this.$store.getters['printer/getHeatersIsWaiting']
   }
 
-  // gcodeSendedOnHeaterWaiting() {
-  //   // EventBus.$emit(this.$tc('app.general.msg.heaters_heating_and_wait'), { type: FlashMessageTypes.warning, timeout: 5000})
-  //   SocketActions.printerOpenMessage("warning","on_wait_temperature")
-  // }
+  get asyncCommands() {
+    return this.$store.getters['printer/getAsyncCommands']
+  }
+
   sendGcode (gcode: string, wait?: string) {
+    if (this.asyncCommands) {
+      if (this.asyncCommands.includes(gcode.trim().split(' ')[0])) {
+        this.addConsoleEntry(gcode)
+        return SocketActions.printerAsyncCommand(gcode, wait)
+      }
+    }
     if (this.heaterWaiting)
     {
       SocketActions.printerOpenMessage("warning","on_wait_temperature")

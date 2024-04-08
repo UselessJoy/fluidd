@@ -110,13 +110,14 @@
           >
             {{ $t('app.general.title.settings') }}
           </app-nav-item>
-
-          <app-nav-item
+          
+          <!-- Later or not needed -->
+          <!-- <app-nav-item
             icon="$ref"
             to="/reference"
           >
             {{ $t('app.general.title.reference') }}
-          </app-nav-item>
+          </app-nav-item> -->
         </div>
       </v-navigation-drawer>
 

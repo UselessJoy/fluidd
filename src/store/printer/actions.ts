@@ -8,6 +8,7 @@ import { Globals } from '@/globals'
 import { consola } from 'consola'
 import type { DiagnosticsCardContainer } from '@/store/diagnostics/types'
 import sandboxedEval from '@/plugins/sandboxedEval'
+import i18n from '@/plugins/i18n'
 // let retryTimeout: number
 
 export const actions: ActionTree<PrinterState, RootState> = {
@@ -245,7 +246,7 @@ export const actions: ActionTree<PrinterState, RootState> = {
       if (typeof data !== 'string') throw new Error('Metrics collector returned invalid data')
       data = JSON.parse(data)
     } catch (err) {
-      data = Object.fromEntries(collectors.map(collector => [collector, (err instanceof Error && err.message) ?? 'Unknown Error']))
+      data = Object.fromEntries(collectors.map(collector => [collector, (err instanceof Error && err.message) ?? i18n.tc('app.printer.errors.unknown_error')]))
     }
 
     data.date = new Date()

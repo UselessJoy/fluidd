@@ -13,7 +13,7 @@
             v-on="on"
             @click="restartKlippy"
           >
-            {{ $t('app.general.btn.restart_service_klipper') }}
+            {{ $t('app.general.btn.restart_config_klipper') }}
           </app-btn>
         </template>
         <span>{{ $t('app.general.tooltip.reload_klipper') }}</span>
@@ -59,7 +59,8 @@
         <span>{{ $t('app.general.tooltip.reload_restart_klipper') }}</span>
       </v-tooltip>
     </div>
-    <div v-if="klippyReady">
+    <!-- In future -->
+    <!-- <div v-if="klippyReady">
         <app-btn
         block
         color="primary"
@@ -68,7 +69,7 @@
         >
           <span>{{ $t('app.general.btn.self_diagnosis') }}</span>
         </app-btn>
-    </div>  
+    </div>   -->
     <app-btn
       block
       class="me-2 mb-2"

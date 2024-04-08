@@ -60,9 +60,25 @@ app:
       part_fan: Вентилятор экструдера
       heater_fan: Хеатер Фан
     neopixel: Светодиодная лента
+  shaper:
+    btn:
+      clear_shaper: Убрать график
+    label:
+      chosen: Выбран
+      saved_graphs: Сохраненные графики
+      tmp_graphs: Временные графики
+    msg:
+      not_found: Не найдено графиков компенсации резонанса
+      not_loaded: График компенсации резонанса не загружен
+    tooltip:
+      choose: Выбрать график
+      delete: Удалить график
+      save: Сохранить график
+      load: Загрузить график
+      rename: Переименовать
   bedmesh:
     label:
-      active: Активно
+      active: Активен
       box_scale: Масштаб
       flat_surface: Показать базовую плоскость
       mesh_matrix: Сетчатая матрица
@@ -71,7 +87,7 @@ app:
       remove_profile: Удалить %{name} профиль
       scale: Масштаб по мин. / макс.
       wireframe: Каркасная сетка
-      base: Основание
+      base: Базовая точка
       save_permanently: Сохранить по завершению
     msg:
       hint: >-
@@ -272,6 +288,7 @@ app:
       reset_file: Сбросить файл
       reset_layout: Сбросить компановку интерфейса
       reset_default_layout: Сбросить компановку интерфейса
+      restart_config_klipper: Перезагрузить конфигурацию Klipper
       restart_firmware: Перезагрузить прошивку
       restart_service: Перезапустить %{service}
       restart_service_klipper: Перезагрузить Klipper
@@ -413,6 +430,7 @@ app:
       file_time: Файл
       range: Диапозон
       circle: Круг
+      compact: Компактно
       upload_and_print: Загрузить и напечатать
       all: Все
       default: По умолчанию
@@ -427,6 +445,7 @@ app:
       cross: Пересечение
       bars: Столбцы
       version_sort: Сортировка по версии
+      variance: Разность
     msg:
       safety_printing_open_doors_or_cap: Открыта крышка или створки. Печать приостановлена
       heaters_heating_and_wait: Нагрев с параметром 'wait', g-коды будут обработаны после разогрева 
@@ -540,13 +559,15 @@ app:
       rollover_logs: Перезаписать логи
       runout_sensors: Датчик контроля филамента
       settings: Настройки
+      shaper_controls: Графики результатов компенсации резонанса
+      shaper: График компенсации резонанса
       stats: Статистика принтера
       system: Система
       system_overview: Информация о системе
       temperature: Температура
       timelapse: Интервальная съемка
       tool: Инструмент
-      tune: Юстировка стола
+      tune: Юстировка стола и компенсация резонанса
       job_queue: Очередь заданий
     tooltip:
       browse_metrics: Просмотр доступных метрики
@@ -593,6 +614,11 @@ app:
       in_progress: В прогрессе
       printing: Печатается
   printer:
+    errors:
+      unknown_error: Неизвестная ошибка
+      unknown: Неизвестен
+      klippy_not_connected: Нет соединения с Klipper.
+      klippy_host_not_connected: Нет соединения с хостом Klipper
     state:
       startup: Запускается
       shutdown: Отключен
@@ -606,6 +632,8 @@ app:
       printing: Идёт печать
       ready: Готов
       standby: Режим ожидания
+      disconnected: Потеряно соединение
+      unknown: Отключен
       title:
         printer_status: Статус принтера
       interrupt: Прерван
@@ -712,6 +740,7 @@ app:
       optional: Необязательный
       power_toggle_in_top_nav: Переключатель питания в верхней панели навигации
       primary_color: Основной цвет
+      print_in_progress_layout: Макет в процессе печати
       printer_name: Имя принтера
       reset: Сбросить настройки
       retraction_icon_size: Размер иконки ретракта
@@ -856,7 +885,12 @@ app:
       quad_gantry_level: QGL
       z_endstop_calibrate: Калибровка концевика оси Z
       z_tilt_adjust: Регулировка наклона оси Z
-      probe_accuracy: Probe Accuracy
+      probe_accuracy: Точность измерений пробы
+      get_magnet_probe: Взять пробу
+      return_magnet_probe: Вернуть пробу
+      measure_axes_noise: Измерение шума осей
+      test_resonances: Тест резонансов
+      shaper_calibrate: Компенсация резонанса
     tooltip:
       absolute_positioning: Абсолютная позиция
       extruder_disabled: Экструдер отключён, температура ниже чем (%{min}<small>°C</small>)
@@ -866,6 +900,7 @@ app:
       z_tilt_adjust: Регулировка наклона оси Z
       quad_gantry_level: QGL
       motors_off: Моторы выкл.
+      shaper_images: Графики компенсации резонанса
       relative_positioning: Относительная позиция
       select_tool: Выберите инструмент %{tool}
       tools: Инструменты

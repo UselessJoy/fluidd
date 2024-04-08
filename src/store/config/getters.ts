@@ -70,9 +70,6 @@ export const getters: GetterTree<ConfigState, RootState> = {
     })
   },
 
-  // getScrewImage: (state) => {
-  //   return state.printer.screw_image.imageCreated
-  // },
   getScrewImage: (state, getters, rootState, rootGetters) => (filename: string, extensions: string[]) => {
     const files = rootGetters['files/getRootFiles']('config') as MoonrakerRootFile[] | undefined
     if (files) {

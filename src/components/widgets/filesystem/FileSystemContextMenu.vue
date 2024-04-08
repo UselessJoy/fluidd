@@ -65,7 +65,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              v-if="canEdit"
+              v-if="canEdit && root !== 'logs'"
               @click="$emit('edit', file)"
             >
               <v-list-item-icon>
@@ -100,7 +100,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              v-if="canCreateZip"
+              v-if="canCreateZip && root !== 'logs'"
               @click="$emit('create-zip', file)"
             >
               <v-list-item-icon>
@@ -122,7 +122,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              v-if="!rootProperties.readonly"
+              v-if="!rootProperties.readonly && root !== 'logs'"
               link
               @click="$emit('rename', file)"
             >
@@ -132,7 +132,7 @@
               <v-list-item-title>{{ $t('app.general.btn.rename') }}</v-list-item-title>
             </v-list-item>
             <v-list-item
-              v-if="!Array.isArray(file) && !rootProperties.readonly"
+              v-if="!Array.isArray(file) && (!rootProperties.readonly && root !== 'logs')"
               @click="$emit('duplicate', file)"
             >
               <v-list-item-icon>

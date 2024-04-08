@@ -8,7 +8,7 @@ import { SocketActions } from '@/api/socketActions'
 import { EventBus } from '@/eventBus'
 import { upperFirst, camelCase } from 'lodash-es'
 import isKeyOf from '@/util/is-key-of'
-
+import i18n from '@/plugins/i18n'
 let retryTimeout: number
 
 export const actions: ActionTree<SocketState, RootState> = {
@@ -34,7 +34,7 @@ export const actions: ActionTree<SocketState, RootState> = {
       SocketActions.serverInfo()
       SocketActions.identify({
         client_name: Globals.APP_NAME,
-        version: `${rootState.version.fluidd.version || '0.0.0'}-${rootState.version.fluidd.hash || 'unknown'}`.trim(),
+        version: `${rootState.version.fluidd.version || '0.0.0'}-${rootState.version.fluidd.hash || i18n.tc('app.printer.errors.unknown')}`.trim(),
         type: 'web',
         url: Globals.GITHUB_REPO
       })

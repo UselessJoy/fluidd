@@ -184,6 +184,7 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
   internalMax = 0
   overridden = false
   hasFocus = false
+  onSubmitValue = 0
 
   get textRules () {
     // Apply a min and max rule as per the slider.
@@ -238,13 +239,14 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
 
   handleBlur () {
     if (this.hasFocus) {
-      this.$emit('change', this.currentValue)
-      this.currentValue = this.inputValue.toString()
+      this.currentValue = this.onSubmitValue.toString()
+      this.$emit('change', this.onSubmitValue)
       this.hasFocus = false
     }
   }
-  
+
   handleSubmit (value: number) {
+    this.onSubmitValue = value
     this.submitValue(value)
   }
   
@@ -253,6 +255,7 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
     this.$emit('start', value)
   }
   handleEnd (value: number) {
+    this.onSubmitValue = value
     this.$emit('end', value)
   }
   
@@ -263,6 +266,7 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
   
   created () {
     this.currentValue = this.inputValue.toString()
+    this.onSubmitValue = this.inputValue
     this.sliderValue = this.inputValue
     this.internalLocked = this.locked
     this.internalMax = this.max

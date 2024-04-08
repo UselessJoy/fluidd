@@ -266,6 +266,7 @@ app:
       reset_file: Clear File
       reset_layout: Reset to Default Layout
       reset_default_layout: Reset Default Layout
+      restart_config_klipper: Restart Klipper Config
       restart_firmware: Firmware Restart
       restart_service: Restart %{service}
       restart_service_klipper: Restart Klipper
@@ -415,6 +416,7 @@ app:
       edit_category: Edit category
       add_category: Add category
       file_time: File
+      variance: Variance
     msg:
       heaters_heating_and_wait: heating with the wait parameter, gcodes will be processed after warming up
       password_changed: Password changed
@@ -581,6 +583,11 @@ app:
       in_progress: in_progress
       printing: printing
   printer:
+    errors:
+      unknown_error: Unknown Error
+      unknown: Unknown
+      klippy_not_connected: Klippy not connected.
+      klippy_host_not_connected: Klippy Host not connected
     state:
       startup: Startup
       shutdown: Shutdown
@@ -594,6 +601,8 @@ app:
       printing: Printing
       ready: Ready
       standby: Standby
+      disconnected: Disconnected
+      unknown: Unknown
     title:
       printer_status: Printer Status
   setting:
@@ -821,6 +830,11 @@ app:
       z_endstop_calibrate: z_endstop_calibrate
       z_tilt_adjust: z_tilt_adjust
       probe_accuracy: Probe Accuracy
+      get_magnet_probe: Get Magnet Probe
+      return_magnet_probe: Return Magnet Probe
+      measure_axes_noise: Measure axes noise
+      test_resonances: Test resonances
+      shaper_calibrate: Shaper calibrate
     tooltip:
       absolute_positioning: Absolute Positioning
       extruder_disabled: extruder disabled, below min_extrude_temp (%{min}<small>°C</small>)

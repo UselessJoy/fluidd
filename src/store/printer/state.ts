@@ -68,6 +68,15 @@ export const defaultState = (): PrinterState => {
       wifi_mode: {
         wifiMode: ''
       },
+      screws_tilt_adjust: {
+        errors: false,
+        results: {}
+      },
+      resonance_tester: {
+        saved: [],
+        tmp: [],
+        active: ''
+      },
       led_control: {
         led_status: '',
         enabled: true
@@ -141,7 +150,8 @@ export const defaultState = (): PrinterState => {
         thumbnails: []
       },
       gcode: {
-        commands: null
+        commands: null,
+        async_commands: null
       },
       gcode_move: {
         gcode_position: [0, 0, 0, 0],
@@ -160,7 +170,6 @@ export const defaultState = (): PrinterState => {
         current_screw: 0,
         accepted_screws: 0
       },
-      screws_tilt_adjust: {},
       webhooks: {
         state: '',
         state_message: ''

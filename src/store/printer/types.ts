@@ -180,6 +180,7 @@ export interface Endstop {
 export interface Probe {
   last_z_result: number;
   last_query: boolean;
+  is_using_magnet_probe: boolean;
   name: ProbeName;
 }
 

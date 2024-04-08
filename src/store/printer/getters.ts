@@ -49,7 +49,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     // say so.
     const serverInfo = rootGetters['server/getInfo']
     if (serverInfo.klippy_connected === false) {
-      return 'Klippy not connected.'
+      return i18n.tc('app.printer.errors.klippy_not_connected')
     }
 
     // If an external source fires an estop, or the client
@@ -59,15 +59,21 @@ export const getters: GetterTree<PrinterState, RootState> = {
       state.printer.info.state_message &&
       state.printer.info.state_message !== ''
     ) {
+      // need update
+      // Хорошо бы локали добавить и в moonraker
+      if (state.printer.info.state_message == "Klippy Host not connected") {
+        return i18n.tc("app.printer.errors.klippy_host_not_connected")
+      }
       return state.printer.info.state_message.trim().replace(regex, '<br />')
     }
     if (
       state.printer.webhooks.state_message &&
       state.printer.webhooks.state_message !== ''
     ) {
+      alert(state.printer.webhooks.state_message)
       return state.printer.webhooks.state_message.trim().replace(regex, '<br />')
     }
-    return 'Unknown'
+    return i18n.tc('app.printer.errors.unknown')
   },
 
   /**
@@ -125,6 +131,14 @@ export const getters: GetterTree<PrinterState, RootState> = {
   /*      NEW      */
   getWifiMode: (state) => {
     return state.printer.wifi_mode.wifiMode
+  },
+
+  getShaperGraphs: (state) => {
+    return state.printer.resonance_tester
+  },
+
+  getActiveShaperGraph: (state) => {
+    return state.printer.resonance_tester.active
   },
 
   getLedControl: (state) => {
@@ -998,11 +1012,25 @@ export const getters: GetterTree<PrinterState, RootState> = {
     }
   },
 
+  getAsyncCommands: (state, getters, rootState, rootGetters): GcodeCommands | null => {  
+    return state.printer.gcode.async_commands as GcodeCommands | null
+  },
+
   getAvailableCommands: (state, getters, rootState, rootGetters): GcodeCommands => {
     const availableCommands = state.printer.gcode.commands as GcodeCommands | null
-
+    const asyncCommands = state.printer.gcode.async_commands as GcodeCommands | null
     if (availableCommands) {
+      if (asyncCommands) {
+        const merged = {
+          ...availableCommands,
+          ...asyncCommands
+        } as GcodeCommands
+        return merged
+      }
       return availableCommands
+    }
+    else if (asyncCommands) {
+      return asyncCommands
     }
 
     const knownCommands = rootGetters['console/getAllKnownCommands'] as GcodeHelp

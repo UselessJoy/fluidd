@@ -24,7 +24,7 @@
           :color="axisButtonColor(zHomed)"
           :disabled="axisButtonDisabled(zHomed, zHasMultipleSteppers)"
           icon="$up"
-          @click="sendMoveGcode('Z', toolheadMoveLength)"
+          @click="sendMoveGcode('Z', toolheadMoveLength, true)"
         />
       </v-col>
       <v-col
@@ -140,7 +140,7 @@
           :color="axisButtonColor(zHomed)"
           :disabled="axisButtonDisabled(zHomed, zHasMultipleSteppers)"
           icon="$down"
-          @click="sendMoveGcode('Z', toolheadMoveLength, true)"
+          @click="sendMoveGcode('Z', toolheadMoveLength, false)"
         />
       </v-col>
       <v-col

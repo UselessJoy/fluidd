@@ -57,6 +57,7 @@ import PrinterLimitsCard from '@/components/widgets/limits/PrinterLimitsCard.vue
 import RetractCard from '@/components/widgets/retract/RetractCard.vue'
 import type { LayoutConfig } from '@/store/layout/types'
 import BedMeshCard from '@/components/widgets/bedmesh/BedMeshCard.vue'
+import ShaperCard from '@/components/widgets/bedmesh/ShaperCard.vue'
 import GcodePreviewCard from '@/components/widgets/gcode-preview/GcodePreviewCard.vue'
 import JobQueueCard from '@/components/widgets/job-queue/JobQueueCard.vue'
 import SpoolmanCard from '@/components/widgets/spoolman/SpoolmanCard.vue'
@@ -75,6 +76,7 @@ import SensorsCard from '@/components/widgets/sensors/SensorsCard.vue'
     ConsoleCard,
     OutputsCard,
     BedMeshCard,
+    ShaperCard,
     GcodePreviewCard,
     JobQueueCard,
     SpoolmanCard,
@@ -140,6 +142,10 @@ export default class Dashboard extends Mixins(StateMixin) {
 
   get supportsBedMesh () {
     return this.$store.getters['mesh/getSupportsBedMesh']
+  }
+
+  get supportResonanceTester (): boolean {
+    return this.$store.getters['printer/getPrinterSettings']('resonance_tester') ?? false
   }
 
   get supportsSpoolman () {
@@ -216,6 +222,7 @@ export default class Dashboard extends Mixins(StateMixin) {
     if (item.id === 'job-queue-card' && !this.supportsJobQueue) return true
     if (item.id === 'retract-card' && !this.firmwareRetractionEnabled) return true
     if (item.id === 'bed-mesh-card' && !this.supportsBedMesh) return true
+    if (item.id === 'shaper-card' && !this.supportResonanceTester) return true
     if (item.id === 'spoolman-card' && !this.supportsSpoolman) return true
     if (item.id === 'sensors-card' && !this.hasSensors) return true
     if (item.id === 'temperature-card' && !this.hasHeatersOrTemperatureSensors) return true

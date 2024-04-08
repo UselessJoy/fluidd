@@ -5,4 +5,4 @@ export interface FlashMessage {
   timeout?: number;
 }
 
-export type FlashMessageTypes = 'success' | 'error' | 'warning' | 'primary' | 'secondary'
+export type FlashMessageTypes = 'success' | 'error' | 'warning' | 'primary' | 'secondary' | 'accent'

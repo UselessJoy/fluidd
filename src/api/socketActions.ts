@@ -356,6 +356,18 @@ export const SocketActions = {
       }
     )
   },
+
+  async resonanceTesterAction (action: string, args: Array<any>) {
+    baseEmit(
+      'printer.resonance_tester.action', {
+        dispatch: 'void',
+        params: {
+          action: action,
+          args: args
+        }
+      }
+    )
+  },
   /*    END NEW    */
 
   async printerPrintStart (path: string) {
@@ -414,6 +426,18 @@ export const SocketActions = {
         dispatch: 'console/onGcodeScript',
         params: {
           script: gcode
+        },
+        wait
+      }
+    )
+  },
+
+  async printerAsyncCommand (gcode: string, wait?: string) {
+    baseEmit(
+      'printer.gcode.async_command', {
+        dispatch: 'console/onGcodeScript',
+        params: {
+          command: gcode
         },
         wait
       }

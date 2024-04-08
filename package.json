@@ -54,6 +54,7 @@
     "monaco-editor": "^0.45.0",
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
+    "npm-check-updates": "^16.14.18",
     "onigasm": "^2.2.5",
     "panzoom": "^9.4.3",
     "qr-scanner": "^1.4.2",

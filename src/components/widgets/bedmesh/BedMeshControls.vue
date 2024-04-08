@@ -146,7 +146,8 @@
           >
             {{ $t('app.general.btn.clear_profile') }}
           </app-btn>
-
+        </v-col>
+        <v-col cols="6">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <app-btn
@@ -165,36 +166,9 @@
             <span>{{ $t(`app.bedmesh.tooltip.calibrate`) }}</span>
           </v-tooltip>
         </v-col>
+      </v-row>
+      <v-row>
         <v-col cols="6">
-          <app-btn
-            block
-            small
-            class="mb-2"
-            :loading="hasWait($waits.onHomeAll)"
-            :disabled="printerPrinting || printerBusy"
-            :color="(!allHomed) ? 'primary' : undefined"
-            @click="sendGcode('G28', $waits.onHomeAll)"
-          >
-            <v-icon
-              small
-              class="mr-1"
-            >
-              $home
-            </v-icon> {{ $t('app.general.btn.all') }}
-          </app-btn>
-          
-          <app-btn
-            block
-            small
-            class="mb-2"
-            :loading="hasWait($waits.onShaperCalibrate)"
-            :disabled="printerPrinting || printerBusy"
-            :color="(!allHomed) ? 'primary' : undefined"
-            @click="sendGcode('SHAPER_CALIBRATE', $waits.onShaperCalibrate)"
-          >
-            {{ $t('app.general.btn.shaper_calibrate') }}
-          </app-btn>
-
           <app-btn
             v-if="printerSupportsQgl"
             :loading="hasWait($waits.onQGL)"

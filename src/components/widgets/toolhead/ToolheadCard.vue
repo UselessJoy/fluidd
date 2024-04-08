@@ -67,9 +67,6 @@
         </template>
           <span>{{ $t('app.tool.tooltip.force_move_description') }}</span>
         </v-tooltip>
-
-
-
         <app-btn
           v-if="hasSteppersEnabled"
           :disabled="!klippyReady || printerPrinting"
@@ -158,6 +155,7 @@ import StateMixin from '@/mixins/state'
 import ToolheadMixin from '@/mixins/toolhead'
 import Toolhead from './Toolhead.vue'
 import type { Macro } from '@/store/macros/types'
+import type { Probe } from '@/store/printer/types'
 
 type Tool = {
   name: string,
@@ -185,6 +183,10 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
 
   get printerSupportsQuadGantryLevel (): boolean {
     return 'quad_gantry_level' in this.printerSettings
+  }
+
+  get printerSupportResonanceTester (): boolean {
+    return 'resonance_tester' in this.printerSettings
   }
 
   get printerSupportsZTiltAdjust (): boolean {
@@ -216,6 +218,14 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       'stepper_z' in this.printerSettings &&
       'z_position_endstop' in this.printerSettings.stepper_z
     )
+  }
+
+  get probe (): Probe | undefined {
+    return this.$store.getters['printer/getProbe'] as Probe | undefined
+  }
+
+  get isUsingMagnetProbe(): boolean | undefined {
+    return this.probe?.is_using_magnet_probe
   }
 
   get loadFilamentMacro (): Macro | undefined {
@@ -278,11 +288,30 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
         name: '-'
       })
     }
+
+    tools.push({
+      name: 'GET_MAGNET_PROBE',
+      label: this.$tc("app.tool.title.get_magnet_probe"),
+      icon: '$magnetOn',
+      disabled: this.isUsingMagnetProbe,
+      wait: this.$waits.onGetMagnetProbe
+    })
+    tools.push({
+      name: 'RETURN_MAGNET_PROBE',
+      label: this.$tc("app.tool.title.return_magnet_probe"),
+      icon: '$magnetOff',
+      disabled: !this.isUsingMagnetProbe,
+      wait: this.$waits.onReturtMagnetProbe
+    })
+    tools.push({
+        name: '-'
+      })
+
     if (this.printerSupportsBedScrewsAdjust) {
       tools.push({
         name: 'BED_SCREWS_ADJUST',
         label: this.$tc("app.tool.title.bed_screws_adjust"),
-        disabled: !this.allHomed || this.isBedScrewsAdjustActive,
+        disabled: this.isBedScrewsAdjustActive,
         wait: this.$waits.onBedScrewsAdjust
       })
     }
@@ -305,20 +334,20 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     tools.push({
       name: 'MANUAL_PROBE',
       label: this.$tc("app.tool.title.manual_probe"),
-      disabled: !this.allHomed || this.isManualProbeActive,
+      disabled: this.isManualProbeActive,
       wait: this.$waits.onManualProbe
     })
     if (this.printerSupportsProbeCalibrate) {
       tools.push({
         name: 'PROBE_ACCURACY',
         label: this.$tc("app.tool.title.probe_accuracy"),
-        disabled: !this.allHomed,
+        disabled: this.isManualProbeActive,
         wait: this.$waits.onProbeAccuracy
       })
       tools.push({
-        name: 'PROBE_CALIBRATE',
+        name: 'PROBE_CALIBRATE SAMPLES=3',
         label: this.$tc("app.tool.title.probe_calibrate"),
-        disabled: !this.allHomed,
+        disabled: this.isManualProbeActive,
         wait: this.$waits.onProbeCalibrate
       })
     }
@@ -334,7 +363,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       tools.push({
         name: 'SCREWS_TILT_CALCULATE',
         label: this.$tc("app.tool.title.screws_tilt_calculate"),
-        disabled: !this.allHomed || this.isManualProbeActive,
+        disabled: this.isManualProbeActive,
         wait: this.$waits.onBedScrewsCalculate
       })
     }
@@ -350,8 +379,34 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       tools.push({
         name: 'Z_TILT_ADJUST',
         label: this.$tc("app.tool.title.z_tilt_adjust"),
-        disabled: !this.allHomed || this.isManualProbeActive,
+        disabled: this.isManualProbeActive,
         wait: this.$waits.onZTilt
+      })
+    }
+    if (this.printerSupportResonanceTester) {
+      tools.push({
+        name: '-' 
+      })
+      tools.push({
+        name: 'MEASURE_AXES_NOISE',
+        icon: '$sineWave',
+        label: this.$tc("app.tool.title.measure_axes_noise"),
+        disabled: this.isManualProbeActive,
+        wait: this.$waits.onMeasureAxesNoise
+      })
+      // tools.push({
+      //   name: 'TEST_RESONANCES',
+      //   icon: '$sineWave',
+      //   label: this.$tc("app.tool.title.test_resonances"),
+      //   disabled: this.isManualProbeActive,
+      //   wait: this.$waits.onTestResonances
+      // })
+      tools.push({
+        name: 'SHAPER_CALIBRATE',
+        icon: '$sineWave',
+        label: this.$tc("app.tool.title.shaper_calibrate"),
+        disabled: this.isManualProbeActive,
+        wait: this.$waits.onShaperCalibrate
       })
     }
     return tools
@@ -412,15 +467,15 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     }
   }
 
-  @Watch('hasScrewsTiltAdjustResults')
-  onHasScrewsTiltAdjustResults (value: boolean) {
-    this.screwsTiltAdjustDialogOpen = (
-      value &&
-      this.showScrewsTiltAdjustDialogAutomatically &&
-      this.klippyReady &&
-      !this.printerPrinting
-    )
-  }
+  // @Watch('hasScrewsTiltAdjustResults')
+  // onHasScrewsTiltAdjustResults (value: boolean) {
+  //   this.screwsTiltAdjustDialogOpen = (
+  //     value &&
+  //     this.showScrewsTiltAdjustDialogAutomatically &&
+  //     this.klippyReady &&
+  //     !this.printerPrinting
+  //   )
+  // }
 
   async toggleForceMove () {
     const result = (

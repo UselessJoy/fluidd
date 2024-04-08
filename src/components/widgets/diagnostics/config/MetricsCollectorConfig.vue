@@ -101,7 +101,7 @@ export default class MetricsCollectorConfig extends Vue {
       if (typeof data !== 'string') throw new Error('Metrics collector returned invalid data')
       data = JSON.parse(data)
     } catch (err) {
-      data = (err instanceof Error && err.message) ?? 'Unknown Error'
+      data = (err instanceof Error && err.message) ?? this.$tc('app.printer.errors.unknown_error')
     }
 
     if (typeof data === 'number') data = Math.round(data * 1000) / 1000

@@ -109,11 +109,13 @@ import ThemePicker from '../ui/AppColorPicker.vue'
 import type { Led } from '@/store/printer/types'
 import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
 import AppColorPickerDialog from '../ui/AppColorPickerDialog.vue'
+import AppColorPicker from '../ui/AppColorPicker.vue'
 @Component({
   components: {
     ThemePicker,
     OutputItem,
-    AppColorPickerDialog
+    AppColorPickerDialog,
+    AppColorPicker
   }
 })
 export default class ThemeSettings extends Mixins(StateMixin) {
