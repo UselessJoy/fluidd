@@ -23,6 +23,7 @@ export const defaultState = (): ConfigState => {
         locale: 'en',
         chartVisible: true,
         hideTempWaits: true,
+        hideTimelapseMessages: true,
         axis: {
           x: { inverted: false },
           y: { inverted: false },
@@ -67,6 +68,8 @@ export const defaultState = (): ConfigState => {
         enableDiagnostics: false,
         thumbnailSize: 32,
         autoOff_enable: false,
+        watch_bed_mesh: false,
+        autoload_bed_mesh: false,
         lang: 'en',
         safety_enabled: false,
         led_enabled: true,

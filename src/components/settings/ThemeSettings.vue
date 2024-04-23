@@ -30,7 +30,6 @@
           return-object
         />
       </app-setting>
-
       <v-divider />
 
       <app-setting :title="$t('app.setting.label.primary_color')">
@@ -146,7 +145,6 @@ export default class ThemeSettings extends Mixins(StateMixin) {
     :
     this.sendGcode(`DISABLE_LED_EFFECTS`)
   }
-
 
   get theme (): ThemeConfig {
     return this.$store.state.config.uiSettings.theme as ThemeConfig

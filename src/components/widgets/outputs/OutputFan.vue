@@ -44,6 +44,7 @@ import { Component, Mixins, Prop } from 'vue-property-decorator'
 import type { Fan } from '@/store/printer/types'
 import StateMixin from '@/mixins/state'
 import BrowserMixin from '@/mixins/browser'
+import { SocketActions } from '@/api/socketActions'
 
 @Component({})
 export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
@@ -57,10 +58,21 @@ export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
   }
 
   get value () {
-    if (!this.fan.speed) return 0
-    const speed = this.fan.speed / (this.fan.config.max_power || 1)
+    let fan = {} as Fan
+    for (let field in this.$store.state.printer.printer) {
+      if (field === this.fan.key) {
+        
+        fan = this.$store.state.printer.printer[field]
+        // alert(`fan speed ${JSON.stringify(fan)}`)
+      } 
+    }
+    // this.fan.speed = Math.round(fan.speed || 0)
+    // if (!this.fan.speed) return Math.round(fan.speed || 0)
+    const speed = (fan.speed || 0) / (this.fan.config.max_power || 1)
     return Math.round(speed * 100)
   }
+
+
 
   handleChange (target: number) {
     // If this is a controllable fan, it's either the part fan [fan] or a generic fan [fan_generic].

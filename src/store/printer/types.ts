@@ -101,6 +101,7 @@ export type OutputType<T = Record<string, any>> = {
 }
 export interface Heater extends OutputType {
   temperature: number;
+  control: string
   target: number;
   power: number;
   minTemp?: number;

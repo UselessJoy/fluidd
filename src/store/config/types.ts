@@ -60,6 +60,7 @@ export interface GeneralConfig {
   locale: string;
   chartVisible: boolean;
   hideTempWaits: boolean;
+  hideTimelapseMessages: boolean;
   axis: Axis;
   defaultExtrudeLength: number;
   defaultExtrudeSpeed: number;
@@ -100,6 +101,8 @@ export interface GeneralConfig {
   enableDiagnostics: boolean;
   thumbnailSize: number;
   autoOff_enable: boolean;
+  watch_bed_mesh: boolean;
+  autoload_bed_mesh: boolean;
   lang: string;
   safety_enabled: boolean;
   led_enabled: boolean;

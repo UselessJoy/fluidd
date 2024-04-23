@@ -117,7 +117,9 @@ export const defaultState = (): PrinterState => {
         progress: 0,
         has_interrupted_file: false,
         interrupted_file: null,
-        show_interrupt: false
+        show_interrupt: false,
+        watch_bed_mesh: false,
+        autoload_bed_mesh: false
       },
       toolhead: {
         estimated_print_time: 0,

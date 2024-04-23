@@ -213,6 +213,34 @@
       <v-divider />
 
       <app-setting
+        :title="$t('app.setting.label.watch_bed_mesh')"
+        :sub-title="$t('app.setting.label.sub_watch_bed_mesh')"
+      >
+        <v-switch
+          v-model="watchBedMesh"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+      
+      <v-divider />
+
+      <app-setting
+        :title="$t('app.setting.label.autoload_bed_mesh')"
+        :sub-title="$t('app.setting.label.sub_autoload_bed_mesh')"
+      >
+        <v-switch
+          v-model="autoloadBedMesh"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+      
+      <v-divider />
+
+      <app-setting
         :title="$t('app.setting.label.print_in_progress_layout')"
       >
         <v-select
@@ -517,6 +545,32 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
     SocketActions.setSafetyPrinting(value)
+  }
+
+  get watchBedMesh (): boolean {
+    return this.$store.getters['printer/getWatchBedMesh']
+  }
+
+  set watchBedMesh (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.watch_bed_mesh',
+      value,
+      server: true
+    })
+    SocketActions.setWatchBedMesh(value)
+  }
+
+  get autoloadBedMesh (): boolean {
+    return this.$store.getters['printer/getAutoloadBedMesh']
+  }
+
+  set autoloadBedMesh (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.autoload_bed_mesh',
+      value,
+      server: true
+    })
+    SocketActions.setAutoloadBedMesh(value)
   }
 
 

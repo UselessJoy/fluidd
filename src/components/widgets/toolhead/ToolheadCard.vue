@@ -109,7 +109,24 @@
           <v-list dense>
             <template v-for="(tool, index) of availableTools">
               <v-list-item
-                v-if="tool.name !== '-'"
+                v-if="tool.name === 'calibrate_heater_pid'"
+                :key="tool.name"
+                :disabled="tool.disabled || (tool.wait && hasWait(tool.wait))"
+                @click="isOpenPidDialog = true"
+              >
+                <v-list-item-icon>
+                  <v-icon>
+                    {{ tool.icon || '$tools' }}
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ tool.label || tool.name }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                v-else-if="tool.name !== '-'"
                 :key="tool.name"
                 :disabled="tool.disabled || (tool.wait && hasWait(tool.wait))"
                 @click="sendGcode(tool.name, tool.wait)"
@@ -147,8 +164,14 @@
       v-if="screwsTiltAdjustDialogOpen"
       v-model="screwsTiltAdjustDialogOpen"
     />
+    <CalibratePidDialog
+      v-if="isOpenPidDialog"
+      v-model="isOpenPidDialog"
+      @startCalibrate="sendCalibratePid"
+    />
   </collapsable-card>
 </template>
+
 <script lang="ts">
 import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
@@ -156,6 +179,8 @@ import ToolheadMixin from '@/mixins/toolhead'
 import Toolhead from './Toolhead.vue'
 import type { Macro } from '@/store/macros/types'
 import type { Probe } from '@/store/printer/types'
+import type { Heater } from '@/store/printer/types'
+import CalibratePidDialog from '@/components/widgets/thermals/CalibratePidDialog.vue'
 
 type Tool = {
   name: string,
@@ -166,13 +191,15 @@ type Tool = {
 }
 @Component({
   components: {
-    Toolhead
+    Toolhead,
+    CalibratePidDialog
   }
 })
 export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
   manualProbeDialogOpen = false
   bedScrewsAdjustDialogOpen = false
   screwsTiltAdjustDialogOpen = false
+  isOpenPidDialog = false
 
   @Prop({ type: Boolean })
   readonly menuCollapsed?: boolean
@@ -379,7 +406,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
       tools.push({
         name: 'Z_TILT_ADJUST',
         label: this.$tc("app.tool.title.z_tilt_adjust"),
-        disabled: this.isManualProbeActive,
+        disabled: this.isManualProbeActive || this.printerPrinting,
         wait: this.$waits.onZTilt
       })
     }
@@ -391,7 +418,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
         name: 'MEASURE_AXES_NOISE',
         icon: '$sineWave',
         label: this.$tc("app.tool.title.measure_axes_noise"),
-        disabled: this.isManualProbeActive,
+        disabled: this.isManualProbeActive || this.printerPrinting,
         wait: this.$waits.onMeasureAxesNoise
       })
       // tools.push({
@@ -405,10 +432,21 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
         name: 'SHAPER_CALIBRATE',
         icon: '$sineWave',
         label: this.$tc("app.tool.title.shaper_calibrate"),
-        disabled: this.isManualProbeActive,
+        disabled: this.isManualProbeActive || this.printerPrinting,
         wait: this.$waits.onShaperCalibrate
       })
     }
+    if (this.heatersSupportPid)
+    tools.push({
+        name: '-' 
+      })
+    tools.push({
+      name: 'calibrate_heater_pid',
+      icon: '$fire',
+      label: this.$tc("app.tool.title.pid_calibrate"),
+      disabled: this.isManualProbeActive ||this.printerPrinting,
+      wait: this.$waits.onPidCalibrate
+    })
     return tools
   }
   
@@ -419,6 +457,11 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
     )
   }
 
+  get heatersSupportPid (): boolean {
+    let heaters: Heater[] = this.$store.getters['printer/getHeaters']
+    return heaters.find(heater => heater.control === 'pid') ? true : false
+  }
+  
   get hasSteppersEnabled (): boolean {
     return this.$store.getters['printer/getHasSteppersEnabled'] as boolean
   }
@@ -476,6 +519,10 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
   //     !this.printerPrinting
   //   )
   // }
+  
+  sendCalibratePid(heater: string, temperatures: number[]) {
+    this.sendGcode(`CALIBRATE_HEATER_PID HEATER=${heater} TEMPERATURES=${temperatures.join(',')}`, this.$waits.onPidCalibrate)
+  }
 
   async toggleForceMove () {
     const result = (

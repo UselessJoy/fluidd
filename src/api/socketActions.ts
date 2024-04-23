@@ -198,7 +198,7 @@ export const SocketActions = {
     )
   },
 
-  async machineTimelapseSaveFrames (wait?: string) {
+  async machineTimelapseSaveFrames ( wait?: string) {
     baseEmit(
       'machine.timelapse.saveframes', {
         wait
@@ -257,6 +257,17 @@ export const SocketActions = {
     baseEmit(
       'printer.objects.subscribe', {
         dispatch: 'printer/onPrinterObjectsSubscribe',
+        params: {
+          objects
+        }
+      }
+    )
+  },
+
+  async printerObjectsQuery(objects: {[key: string]: null}) {
+    baseEmit(
+      'printer.objects.query', {
+        dispatch: 'printer/onPrinterObjectsQuery',
         params: {
           objects
         }
@@ -324,6 +335,28 @@ export const SocketActions = {
         dispatch: 'void',
         params: {
           safety_enabled: value
+        }
+      }
+    )
+  },
+
+  async setWatchBedMesh (value: boolean) {
+    baseEmit(
+      'printer.setWatchBedMesh', {
+        dispatch: 'void',
+        params: {
+          watch_bed_mesh: value
+        }
+      }
+    )
+  },
+
+  async setAutoloadBedMesh (value: boolean) {
+    baseEmit(
+      'printer.setAutoloadBedMesh', {
+        dispatch: 'void',
+        params: {
+          autoload_bed_mesh: value
         }
       }
     )

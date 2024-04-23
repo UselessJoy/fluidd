@@ -153,6 +153,14 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.autooff.autoOff_enable
   },
 
+  getWatchBedMesh: (state) => {
+    return state.printer.virtual_sdcard.watch_bed_mesh
+  },
+
+  getAutoloadBedMesh: (state) => {
+    return state.printer.virtual_sdcard.autoload_bed_mesh
+  },
+
   getTimeAutoOff: (state) => {
     return state.printer.autooff.timeAutoOff
   },
@@ -504,6 +512,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
             color,
             prettyName,
             key: e,
+            control: config?.control,
             minTemp: config?.min_temp,
             maxTemp: config?.max_temp
           })

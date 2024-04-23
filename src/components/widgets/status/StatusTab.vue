@@ -88,6 +88,12 @@
                 v-if="filename !== ''"
                 :label="$t('app.general.label.file')"
               >
+                <span style="word-break: break-all">{{ filename.split('/').pop().split('.')[0] }}</span>
+              </status-label>
+              <status-label
+                v-if="filename !== ''"
+                :label="$t('app.general.label.filepath')"
+              >
                 <span style="word-break: break-all">{{ filename }}</span>
               </status-label>
             </v-col>

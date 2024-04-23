@@ -101,6 +101,17 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item @click="hideTimelapseMessages = !hideTimelapseMessages">
+            <v-list-item-action class="my-0">
+              <v-checkbox :input-value="hideTimelapseMessages" />
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('app.console.label.hide_timelapse_messages') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
           <template v-if="filters && filters.length">
             <v-divider />
 
@@ -163,6 +174,18 @@ export default class ConsoleCard extends Vue {
   set hideTempWaits (value: boolean) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.hideTempWaits',
+      value,
+      server: true
+    })
+  }
+
+  get hideTimelapseMessages (): boolean {
+    return this.$store.state.config.uiSettings.general.hideTimelapseMessages
+  }
+
+  set hideTimelapseMessages (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.hideTimelapseMessages',
       value,
       server: true
     })

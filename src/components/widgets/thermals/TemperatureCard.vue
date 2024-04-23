@@ -117,15 +117,13 @@ import type { Fan, Heater } from '@/store/printer/types'
 
 import ThermalChart from '@/components/widgets/thermals/ThermalChart.vue'
 import TemperatureTargets from '@/components/widgets/thermals/TemperatureTargets.vue'
-import TemperaturePresetsMenu from './TemperaturePresetsMenu.vue'
 import type { TemperaturePreset } from '@/store/config/types'
 import { SocketActions } from '@/api/socketActions'
 
 @Component({
   components: {
     ThermalChart,
-    TemperatureTargets,
-    TemperaturePresetsMenu
+    TemperatureTargets
   }
 })
 export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
@@ -134,7 +132,7 @@ export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
 
   @Ref('thermalchart')
   readonly thermalChartElement!: ThermalChart
-
+  
   get chartReady () {
     return (
       this.$store.state.socket.acceptingNotifications &&

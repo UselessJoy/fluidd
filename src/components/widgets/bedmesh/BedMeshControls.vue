@@ -36,7 +36,7 @@
           :key="item.profile_name"
         >
           <td class="">
-            {{ item.profile_name }}
+            {{ item.profile_name.search(/^profile_\d+$/) !== -1 ? $t('app.bedmesh.default', {i: item.profile_name.split('_')[1]}) : item.profile_name}}
           </td>
           <td>
             <v-chip

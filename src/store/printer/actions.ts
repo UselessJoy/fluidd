@@ -35,6 +35,14 @@ export const actions: ActionTree<PrinterState, RootState> = {
     commit('setAutoOff', payload)
   },
 
+  async onGetWatchBedMesh({ commit }, payload) {
+    commit('setWatchBedMesh', payload)
+  },
+
+  async onGetAutoloadBedMesh({ commit }, payload) {
+    commit('setAutoloadBedMesh', payload)
+  },
+
   async onGetLedStatus({ commit}, payload) {
     commit('setLedStatus', payload)
   },
@@ -155,6 +163,10 @@ export const actions: ActionTree<PrinterState, RootState> = {
     SocketActions.serverGcodeStore()
     SocketActions.printerGcodeHelp()
     SocketActions.serverTemperatureStore()
+  },
+
+  async onPrinterObjectsQuery ({ commit }, payload) {
+    return
   },
 
   /**

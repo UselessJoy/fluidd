@@ -13,7 +13,7 @@
           <img
             :src="previewUrl"
             class="mx-auto thumbnail"
-            :style="{filter: isRendering ? `saturate(${renderProgress}%)` : 'none'}"
+            :style="{filter: isRendering ? `saturate(${renderProgress}%)` : 'none', transform: `rotateX(${camera.flipY ? 180 : 0}deg) rotateY(${camera.flipX ? 180 : 0}deg)`}"
           >
           <v-progress-circular
             v-if="isRendering"
@@ -79,6 +79,7 @@ import type { RenderStatus, TimelapseLastFrame, TimelapseSettings } from '@/stor
 import { SocketActions } from '@/api/socketActions'
 import CameraItem from '@/components/widgets/camera/CameraItem.vue'
 import FilesMixin from '@/mixins/files'
+import type { CameraConfig } from '@/store/cameras/types'
 
 @Component({
   components: {
@@ -126,7 +127,7 @@ export default class StatusCard extends Mixins(StateMixin, FilesMixin) {
   }
 
   get camera () {
-    return this.$store.getters['cameras/getCameraById'](this.settings.camera)
+    return this.$store.getters['cameras/getCameraById'](this.settings.camera) as CameraConfig
   }
 
   get settings (): TimelapseSettings {

@@ -95,12 +95,22 @@ app:
         %{name} профиль
       not_found: Не найдено существующих сеток стола.
       not_loaded: Сетка не загружена
+    default: Профиль_%{i}
     tooltip:
       calibrate: Начать новую калибровку, будет сохранено как профиль 'default'
-      delete: Удалить профиль.
+      delete: Удалить профиль
       load: Загрузить профиль
       save: Сохранить откалиброванный профиль в printer.cfg.
       copy_image: Скопировать изображение сетки кровати
+  pid_calibrate:
+    btn:
+      add_temperature: Добавить температуру
+    title:
+      pid_calibrate_settings: Калибровка PID
+    setting:
+      heater: Нагреватель
+      temps: Калибровочные температуры
+      temp: Температура
   chart:
     label:
       current: Текущее значение
@@ -108,6 +118,8 @@ app:
       power: Мощность
       target: Цель
       rate_of_change: Изменение
+      pid: Калибровка
+      pid_calibrate: Калибровка PID
     tooltip:
       help: >-
         Удерживайте <kbd>Shift</kbd>, чтобы увеличить.<br />Щелкните по элементу,
@@ -118,6 +130,7 @@ app:
       auto_scroll: Автоматическое пролистывание
       flip_layout: Перевернутое отображение
       hide_temp_waits: Скрыть временные ожидания
+      hide_timelapse_messages: Скрыть сообщения от таймлапса
     placeholder:
       command: '''tab'' для автоподбора, ''help'' for для списка комманд ''↑ и ↓''
         история команд'
@@ -363,6 +376,7 @@ app:
       extrude_speed: Скорость экструзии
       filament: Филамент
       file: Файл
+      filepath: Путь к файлу
       finish_time: Конец
       flow: Поток
       free: Свободно
@@ -465,10 +479,11 @@ app:
     simple_form:
       error:
         arrayofnums: Только цифры
+        uniquearray: Повторяющееся значение
         credentials: Недействительные учетные данные
         exists: Уже существует
-        invalid_number: Неверный номер
-        invalid_url: Невалидный URL
+        invalid_number: Недопустимое значение
+        invalid_url: Недопустимый URL
         invalid_expression: Недопустимое выражение
         max: Макс. %{max}
         min: Мин. %{min}
@@ -661,11 +676,17 @@ app:
       '180': 180°
       '270': 270°
       none: Нет
+    themes:
+      Gelios: Гелиос
     label:
       klipper_language: Язык Клиппера
       klipper_language_description: Язык, на котором будут показываться ошибки и вывод консоли
       safety_printing: Безопасная печать
       auto_off_complete: Автовыключение после печати
+      watch_bed_mesh: Отслеживать сетку стола в начале печати
+      sub_watch_bed_mesh: Предупреждает об отсутствии загруженной сетки стола в начале печати
+      autoload_bed_mesh: Автозагрузка сетки стола в начале печати
+      sub_autoload_bed_mesh: Выбирается последний по времени, среди наиболее подходящих относительно целевой температуры стола, профиль
       all_off: Всё выключить
       all_on: Всё включить
       aspect_ratio: Соотношение сторон
@@ -891,6 +912,7 @@ app:
       measure_axes_noise: Измерение шума осей
       test_resonances: Тест резонансов
       shaper_calibrate: Компенсация резонанса
+      pid_calibrate: Калибровка PID
     tooltip:
       absolute_positioning: Абсолютная позиция
       extruder_disabled: Экструдер отключён, температура ниже чем (%{min}<small>°C</small>)
@@ -907,7 +929,7 @@ app:
       screws_tilt_calculate: Расчет поворота винтов
       bed_screws_adjust: Регулировка винтов
       force_move: Принудительно
-      force_move_description: Режим принудительного перемещения (движение без парковки экструдера)
+      force_move_description: Режим принудительного перемещения (движение без парковки стола и экструдера)
     label:
       stats_active_extruder: >-
         <span class="secondary--text">Активный экструдер настроен на </span>

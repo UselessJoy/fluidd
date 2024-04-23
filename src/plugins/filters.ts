@@ -490,6 +490,10 @@ export const Rules = {
     return !v.some(i => i === '' || isNaN(+(i ?? NaN))) || i18n.t('app.general.simple_form.error.arrayofnums')
   },
 
+  numberArrayUnique (array: number[], index: number) {
+    return (v: number) => array.every((val, i) => { return i === index ? true : +val !== +v}) || i18n.t('app.general.simple_form.error.uniquearray')
+  },
+
   passwordNotEqualUsername (username?: string | null) {
     return (v: string) => (v.toLowerCase() !== (username ?? '').toLowerCase()) || i18n.t('app.general.simple_form.error.password_username')
   },

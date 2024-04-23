@@ -488,7 +488,10 @@ export const Waits = Object.freeze({
   onGetMagnetProbe: 'onGetMagnetProbe',
   onReturtMagnetProbe: 'onReturtMagnetProbe',
   onMeasureAxesNoise: 'onMeasureAxesNoise',
-  onTestResonances: 'onTestResonances'
+  onTestResonances: 'onTestResonances',
+  onGetWatchBedMesh: 'onGetWatchBedMesh',
+  onGetAutoloadBedMesh: 'onGetAutoloadBedMesh',
+  onPidCalibrate: 'onPidCalibrate'
   /*    END NEW    */
 })
 

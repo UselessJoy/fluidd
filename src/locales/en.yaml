@@ -78,12 +78,22 @@ app:
         the %{name} profile
       not_found: No existing bed meshes found.
       not_loaded: No mesh loaded
+    default: Profile_%{i}
     tooltip:
       calibrate: Begins a new calibration, saving as profile 'default'
       delete: Delete Profile
       load: Load Profile
       save: Commits calibrated profile to printer.cfg
       copy_image: Copy bed mesh image
+  pid_calibrate:
+    btn:
+      add_temperature: Add temperature
+    title:
+      pid_calibrate_settings: PID calibrate
+    setting:
+      heater: Heater
+      temps: Calibration temperatures
+      temp: Temperature
   chart:
     label:
       current: Actual
@@ -102,6 +112,7 @@ app:
       auto_scroll: Auto scroll
       flip_layout: Flip layout
       hide_temp_waits: Hide temp waits
+      hide_timelapse_messages: Hide timelapse messages
     tooltip:
       help: >-
         Enter "help" for commands<br />Use <kbd>Tab</kbd> for autocomplete<br />Use <kbd>&uarr;</kbd> and <kbd>&darr;</kbd> for history
@@ -341,6 +352,7 @@ app:
       extrude_speed: Extrude Speed
       filament: Filament
       file: File
+      filepath: Filepath
       finish_time: Finish
       flow: Flow
       free: free
@@ -433,6 +445,7 @@ app:
     simple_form:
       error:
         arrayofnums: Only numbers
+        uniquearray: Duplicate value
         credentials: Invalid credentials
         exists: Already exists
         invalid_number: Invalid Number
@@ -629,8 +642,16 @@ app:
       '180': 180°
       '270': 270°
       none: None
+    themes:
+      Gelios: Gelios
     label:
-      auto_off_complete: Enable auto off after printing
+      klipper_language: Klipper Language
+      klipper_language_description: The language in which errors and console output will be displayed
+      auto_off_complete: Track the bed mesh when printing starts
+      watch_bed_mesh: Watch Bed Mesh
+      sub_watch_bed_mesh: Warns about the absence of a loaded table grid at the beginning of printing
+      autoload_bed_mesh: Autoload Bed Mesh
+      sub_autoload_bed_mesh: The latest profile is selected, among the most suitable relative to the target temperature of the table
       all_off: All off
       all_on: All on
       aspect_ratio: Aspect Ratio
@@ -835,6 +856,7 @@ app:
       measure_axes_noise: Measure axes noise
       test_resonances: Test resonances
       shaper_calibrate: Shaper calibrate
+      pid_calibrate: PID calibrate
     tooltip:
       absolute_positioning: Absolute Positioning
       extruder_disabled: extruder disabled, below min_extrude_temp (%{min}<small>°C</small>)

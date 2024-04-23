@@ -25,6 +25,14 @@ export const mutations: MutationTree<PrinterState> = {
     state.printer.autooff = payload
   },
 
+  setWatchBedMesh(state, payload) {
+    state.printer.virtual_sdcard = payload
+  },
+
+  setAutoloadBedMesh(state, payload) {
+    state.printer.virtual_sdcard = payload
+  },
+
   setKlipperLang (state, payload) {
     state.printer.locale = payload
   },
@@ -61,6 +69,12 @@ export const mutations: MutationTree<PrinterState> = {
   },
 
   setPrinterObjectList (state, payload) {
+    if (!state.printer.objects.includes(payload)) {
+      state.printer.objects.push(payload)
+    }
+  },
+
+  setPrinterObjectQuery (state, payload) {
     if (!state.printer.objects.includes(payload)) {
       state.printer.objects.push(payload)
     }
