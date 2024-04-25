@@ -151,7 +151,7 @@
           :key="index"
           @change="$emit('root-change', root)"
         >
-        <span v-if="root !== 'tmp'">
+        <span>
           {{ $t('app.filesystem.'+root) }}
         </span>
         </v-tab>

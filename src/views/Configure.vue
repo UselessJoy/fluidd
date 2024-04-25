@@ -71,12 +71,20 @@ export default class Configure extends Mixins(StateMixin) {
 
   get roots () {
     const roots = ['logs', 'docs', 'config_examples']
-    const excludeRoots = ['gcodes', 'config', 'timelapse', 'timelapse_frames']
-    for (const root of this.$store.state.server.info.registered_directories || []) {
-      if (!excludeRoots.includes(root) && !roots.includes(root)) {
-        roots.push(root)
+
+    const all_roots = this.$store.state.server.info.registered_directories || []
+    // Добавить настройку для показа дополнительных директорий
+    for (const dir_root in all_roots) {
+      if (!roots.includes(dir_root) && this.$store.state.config.uiSettings.general.shown_registered_directories.includes(dir_root)) {
+        roots.push(dir_root)
       }
     }
+    // const excludeRoots = ['gcodes', 'config', 'timelapse', 'timelapse_frames']
+    // for (const root of this.$store.state.server.info.registered_directories || []) {
+    //   if (!excludeRoots.includes(root) && !roots.includes(root)) {
+    //     roots.push(root)
+    //   }
+    // }
     return roots
   }
 }

@@ -106,6 +106,7 @@ export interface GeneralConfig {
   lang: string;
   safety_enabled: boolean;
   led_enabled: boolean;
+  shown_registered_directories: string[]
 }
 
 export type ToolheadControlStyle = 'cross' | 'bars' | 'circle'

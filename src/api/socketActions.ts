@@ -732,8 +732,7 @@ export const SocketActions = {
     baseEmit(
       'server.files.has_media',
       {
-        dispatch: 'void',
-        params: { root: "media" }
+        dispatch: 'void'
       }
     )
   },

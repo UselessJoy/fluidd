@@ -46,6 +46,7 @@ app:
     docs: docs
     gcodes: G-codes
     media: Media
+    tmp: Tmp files
     config_examples: config_examples
     loading_text: Loading...
   language:

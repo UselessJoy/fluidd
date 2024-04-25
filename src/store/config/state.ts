@@ -73,6 +73,7 @@ export const defaultState = (): ConfigState => {
         lang: 'en',
         safety_enabled: false,
         led_enabled: true,
+        shown_registered_directories: []
       },
       theme: {
         isDark: true,

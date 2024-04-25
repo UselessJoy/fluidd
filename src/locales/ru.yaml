@@ -46,6 +46,7 @@ app:
     docs: Документация
     gcodes: G-коды
     media: Внешние накопители
+    tmp: Временные файлы
     config_examples: Примеры конфигурации
     loading_text: Загрузка...
   language:
