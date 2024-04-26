@@ -10,6 +10,16 @@ export const defaultState = (): FilesState => {
       used: 0,
       free: 0
     },
+    disk_usage_gcodes: {
+      total: 0,
+      used: 0,
+      free: 0
+    },
+    disk_usage_config: {
+      total: 0,
+      used: 0,
+      free: 0
+    },
     rootFiles: {},
     pathFiles: {}
   }

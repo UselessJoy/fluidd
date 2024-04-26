@@ -24,26 +24,25 @@
     <v-card-text>
       <div class="mb-4">
         <v-layout justify-space-between>
-          <div class="grey--text text--darken-2">{{ $t('app.file_system.label.disk_usage') }}</div>
+          <div class="grey--text text--darken-2">{{ isEqualUsage ? $t('app.file_system.label.disk_internal_usage') : $t('app.file_system.label.disk_gcode_usage') }}</div>
         </v-layout>
         <v-progress-linear
           :size="90"
           :height="10"
-          :value="fileSystemUsedPercent"
+          :value="fileSystemGcodesUsedPercent"
           color="primary"
           class="my-1"
         >
         </v-progress-linear>
-
         <v-layout justify-space-between>
           <div class="grey--text">
             <span class="focus--text">
-              {{ $filters.getReadableFileSizeString(fileSystemUsage.used) }}
+              {{ $filters.getReadableFileSizeString(fileSystemGcodeUsage.used) }}
             </span> {{ $t('app.general.label.used') }}
           </div>
           <div class="grey--text">
             <span class="focus--text">
-              {{ $filters.getReadableFileSizeString(fileSystemUsage.free) }}
+              {{ $filters.getReadableFileSizeString(fileSystemGcodeUsage.free) }}
             </span> {{ $t('app.general.label.free') }}
           </div>
         </v-layout>
@@ -135,6 +134,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import JobHistory from '@/components/widgets/history/JobHistory.vue'
 import { SocketActions } from '@/api/socketActions'
+import type { DiskUsage } from '@/store/files/types'
 
 @Component({
   components: {
@@ -149,15 +149,34 @@ export default class PrinterStatsCard extends Vue {
     return this.$store.getters['history/getRollUp']
   }
 
-  get fileSystemUsedPercent () {
-    // (250 / 500) * 100
-    const total = this.fileSystemUsage.total
-    const used = this.fileSystemUsage.used
+  // Не используется
+  // get fileSystemUsedPercent () {
+  //   // (250 / 500) * 100
+  //   const total = this.fileSystemUsage.total
+  //   const used = this.fileSystemUsage.used
+  //   return Math.floor((used / total) * 100).toFixed()
+  // }
+
+  // get fileSystemUsage (): DiskUsage {
+  //   return this.$store.getters['files/getUsage']
+  // }
+  
+  get fileSystemGcodesUsedPercent () {
+    const total = this.fileSystemGcodeUsage.total
+    const used = this.fileSystemGcodeUsage.used
     return Math.floor((used / total) * 100).toFixed()
   }
 
-  get fileSystemUsage () {
-    return this.$store.getters['files/getUsage']
+  get isEqualUsage(): boolean {
+    return this.fileSystemGcodeUsage.total === this.fileSystemConfiglUsage.total
+  }
+
+  get fileSystemGcodeUsage (): DiskUsage {
+    return this.$store.getters['files/getGcodesUsage']
+  }
+
+  get fileSystemConfiglUsage(): DiskUsage {
+    return this.$store.getters['files/getConfigUsage']
   }
   
   get supportsHistoryComponent () {
@@ -173,6 +192,11 @@ export default class PrinterStatsCard extends Vue {
     if (result) {
       SocketActions.serverHistoryResetTotals()
     }
+  }
+
+  mounted() {
+   SocketActions.serverGetRootUsage('gcodes')
+   SocketActions.serverGetRootUsage('config')
   }
 }
 </script>

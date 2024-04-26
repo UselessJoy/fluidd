@@ -9,7 +9,7 @@
         icon="$video"
       >
         <file-system
-          :roots="'timelapse'"
+          :roots="['timelapse']"
           name="timelapse"
           bulk-actions
           max-height="816"

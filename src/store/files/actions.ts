@@ -26,6 +26,15 @@ export const actions: ActionTree<FilesState, RootState> = {
     )
     commit('setDiskUsage', disk_usage)
     commit('setServerFilesGetDirectory', { path, content: { files, dirs: filteredDirs } })
+    SocketActions.serverGetRootUsage('gcodes')
+    SocketActions.serverGetRootUsage('config')
+  },
+
+  async onServerGetRootUsage ({ commit }, payload: { disk_usage: DiskUsage; __request__: any }) 
+  {
+    const { disk_usage, __request__: request } = payload
+    const { root } = request.params
+    commit(`setDiskUsage${root}`, disk_usage)
   },
 
   async onServerFilesListRoot ({ commit }, payload) {

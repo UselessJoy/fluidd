@@ -47,6 +47,8 @@ app:
     gcodes: G-коды
     media: Внешние накопители
     tmp: Временные файлы
+    timelapse: Таймлапс
+    timelapse_frames: Кадры съемки 
     config_examples: Примеры конфигурации
     loading_text: Загрузка...
   language:
@@ -184,6 +186,8 @@ app:
     label:
       dir_name: Имя папки
       disk_usage: Использование дискового пространства
+      disk_gcode_usage: Память sd-карты
+      disk_internal_usage: Внутренняя память
       diskinfo: Информация о диске
       downloaded: Скачано
       file_name: Имя файла
@@ -803,8 +807,8 @@ app:
         окно "Наклона винтов"
       auto_load_mobile_on_print_start: Автоматически загружать файл на мобильных устройствах
       draw_origin: Показывать начало координат
-      sections_to_ignore_pending_configuration_changes: Разделы, которые следует игнорировать
-        ожидающие изменения конфигурации
+      sections_to_ignore_pending_configuration_changes: Игнорировать изменения в разделах
+      shown_registered_directories: Показывать дополнительные директории на странице конфигурации
       enable_xy_homing: 'Включить парковку по XY'
       show_chart: Показать график
       show_logo_on_background: Показать логотип на фоне
@@ -1024,6 +1028,7 @@ app:
         x_only: Переместить только X
         y_only: Переместить только Y
       previewimage: Создавать Скриншот
+      delete_after_render: Удалять кадры по завершению
       saveframes: Сохранение Кадров
       stream_delay_compensation: Компенсация Задержки
       targetlength: Целевая длина

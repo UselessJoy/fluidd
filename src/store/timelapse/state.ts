@@ -32,7 +32,8 @@ export const defaultWritableSettings = (): TimelapseWritableSettings => {
     variable_fps_max: 60,
     duplicatelastframe: 5,
     previewimage: true, // true for better timelapse browser integration
-    saveframes: false
+    saveframes: false,
+    deleteframes: false
   }
 }
 

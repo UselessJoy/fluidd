@@ -7,6 +7,8 @@ export interface FilesState {
   download: FileDownload | null;
   currentPaths: Record<string, string>;
   disk_usage: DiskUsage;
+  disk_usage_gcodes: DiskUsage;
+  disk_usage_config: DiskUsage;
   rootFiles: Record<string, MoonrakerRootFile[] | undefined>;
   pathFiles: Record<string, MoonrakerPathContent | undefined>;
 }

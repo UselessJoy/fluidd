@@ -180,6 +180,17 @@
           @click.native.stop
         />
       </app-setting>
+      <!-- <app-setting
+        :title="$t('app.timelapse.setting.delete_after_render')"
+        :sub-title="subtitleIfBlocked(deleteFramesBlocked)"
+      >
+        <v-switch
+          v-model="deleteFrames"
+          hide-details
+          :disabled="deleteFramesBlocked"
+          @click.native.stop
+        />
+      </app-setting> -->
     </div>
 
     <template #actions>
@@ -360,6 +371,18 @@ export default class TimelapseRenderSettingsDialog extends Mixins(StateMixin) {
   set previewImage (value: boolean) {
     SocketActions.machineTimelapseSetSettings({ previewimage: value })
   }
+
+  // get deleteFrames () {
+  //   return this.settings?.deleteframes
+  // }
+
+  // set deleteFrames (value: boolean) {
+  //   SocketActions.machineTimelapseSetSettings({ deleteframes: value })
+  // }
+
+  // get deleteFramesBlocked (): boolean {
+  //   return this.$store.getters['timelapse/isBlockedSetting']('deleteframes')
+  // }
 
   renderTimelapse () {
     SocketActions.machineTimelapseRender()

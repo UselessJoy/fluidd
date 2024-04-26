@@ -151,6 +151,10 @@ export default class StatusCard extends Mixins(StateMixin, FilesMixin) {
 
     return 0
   }
+
+  mounted() {
+    SocketActions.oldFrames()
+  }
 }
 </script>
 

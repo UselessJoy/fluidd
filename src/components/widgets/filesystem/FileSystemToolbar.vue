@@ -138,14 +138,6 @@
       #extension
     >
       <v-tabs>
-        <!-- <v-tab
-          v-for="(root, index) in roots"
-          v-if="root === 'media' ? hasMediaFiles() : true"
-          :key="index"
-          @change="$emit('root-change', root)"
-        >
-          {{ $t('app.filesystem.'+root) }}
-        </v-tab> -->
         <v-tab
           v-for="(root, index) in roots"
           :key="index"

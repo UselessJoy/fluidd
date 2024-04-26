@@ -522,6 +522,14 @@ export const SocketActions = {
     )
   },
 
+  async oldFrames () {
+    baseEmit(
+      'machine.timelapse.old_frames', {
+        dispatch: 'void'
+      }
+    )
+  },
+
   async serverConfig () {
     baseEmit(
       'server.config', {
@@ -724,6 +732,18 @@ export const SocketActions = {
         dispatch: 'files/onServerFilesGetDirectory',
         wait,
         params: { root, path, extended: true }
+      }
+    )
+  },
+
+  async serverGetRootUsage (root: string) {
+    const wait = `${Waits.onFileSystem}/${root}`
+    baseEmit(
+      'server.files.get_root_usage',
+      {
+        dispatch: 'files/onServerGetRootUsage',
+        wait,
+        params: {root: root}
       }
     )
   },

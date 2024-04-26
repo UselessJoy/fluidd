@@ -147,6 +147,14 @@ export const getters: GetterTree<FilesState, RootState> = {
           canConfigure: false,
           filterTypes: ['hidden_files']
         }
+      case 'timelapse_frames':
+        return {
+          readonly: false,
+          accepts: [],
+          canView,
+          canConfigure: false,
+          filterTypes: ['hidden_files']
+        }
       default:
         return {
           readonly: true,
@@ -204,5 +212,13 @@ export const getters: GetterTree<FilesState, RootState> = {
    */
   getUsage: (state) => {
     return state.disk_usage
+  },
+
+  getGcodesUsage: (state) => {
+    return state.disk_usage_gcodes
+  },
+
+  getConfigUsage: (state) => {
+    return state.disk_usage_config
   }
 }

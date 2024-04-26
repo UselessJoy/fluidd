@@ -130,6 +130,14 @@ export const mutations: MutationTree<FilesState> = {
 
   setDiskUsage (state, payload) {
     Vue.set(state, 'disk_usage', payload)
-  }
+  },
+
+  setDiskUsagegcodes (state, payload) {
+    Vue.set(state, 'disk_usage_gcodes', payload)
+  },
+
+  setDiskUsageconfig (state, payload) {
+    Vue.set(state, 'disk_usage_config', payload)
+  },
 
 }
