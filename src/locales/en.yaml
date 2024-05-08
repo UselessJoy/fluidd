@@ -646,6 +646,7 @@ app:
     themes:
       Gelios: Gelios
     label:
+      enable_quite_mode: Enable quite mode
       klipper_language: Klipper Language
       klipper_language_description: The language in which errors and console output will be displayed
       auto_off_complete: Track the bed mesh when printing starts

@@ -340,6 +340,18 @@ export const SocketActions = {
     )
   },
 
+  async setQuiteMode (stepper: string, quite_mode: boolean) {
+    baseEmit(
+      'printer.setQuiteMode', {
+        dispatch: 'void',
+        params: {
+          stepper: stepper,
+          quite_mode: quite_mode
+        }
+      }
+    )
+  },
+
   async setWatchBedMesh (value: boolean) {
     baseEmit(
       'printer.setWatchBedMesh', {

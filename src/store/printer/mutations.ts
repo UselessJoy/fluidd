@@ -41,6 +41,10 @@ export const mutations: MutationTree<PrinterState> = {
     state.printer.safety_printing = payload
   },
 
+  setQuiteMode(state, payload) {
+    state.printer.quite_mode = payload
+  },
+
   setLedStatus(state, payload) {
     state.printer.led_control = payload
   },

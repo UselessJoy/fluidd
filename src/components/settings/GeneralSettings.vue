@@ -85,6 +85,19 @@
       <v-divider />
 
       <app-setting
+        :title="$t('app.setting.label.enable_quite_mode')"
+      >
+        <v-switch
+          v-model="enableQuiteMode"
+          hide-details
+          class="mb-5"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting
         :title="$t('app.setting.label.confirm_on_estop')"
       >
         <v-switch
@@ -362,6 +375,21 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       value,
       server: true
     })
+  }
+
+  get enableQuiteMode () {
+    let value = this.$store.getters['printer/getQuiteMode']
+    return value
+  }
+
+  set enableQuiteMode (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.general.enableQuiteMode',
+      value,
+      server: true
+    })
+    SocketActions.setQuiteMode("stepper_x", value)
+    SocketActions.setQuiteMode("stepper_y", value)
   }
 
   get topNavPowerToggle () {

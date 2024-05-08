@@ -72,6 +72,7 @@ export const defaultState = (): ConfigState => {
         autoload_bed_mesh: false,
         lang: 'en',
         safety_enabled: false,
+        enableQuiteMode: false,
         led_enabled: true,
         shown_registered_directories: []
       },

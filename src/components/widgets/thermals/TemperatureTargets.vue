@@ -247,12 +247,17 @@
 </template>
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
+import TemperaturePresetsMenu from './TemperaturePresetsMenu.vue'
 import StateMixin from '@/mixins/state'
 import type { Heater, Sensor } from '@/store/printer/types'
 import { takeRightWhile } from 'lodash-es'
 import type { ChartData } from '@/store/charts/types'
 
-@Component({})
+@Component({
+  components: {
+    TemperaturePresetsMenu
+  }
+})
 export default class TemperatureTargets extends Mixins(StateMixin) {
 
   get extruder () {

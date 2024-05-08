@@ -185,6 +185,11 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.safety_printing
   },
 
+  getQuiteMode: (state) => {
+    return state.printer['tmc2209 stepper_x'].quite_mode
+  },
+
+
   getPrintingIsPaused: (state) => {
     return state.printer.print_stats.state
   },

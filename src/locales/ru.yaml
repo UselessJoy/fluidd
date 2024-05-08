@@ -684,6 +684,7 @@ app:
     themes:
       Gelios: Гелиос
     label:
+      enable_quite_mode: Тихий режим работы двигателей
       klipper_language: Язык Клиппера
       klipper_language_description: Язык, на котором будут показываться ошибки и вывод консоли
       safety_printing: Безопасная печать

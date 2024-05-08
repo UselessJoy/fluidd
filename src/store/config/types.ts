@@ -105,6 +105,7 @@ export interface GeneralConfig {
   autoload_bed_mesh: boolean;
   lang: string;
   safety_enabled: boolean;
+  enableQuiteMode: boolean;
   led_enabled: boolean;
   shown_registered_directories: string[]
 }
