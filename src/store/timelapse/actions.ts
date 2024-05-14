@@ -5,6 +5,7 @@ import { SocketActions } from '@/api/socketActions'
 import { consola } from 'consola'
 import { EventBus } from '@/eventBus'
 import i18n from '@/plugins/i18n'
+import type { CameraConfig } from '@/store/cameras/types'
 
 export const actions: ActionTree<TimelapseState, RootState> = {
   /**
@@ -13,7 +14,6 @@ export const actions: ActionTree<TimelapseState, RootState> = {
   async reset ({ commit }) {
     commit('setReset')
   },
-
   /**
    * Make a socket request to init the timelapse component.
    */
@@ -34,12 +34,17 @@ export const actions: ActionTree<TimelapseState, RootState> = {
     })
   },
 
-  async onEvent ({ commit }, payload) {
+  async onEvent ({ rootState, commit }, payload) {
     switch (payload.action) {
       case 'newframe': {
         if (payload.status === 'error') {
-          // open snackbar
-          EventBus.$emit(i18n.tc('app.timelapse.error.newframe'), { type: 'error' })
+          if (!rootState.cameras.cameras.some(camera => {
+            return camera.enabled
+          }))
+          {
+            // open snackbar
+            EventBus.$emit(i18n.tc('app.timelapse.error.newframe'), { type: 'error' })
+          }
         } else {
           const count = parseInt(payload.frame)
           commit('setLastFrame', {
