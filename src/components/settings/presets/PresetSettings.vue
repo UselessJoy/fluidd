@@ -41,7 +41,7 @@
               :key="k"
               class="mr-2"
             >
-              {{ k }}: {{ value.value }}<small>°C</small>
+              {{ $t("app.components.heaters."+k.toString()) || k }}: {{ value.value }}<small>°C</small>
             </span>
           </template>
           <app-btn
