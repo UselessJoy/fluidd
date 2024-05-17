@@ -34,6 +34,7 @@
           color="primary"
           text
           style="border-radius: 0px; height: inherit;"
+          @click="sendRunInterruptFile"
         >
           {{ $t('app.general.btn.interrupt_print') }}
         </v-btn>
@@ -142,6 +143,10 @@ export default class PrinterStatusCard extends Mixins(StateMixin) {
 
   reprintInterrupt() {
     SocketActions.printerPrintRebuild()
+  }
+
+  sendRunInterruptFile() {
+    this.sendGcode("SDCARD_RUN_FILE")
   }
 }
 </script>
