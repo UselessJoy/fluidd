@@ -13,13 +13,15 @@
         filled
         required
         class="mb-4"
-        :rules="[
-          $rules.required
-        ]"
+        
         hide-details="auto"
-        :label="$t('app.bedmesh.label.profile_name')"
+        
+        :placeholder="$t('app.bedmesh.default', {i: base_name.split('_')[1]})"
       />
-
+      <!-- :label="$t('app.bedmesh.label.profile_name')" -->
+      <!-- :rules="[
+          $rules.required
+        ]" -->
       <v-checkbox
         v-model="savePermanently"
         :label="$t('app.bedmesh.label.save_permanently')"
@@ -44,15 +46,22 @@ export default class SaveMeshDialog extends Mixins(StateMixin, ToolheadMixin) {
   readonly profile!: string
 
   mounted () {
-    this.name = this.profile
+    this.base_name = this.profile
     this.savePermanently = false
   }
 
-  name = 'default'
+  name = ''
+  base_name = ''
   savePermanently = false
 
   handleSubmit () {
-    this.$emit('calibrate', { name: this.name, savePermanently: this.savePermanently })
+    if (this.name == '') {
+      this.$emit('calibrate', { name: this.base_name, savePermanently: this.savePermanently })
+    }
+    else {
+      this.$emit('calibrate', { name: this.name, savePermanently: this.savePermanently })
+    }
+    
     this.open = false
   }
 }
