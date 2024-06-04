@@ -192,7 +192,7 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
 
   autooffConfirmButtons = [
     {type: 'yes', text: this.$tc('app.general.btn.yes'), color: 'primary'}, 
-    {type: 'no', text: this.$tc('app.general.btn.no'), color: 'grey'}
+    {type: 'no', text: this.$tc('app.general.btn.off_now'), color: 'grey'}
   ]
   // Our app is in a loading state when the socket isn't quite ready, or
   // our translations are loading.

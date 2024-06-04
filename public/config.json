@@ -148,14 +148,6 @@
       }
     },
     {
-      "name": "Warhammer",
-      "color": "#e37c1b",
-      "isDark": true,
-      "logo": {
-        "src": "logo_warhammer.svg"
-      }
-    },
-    {
       "name": "Gelios",
       "color": "#FFD700",
       "isDark": true,
