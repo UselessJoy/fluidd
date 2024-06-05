@@ -5,11 +5,12 @@
     :max-height="maxHeight"
     :class="{ 'no-pointer-events': dragState.overlay }"
     flat
-    @dragover="handleDragOver"
-    @dragenter.self.prevent
-    @dragleave.self.prevent="handleDragLeave"
-    @drop.self.prevent="handleDrop"
   >
+  <!-- Эффект уже реализован в app.vue + здесь из-за него багует + есть блокирующие окна скачивания -->
+    <!-- @dragover="handleDragOver"
+    @dragenter.self.prevent="handleDragEnter"
+    @dragleave.self.prevent="handleDragLeave"
+    @drop.self.prevent="handleDrop"  -->
     <file-system-toolbar
       v-if="selected.length <= 0"
       :roots="availableRoots"
@@ -916,6 +917,10 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       this.dragState.overlay = true
       event.dataTransfer.dropEffect = 'copy'
     }
+  }
+
+  handleDragEnter () {
+    this.dragState.overlay = true
   }
 
   handleDragLeave () {
