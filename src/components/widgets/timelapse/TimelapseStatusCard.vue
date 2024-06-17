@@ -51,6 +51,14 @@
 
     <v-card-actions>
       <v-spacer />
+      <app-btn
+        color="primary"
+        text
+        :disabled="!frameCount || savingFrames"
+        @click="deleteFrames()"
+      >
+        {{ $t('app.timelapse.btn.delete_frames') }}
+      </app-btn>
 
       <app-btn
         color="primary"
@@ -60,6 +68,7 @@
       >
         {{ $t('app.timelapse.btn.save_frames') }}
       </app-btn>
+
       <app-btn
         color="primary"
         :disabled="!frameCount || isRendering"
@@ -92,6 +101,10 @@ export default class StatusCard extends Mixins(StateMixin, FilesMixin) {
 
   saveFrames () {
     SocketActions.machineTimelapseSaveFrames(this.$waits.onTimelapseSaveFrame)
+  }
+
+  deleteFrames () {
+    SocketActions.machineTimelapseDeleteFrames()
   }
 
   get savingFrames () {

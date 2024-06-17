@@ -190,12 +190,17 @@ export const SocketActions = {
 
   async machineTimelapseSetSettings (settings: Partial<TimelapseWritableSettings>, wait?: string) {
     baseEmit(
-      'machine.timelapse.post_settings', {
+      'machine.timelapse.settings', {
         dispatch: 'timelapse/onSettings',
         params: settings,
         wait
       }
     )
+  },
+
+  async machineTimelapseDeleteFrames () {
+    baseEmit(
+      'machine.timelapse.delete_frames', {})
   },
 
   async machineTimelapseSaveFrames ( wait?: string) {

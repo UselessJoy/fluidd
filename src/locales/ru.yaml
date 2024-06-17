@@ -984,8 +984,9 @@ app:
       release_notes: Примечания к релизу
   timelapse:
     btn:
-      render: Рендеринг
-      save_frames: Сохранение Кадров
+      render: Рендер
+      save_frames: Сохранение кадров
+      delete_frames: Удаление кадров
     error:
       newframe: Ошибка при съемке замедленного кадра
     label:

@@ -38,8 +38,8 @@ export const actions: ActionTree<TimelapseState, RootState> = {
     switch (payload.action) {
       case 'newframe': {
         if (payload.status === 'error') {
-          if (!rootState.cameras.cameras.some(camera => {
-            return camera.enabled
+          if (rootState.cameras.cameras.some(camera => {
+            return camera.enabled;
           }))
           {
             // open snackbar
@@ -100,7 +100,14 @@ export const actions: ActionTree<TimelapseState, RootState> = {
         commit('setRenderStatus', status)
         break
       }
-
+      case 'delete': {
+          commit('setLastFrame', {
+            count: 0,
+            uniqueCount: 0,
+            file: ""
+          })
+        break
+      }
       default: {
         consola.warn('unhandled timelapse event', payload)
         break
