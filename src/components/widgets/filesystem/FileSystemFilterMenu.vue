@@ -94,7 +94,7 @@ export default class FileSystemFilterMenu extends Vue {
       filters.push({
         type: 'print_start_time',
         text: this.$tc('app.file_system.filters.label.print_start_time'),
-        desc: this.$tc('app.file_system.filters.label.print_start_time_desc')
+        // desc: this.$tc('app.file_system.filters.label.print_start_time_desc')
       })
     }
     if (rootFilterTypes.includes('gcodes_files')) {

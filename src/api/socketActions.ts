@@ -3,6 +3,7 @@ import { Globals, Waits } from '@/globals'
 import type { NotifyOptions } from '@/plugins/socketClient'
 import { consola } from 'consola'
 import type { TimelapseWritableSettings } from '@/store/timelapse/types'
+import type { WebcamConfig } from '@/store/webcams/types'
 
 const baseEmit = (method: string, options: NotifyOptions) => {
   if (!Vue.$socket) {
@@ -190,7 +191,7 @@ export const SocketActions = {
 
   async machineTimelapseSetSettings (settings: Partial<TimelapseWritableSettings>, wait?: string) {
     baseEmit(
-      'machine.timelapse.settings', {
+      'machine.timelapse.post_settings', {
         dispatch: 'timelapse/onSettings',
         params: settings,
         wait
@@ -908,6 +909,24 @@ export const SocketActions = {
     baseEmit(
       'server.webcams.list', {
         dispatch: 'webcams/onWebcamsList'
+      }
+    )
+  },
+  
+  async serverWebcamsWrite (webcam: WebcamConfig) {
+    baseEmit(
+      'server.webcams.post_item', {
+        params: webcam
+      }
+    )
+  },
+
+  async serverWebcamsDelete (uid: string) {
+    baseEmit(
+      'server.webcams.delete_item', {
+        params: {
+          uid
+        }
       }
     )
   },

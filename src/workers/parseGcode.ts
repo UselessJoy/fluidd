@@ -36,7 +36,7 @@ const parseLine = (line: string) => {
   .split(/^([gm][0-9]+)\s*/i)
 
   const [, macroCommand, macroCommandArgs = ''] = clearedLine
-  .split(/^(SET_PRINT_STATS_INFO|EXCLUDE_OBJECT_DEFINE)\s+/i)
+  .split(/^(SET_PRINT_STATS_INFO|EXCLUDE_OBJECT_DEFINE|SET_RETRACTION)\s+/i)
 
   if (gcodeCommand) {
     return {
@@ -116,35 +116,51 @@ const parseGcode = (gcode: string, sendProgress: (filePosition: number) => void)
               parts.push(Object.freeze(part))
             }
           break
+        case 'SET_RETRACTION':
+            if ('retract_length' in args) {
+              fwretraction.length = +args.retract_length
+            }
+            if ('unretract_extra_length' in args) {
+              fwretraction.extrudeExtra = +args.unretract_extra_length
+            }
+            break
         }
     } else if (type === 'gcode') {
       switch (command) {
         case 'G0':
-        case 'G1':
-          move = {
-            ...pick(args, [
+        case 'G1': {
+            const params = [
               'x', 'y', 'z', 'e'
-            ]),
-            filePosition: toolhead.filePosition
-          } satisfies LinearMove
+            ]
+            if (params.some(param => param in args)) {
+              move = {
+                ...pick(args, params),
+                filePosition: toolhead.filePosition
+            } satisfies LinearMove
+          }
           break
+        }
         case 'G2':
-        case 'G3':
-          move = {
-            ...pick(args, [
+        case 'G3': {
+            const params = [
               'x', 'y', 'z', 'e',
               'i', 'j', 'k', 'r'
-            ]),
-            direction: command === 'G2'
-              ? 'clockwise'
-              : 'counter-clockwise',
-            filePosition: toolhead.filePosition
-          } satisfies ArcMove
+            ]
+            if (params.some(param => param in args)) {
+              move = {
+                ...pick(args, params),
+                direction: command === 'G2'
+                  ? 'clockwise'
+                  : 'counter-clockwise',
+                filePosition: toolhead.filePosition
+              } satisfies ArcMove
+            }
           break
+        }
         case 'G10':
           move = {
             e: -fwretraction.length,
-            filePosition: 0
+            filePosition: toolhead.filePosition
           } satisfies LinearMove
 
           if (fwretraction.z !== 0) {
@@ -183,7 +199,6 @@ const parseGcode = (gcode: string, sendProgress: (filePosition: number) => void)
           break
         case 'M207':
           fwretraction.length = args.s ?? fwretraction.length
-          fwretraction.extrudeExtra = args.s ?? fwretraction.extrudeExtra
           fwretraction.z = args.z ?? fwretraction.z
           break
       }

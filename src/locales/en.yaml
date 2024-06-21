@@ -726,7 +726,9 @@ app:
       optional: Optional
       power_toggle_in_top_nav: Power toggle in top navigation
       primary_color: Primary color
+      print_eta_calculation: Print ETA calculation
       print_in_progress_layout: Print in Progress layout
+      print_progress_calculation: Print Progress calculation
       printer_name: Printer Name
       reset: Reset settings
       retraction_icon_size: Retraction Icon Size
@@ -767,10 +769,13 @@ app:
       show_bed_screws_adjust_dialog_automatically: Show Bed Screws Adjust dialog automatically
       show_screws_tilt_adjust_dialog_automatically: Show Screws Tilt Adjust dialog automatically
     timer_options:
+      absolute_file_position: Absolute file position
       duration: Duration only
-      filament: Filament Estimation
-      file: File Estimation
+      filament: Filament
+      file: File
+      relative_file_position: Relative file position
       slicer: Slicer
+      licer_m73: Slicer (M73)
     title:
       authentication: Authentication
       console: Console
@@ -784,6 +789,7 @@ app:
       thermal_presets: Thermal Presets
       tool: Tool
     tooltip:
+      average_calculation: If more than one option is select, an average will be calculated
       diagnostics_performance: '[BETA] Logging diagnostics info may impact performance'
       gcode_coords: Use GCode position instead of toolhead position on dashboard
       show_manual_probe_dialog_automatically: Automatically shows helper dialog if running a Manual Probe tool
@@ -911,6 +917,8 @@ app:
       package_list: Package List
       up_to_date: UP TO DATE
       updates_available: Updates are available
+      old_component_version: >-
+        You are using an old version of %{name} that does not support all features of Fluidd.<br>Update %{name} to at least %{version}.
     status:
       finished: Updates finished
       updating: Updating...

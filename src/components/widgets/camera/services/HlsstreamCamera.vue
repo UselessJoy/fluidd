@@ -18,7 +18,7 @@
     readonly cameraVideo!: HTMLVideoElement
     hls: Hls | null = null
     startPlayback () {
-      const url = this.buildAbsoluteUrl(this.camera.urlStream || '').toString()
+      const url = this.buildAbsoluteUrl(this.camera.stream_url || '').toString()
       if (Hls.isSupported()) {
         this.hls?.destroy()
         this.hls = new Hls({

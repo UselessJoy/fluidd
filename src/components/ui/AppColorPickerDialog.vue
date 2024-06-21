@@ -47,7 +47,7 @@
             column
           >
             <!-- standard full color picker -->
-            <app-iro-color-picker
+            <app-old-iro-color-picker
               v-if="supportedChannels !== 'W'"
               :color="primaryColor.hexString"
               :options="primaryOptions"
@@ -55,7 +55,7 @@
             />
   
             <!-- white channel color picker -->
-            <app-iro-color-picker
+            <app-old-iro-color-picker
               v-if="supportedChannels.includes('W')"
               class="mt-4"
               :color="whiteColor.hexString"
@@ -142,6 +142,7 @@ import iro from '@jaames/iro'
 import { IroColor } from '@irojs/iro-core'
 import type { Led } from '@/store/printer/types';
 import StateMixin from '@/mixins/state'
+import AppOldIroColorPicker from '../ui/AppOldIroColorPicker.vue'
 
 interface RgbwColor {
     r: number;
@@ -162,7 +163,7 @@ y: number;
 type Channel = 'r' | 'g' | 'b' | 'w'
 
 @Component({
-components: {}
+components: { AppOldIroColorPicker }
 })
 export default class AppColorPickerDialog extends Mixins(StateMixin) {
     // Expected color input. Can be a hex, rgbw etc.

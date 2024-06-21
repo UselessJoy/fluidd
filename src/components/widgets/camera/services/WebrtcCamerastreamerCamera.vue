@@ -25,7 +25,7 @@ export default class WebrtcCamerastreamerCamera extends Mixins(CameraMixin) {
   pc: RTCPeerConnection | null = null
   remoteId: string | null = null
   startPlayback () {
-    const url = this.buildAbsoluteUrl(this.camera.urlStream || '')
+    const url = this.buildAbsoluteUrl(this.camera.stream_url || '')
     this.pc?.close()
     fetch(url, {
       body: JSON.stringify({

@@ -5,7 +5,6 @@ import { SocketActions } from '@/api/socketActions'
 import { consola } from 'consola'
 import { EventBus } from '@/eventBus'
 import i18n from '@/plugins/i18n'
-import type { CameraConfig } from '@/store/cameras/types'
 
 export const actions: ActionTree<TimelapseState, RootState> = {
   /**
@@ -38,8 +37,9 @@ export const actions: ActionTree<TimelapseState, RootState> = {
     switch (payload.action) {
       case 'newframe': {
         if (payload.status === 'error') {
-          if (rootState.cameras.cameras.some(camera => {
-            return camera.enabled;
+          if (
+            rootState.webcams.webcams.some(webcam => {
+            return webcam.enabled;
           }))
           {
             // open snackbar

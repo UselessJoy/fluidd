@@ -8,27 +8,29 @@
       <v-row>
         <div
           v-if="frameCount"
-          style="position: relative"
+          :style="{filter: isRendering ? `saturate(${renderProgress}%)` : 'none', position: 'relative', transform: 
+            `rotateX(${camera?.flip_vertical ? 180 : 0}deg) 
+            rotateY(${camera?.flip_horizontal ? 180 : 0}deg) 
+            rotate(${camera?.rotation}deg)`, alignItems: 'center'}"
         >
           <img
             :src="previewUrl"
             class="mx-auto thumbnail"
-            :style="{filter: isRendering ? `saturate(${renderProgress}%)` : 'none', transform: `rotateX(${camera.flipY ? 180 : 0}deg) rotateY(${camera.flipX ? 180 : 0}deg)`}"
+            :style="{margin: `${camera?.rotation == 90 || camera?.rotation == 270 ? 20 : 0}%`}"
           >
-          <v-progress-circular
-            v-if="isRendering"
-            class="render-progress"
-            color="primary"
-            size="64"
-            :value="renderProgress"
-          />
         </div>
+        <v-progress-circular
+          v-if="isRendering"
+          class="render-progress"
+          color="primary"
+          size="64"
+          :value="renderProgress"
+        />
         <camera-item
-          v-else-if="camera"
+          v-if="!frameCount && camera"
           :camera="camera"
         />
       </v-row>
-
       <v-row>
         <v-col cols="12">
           <v-layout justify-center>
@@ -88,7 +90,7 @@ import type { RenderStatus, TimelapseLastFrame, TimelapseSettings } from '@/stor
 import { SocketActions } from '@/api/socketActions'
 import CameraItem from '@/components/widgets/camera/CameraItem.vue'
 import FilesMixin from '@/mixins/files'
-import type { CameraConfig } from '@/store/cameras/types'
+import type { WebcamConfig } from '@/store/webcams/types'
 
 @Component({
   components: {
@@ -139,8 +141,8 @@ export default class StatusCard extends Mixins(StateMixin, FilesMixin) {
     return this.lastFrame?.uniqueCount
   }
 
-  get camera () {
-    return this.$store.getters['cameras/getCameraById'](this.settings.camera) as CameraConfig
+  get camera (): WebcamConfig | undefined {
+    return this.$store.getters['webcams/getWebcamById'](this.settings.camera) as WebcamConfig | undefined
   }
 
   get settings (): TimelapseSettings {

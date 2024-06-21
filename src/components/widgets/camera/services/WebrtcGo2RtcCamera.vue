@@ -36,7 +36,7 @@ startPlayback () {
     this.pc?.close()
     this.ws?.close()
     this.abortController = new AbortController()
-    const url = this.buildAbsoluteUrl(this.camera.urlStream || '')
+    const url = this.buildAbsoluteUrl(this.camera.stream_url || '')
     const socketUrl = new URL('api/ws' + url.search, url)
     socketUrl.protocol = socketUrl.protocol === 'https:'
     ? 'wss:'

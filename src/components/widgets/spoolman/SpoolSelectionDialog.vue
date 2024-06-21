@@ -13,7 +13,7 @@
       <v-spacer />
 
       <v-menu
-        v-if="cameras.length > 1"
+        v-if="availableCameras.length > 1"
         left
         offset-y
         transition="slide-y-transition"
@@ -43,9 +43,9 @@
         </template>
         <v-list dense>
           <v-list-item
-            v-for="camera in cameras"
-            :key="camera.id"
-            @click="scanSource = camera.id"
+            v-for="camera in availableCameras"
+            :key="camera.uid"
+            @click="cameraScanSource = camera.uid"
           >
           <v-list-item-icon>
               <v-icon>
@@ -62,10 +62,10 @@
       </v-menu>
 
       <app-btn
-        v-else-if="cameras.length"
+        v-else-if="availableCameras.length"
         small
         class="ms-1 my-1"
-        @click="cameraScanSource = cameras[0].id"
+        @click="cameraScanSource = availableCameras[0].uid"
       >
         <v-icon
           class="mr-1"
@@ -195,8 +195,8 @@
       </app-btn>
     </template>
     <QRReader
-      v-if="scanSource"
-      v-model="scanSource"
+      v-if="cameraScanSource"
+      v-model="cameraScanSource"
       @detected="handleQRCodeDetected"
     />
   </app-dialog>
@@ -209,7 +209,7 @@
   import type { MacroWithSpoolId, Spool } from '@/store/spoolman/types'
   import BrowserMixin from '@/mixins/browser'
   import QRReader from '@/components/widgets/spoolman/QRReader.vue'
-  import type { CameraConfig } from '@/store/cameras/types'
+  import type { WebcamConfig } from '@/store/webcams/types'
   import QrScanner from 'qr-scanner'
   import type { AppTableHeader } from '@/types'
 
@@ -241,7 +241,7 @@
             this.$nextTick(() => (this.cameraScanSource = 'device'))
         } else {
             const autoOpenCameraId = this.autoOpenQRDetectionCamera
-            if (this.$store.getters['cameras/getCameraById'](autoOpenCameraId)) {
+            if (this.$store.getters['webcams/getWebcamById'](autoOpenCameraId)) {
                 this.$nextTick(() => (this.cameraScanSource = autoOpenCameraId))
             }
         }
@@ -272,7 +272,7 @@
         spools.push({
           ...spool,
           filament_name: filamentName,
-          filament_material: spool.filament.material
+          material: spool.filament.material
         })
       }
       return spools
@@ -331,22 +331,21 @@
       return this.$store.state.spoolman.dialog.targetMacro
     }
 
-    get cameras () {
-        const cameras = this.$store.getters['cameras/getEnabledCameras']
-            .filter((camera: CameraConfig) => camera.service !== 'iframe')
-        if (this.hasDeviceCamera) {
-            // always show device camera first
-            cameras.unshift({ name: this.$t('app.spoolman.label.device_camera'), id: 'device' })
-        }
-        return cameras
+    get enabledWebcams (): WebcamConfig[] {
+      return this.$store.getters['webcams/getEnabledWebcams'] as WebcamConfig[]
     }
 
-    get scanSource () {
-      return this.cameraScanSource
-    }
-
-    set scanSource (source) {
-      this.cameraScanSource = source
+    get availableCameras (): Pick<WebcamConfig, 'uid' | 'name'>[] {
+      const cameras: Pick<WebcamConfig, 'uid' | 'name'>[] = this.enabledWebcams
+        .filter(camera => camera.service !== 'iframe')
+      if (this.hasDeviceCamera) {
+        // always show device camera first
+        cameras.unshift({
+          name: this.$t('app.spoolman.label.device_camera').toString(),
+          uid: 'device'
+        })
+      }
+      return cameras
     }
 
     handleQRCodeDetected (id: number) {

@@ -65,6 +65,8 @@ export const defaultState = (): ConfigState => {
         showScrewsTiltAdjustDialogAutomatically: true,
         forceMoveToggleWarning: true,
         printInProgressLayout: 'default',
+        printProgressCalculation: ['file'],
+        printEtaCalculation: ['file'],
         enableDiagnostics: false,
         thumbnailSize: 32,
         autoOff_enable: false,
@@ -179,7 +181,9 @@ export const defaultState = (): ConfigState => {
         }
       },
       fileSystem: {
-        activeFilters: {}
+        activeFilters: {},
+        sortBy: {},
+        sortDesc: {}
       },
       toolhead: {
         forceMove: false,

@@ -16,7 +16,7 @@
     readonly cameraImage!: HTMLImageElement
     cameraImageSource = ''
     startPlayback () {
-      const url = this.buildAbsoluteUrl(this.camera.urlStream || '')
+      const url = this.buildAbsoluteUrl(this.camera.stream_url || '')
       url.searchParams.set('cacheBust', Date.now().toString())
       this.cameraImageSource = url.toString()
       this.$emit('raw-camera-url', this.cameraImageSource)

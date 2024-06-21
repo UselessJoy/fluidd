@@ -45,9 +45,8 @@
 
         <app-color-picker
           v-if="theme"
-          :primary="themeColor"
+          v-model="themeColor"
           :title="$t('app.setting.btn.select_theme')"
-          @change="handleChangeThemeColor"
         />
       </app-setting>
 
@@ -81,7 +80,6 @@
           :v-model ="open"
           :buttonColor="themeColor"
           :title="$t('app.setting.btn.select_color')"
-          @change="handleChangeThemeColor"
         />
       </app-setting>
 
@@ -171,6 +169,14 @@ export default class ThemeSettings extends Mixins(StateMixin) {
 
   get themeColor () {
     return this.theme.color
+  }
+  
+  set themeColor (value: string) {
+    if (this.theme.color.toLowerCase() !== value.toLowerCase()) {
+      this.updateTheme({
+        color: value
+      })
+    }
   }
   
   handleChangeThemeColor (value: { channel: string; color: IroColor }) {

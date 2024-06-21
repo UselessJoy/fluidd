@@ -154,6 +154,16 @@ export const actions: ActionTree<ConfigState, RootState> = {
     SocketActions.serverWrite(`uiSettings.fileSystem.activeFilters.${payload.root}`, state.uiSettings.fileSystem.activeFilters[payload.root])
   },
 
+  async updateFileSystemSortBy ({ commit, state }, payload: { root: string, value: string | null }) {
+    commit('setFileSystemSortBy', payload)
+    SocketActions.serverWrite(`uiSettings.fileSystem.sortBy.${payload.root}`, state.uiSettings.fileSystem.sortBy[payload.root])
+  },
+
+  async updateFileSystemSortDesc ({ commit, state }, payload: { root: string, value: boolean | null }) {
+    commit('setFileSystemSortDesc', payload)
+    SocketActions.serverWrite(`uiSettings.fileSystem.sortDesc.${payload.root}`, state.uiSettings.fileSystem.sortDesc[payload.root])
+  },
+  
   /**
    * Remove a temp preset
    */

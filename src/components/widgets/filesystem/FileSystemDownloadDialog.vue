@@ -8,7 +8,7 @@
     right
     :vertical="$vuetify.breakpoint.smAndDown"
   >
-  <template v-if="currentDownload">
+    <template v-if="currentDownload">
       <div class="mb-2">
         {{ $t('app.file_system.title.download_file') }}: {{ currentDownload.filepath }}
       </div>
@@ -56,14 +56,13 @@ export default class FileSystemDownloadDialog extends Mixins(StateMixin) {
   onCurrentDownloadChange (val: FileDownload | null) {
     this.open = !!val
   }
-  
+
   get currentDownload () {
     return this.$store.state.files.download
   }
-  
+
   handleCancelDownload () {
     this.currentDownload?.abortController.abort()
-    this.$store.dispatch('files/removeFileDownload')
   }
 }
 </script>

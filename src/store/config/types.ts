@@ -98,6 +98,8 @@ export interface GeneralConfig {
   showScrewsTiltAdjustDialogAutomatically: boolean;
   forceMoveToggleWarning: boolean;
   printInProgressLayout: PrintInProgressLayout;
+  printProgressCalculation: PrintProgressCalculation[];
+  printEtaCalculation: PrintEtaCalculation[];
   enableDiagnostics: boolean;
   thumbnailSize: number;
   autoOff_enable: boolean;
@@ -117,6 +119,10 @@ export type TextSortOrder = 'default' | 'numeric-prefix' | 'version'
 export type CameraFullscreenAction = 'embed' | 'rawstream';
 
 export type PrintInProgressLayout = 'default' | 'compact'
+
+export type PrintProgressCalculation = 'file' | 'fileAbsolute' | 'slicer' | 'filament'
+
+export type PrintEtaCalculation = 'file' | 'slicer'
 
 // Config stored in moonraker db
 export interface ThemeConfig {
@@ -226,5 +232,7 @@ export interface GcodePreviewConfig {
 }
 
 export interface FileSystemConfig {
-  activeFilters: Record<string, FileFilterType[]>
+  activeFilters: Record<string, FileFilterType[]>;
+  sortBy: Record<string, string | null>;
+  sortDesc: Record<string, boolean | null>;
 }
