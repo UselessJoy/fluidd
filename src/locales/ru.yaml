@@ -767,7 +767,9 @@ app:
       optional: Необязательный
       power_toggle_in_top_nav: Переключатель питания в верхней панели навигации
       primary_color: Основной цвет
-      print_in_progress_layout: Макет в процессе печати
+      print_eta_calculation: Расчет хода выполнения печати ETA
+      print_in_progress_layout: Модель в процессе печати
+      print_progress_calculation: Расчет хода выполнения печати
       printer_name: Имя принтера
       reset: Сбросить настройки
       retraction_icon_size: Размер иконки ретракта
@@ -819,10 +821,13 @@ app:
       hide_single_part_bounding_box: Скрыть рамку ограничения части при печати одной
         части
     timer_options:
+      absolute_file_position: Абсолютный путь к файлу
+      relative_file_position: Относительный путь к файлу
       duration: Только продолжительность
       filament: Оценка филамента
       file: Оценка времени на основе файла
       slicer: Слайсер
+      licer_m73: Слайсер (M73)
     title:
       authentication: Аутентификация
       console: Консоль
@@ -836,6 +841,7 @@ app:
       tool: Инструменты
       file_browser: Файловый менеджер
     tooltip:
+      average_calculation: При выборе более одного значения, будет рассчитываться среднее от них
       diagnostics_performance: '[BETA] Логирование диагностики может замедлить работу
         системы'
       gcode_coords: Использовать GCode положение вместо положение инструментальной
@@ -971,6 +977,8 @@ app:
       package_list: Список пакетов
       up_to_date: Актуальная версия
       updates_available: Доступны обновления
+      old_component_version: >-
+        Вы используете старую версию %{name}, которая не поддерживает все компоненты Fluidd. <br>Обновите %{name} до последней версии %{version}.
     status:
       finished: Обновление завершено
       updating: Обновление...
