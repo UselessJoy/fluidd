@@ -75,6 +75,8 @@ export const defaultState = (): PrinterState => {
       resonance_tester: {
         saved: [],
         tmp: [],
+        belt_tensions: [],
+        active_belt_tension: '',
         active: ''
       },
       led_control: {
@@ -86,6 +88,9 @@ export const defaultState = (): PrinterState => {
         message: "",
         message_type: "",
         is_open: false
+      },
+      pid_calibrate: {
+        is_calibrating: false
       },
       screw_image: {
         imageCreated: false

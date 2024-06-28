@@ -137,6 +137,17 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.resonance_tester.active
   },
 
+  getBeltTensions: (state) => {
+    return state.printer.resonance_tester.belt_tensions
+  },
+
+  getActiveBeltTension: (state) => {
+    return state.printer.resonance_tester.active_belt_tension
+  },
+
+  getIsPIDCalibrating: (state) => {
+    return state.printer.pid_calibrate.is_calibrating
+  },
   getLedControl: (state) => {
     return state.printer.led_control
   },

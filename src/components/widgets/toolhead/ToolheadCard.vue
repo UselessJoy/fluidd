@@ -125,6 +125,25 @@
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+
+              <v-list-item
+                v-if="tool.name === 'belt_tension'"
+                :key="tool.name"
+                :disabled="tool.disabled || (tool.wait && hasWait(tool.wait))"
+                @click="isOpenBeltDialog = true"
+              >
+                <v-list-item-icon>
+                  <v-icon>
+                    {{ tool.icon || '$tools' }}
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ tool.label || tool.name }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
               <v-list-item
                 v-else-if="tool.name !== '-'"
                 :key="tool.name"
@@ -169,6 +188,11 @@
       v-model="isOpenPidDialog"
       @startCalibrate="sendCalibratePid"
     />
+    <BeltTensionDialog
+      v-if="isOpenBeltDialog"
+      v-model="isOpenBeltDialog"
+      @cancel="isOpenBeltDialog = false"
+    />
   </collapsable-card>
 </template>
 
@@ -181,6 +205,7 @@ import type { Macro } from '@/store/macros/types'
 import type { Probe } from '@/store/printer/types'
 import type { Heater } from '@/store/printer/types'
 import CalibratePidDialog from '@/components/widgets/thermals/CalibratePidDialog.vue'
+import BeltTensionDialog from '@/components/common/BeltTensionDialog.vue'
 
 type Tool = {
   name: string,
@@ -192,7 +217,8 @@ type Tool = {
 @Component({
   components: {
     Toolhead,
-    CalibratePidDialog
+    CalibratePidDialog,
+    BeltTensionDialog
   }
 })
 export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
@@ -200,6 +226,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
   bedScrewsAdjustDialogOpen = false
   screwsTiltAdjustDialogOpen = false
   isOpenPidDialog = false
+  isOpenBeltDialog = false
 
   @Prop({ type: Boolean })
   readonly menuCollapsed?: boolean
@@ -435,6 +462,13 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
         disabled: this.isManualProbeActive || this.printerPrinting,
         wait: this.$waits.onShaperCalibrate
       })
+      // tools.push({
+      //   name: 'belt_tension',
+      //   icon: '$sineWave',
+      //   label: this.$tc("app.tool.title.belt_tension"),
+      //   disabled: this.isManualProbeActive || this.printerPrinting,
+      //   wait: this.$waits.onBeltTension
+      // })
     }
     if (this.heatersSupportPid)
     tools.push({

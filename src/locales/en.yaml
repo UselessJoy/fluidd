@@ -862,6 +862,7 @@ app:
       get_magnet_probe: Get Magnet Probe
       return_magnet_probe: Return Magnet Probe
       measure_axes_noise: Measure axes noise
+      belt_tension: Belt tension
       test_resonances: Test resonances
       shaper_calibrate: Shaper calibrate
       pid_calibrate: PID calibrate

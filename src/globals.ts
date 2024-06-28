@@ -485,6 +485,7 @@ export const Waits = Object.freeze({
   onGetTimeAutoOff: 'onGetAutoOff',
   onGetAutoOffEnable: 'onGetAutoOffEnable',
   onShaperCalibrate: 'onShaperCalibrate',
+  onBeltTension: 'onBeltTension',
   onGetLedStatus: 'onGetLedStatus',
   onGetMagnetProbe: 'onGetMagnetProbe',
   onReturtMagnetProbe: 'onReturtMagnetProbe',
@@ -492,7 +493,8 @@ export const Waits = Object.freeze({
   onTestResonances: 'onTestResonances',
   onGetWatchBedMesh: 'onGetWatchBedMesh',
   onGetAutoloadBedMesh: 'onGetAutoloadBedMesh',
-  onPidCalibrate: 'onPidCalibrate'
+  onPidCalibrate: 'onPidCalibrate',
+  onSetTension: 'onSetTension'
   /*    END NEW    */
 })
 

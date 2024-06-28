@@ -592,6 +592,7 @@ app:
     tooltip:
       browse_metrics: Просмотр доступных метрики
       estop: Аварийная остановка
+      stop_pid: Прервать калибровку PID
       managed_by_moonraker: Управляется вашей конфигурацией moonraker
       notifications: Оповещения
       reload_klipper: Перезагружает конфигурацию Klipper.
@@ -922,6 +923,7 @@ app:
       get_magnet_probe: Взять пробу
       return_magnet_probe: Вернуть пробу
       measure_axes_noise: Измерение шума осей
+      belt_tension: Проверка натяжения ремней
       test_resonances: Тест резонансов
       shaper_calibrate: Компенсация резонанса
       pid_calibrate: Калибровка PID

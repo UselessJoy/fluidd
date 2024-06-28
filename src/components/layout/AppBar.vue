@@ -36,13 +36,16 @@
       </v-toolbar-title>
     </div>
 
-    <!-- <v-spacer /> -->
-
     <div class="toolbar-supplemental">
-      <!-- <div v-if="socketConnected">
-        {{ handleRebuildGcode() }}
-      </div> -->
-      <!--    END NEW    -->
+      <div v-if="isPIDCalibrating">
+        <app-btn
+          :disabled="!klippyReady"
+          class="mx-1"
+          @click="stopPID"
+        >
+          {{ $t('app.general.tooltip.stop_pid') }}
+        </app-btn>
+      </div>
       <div
         v-if="socketConnected && klippyReady && authenticated && showSaveConfigAndRestartForPendingChanges"
         class="mr-1"
@@ -53,7 +56,7 @@
           @click="saveConfigAndRestart"
         />
       </div>
-
+      
       <div v-if="socketConnected && !isMobileViewport && authenticated">
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
@@ -232,12 +235,16 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     return this.$store.state.printer.printer.print_stats.filename
   }
 
-  get hasUpdates () {
+  get hasUpdates (): boolean {
     return this.$store.getters['version/hasUpdates']
   }
 
+  get isPIDCalibrating (): boolean {
+    return this.$store.getters['printer/getIsPIDCalibrating']
+  }
+
   get saveConfigPending (): boolean {
-    return this.$store.getters['printer/getSaveConfigPending'] as boolean
+    return this.$store.getters['printer/getSaveConfigPending']
   }
 
   get saveConfigPendingItems (): Record<string, Record<string, string>> {
@@ -335,6 +342,10 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     }
 
     return true
+  }
+
+  stopPID () {
+    SocketActions.stopPID()
   }
 
   handleExitLayout () {

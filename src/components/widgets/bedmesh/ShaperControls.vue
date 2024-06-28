@@ -249,7 +249,6 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-import FilesMixin from '@/mixins/files'
 import { SocketActions } from '@/api/socketActions'
 import SaveShaperDialog from '@/components/widgets/bedmesh/SaveShaperDialog.vue'
 
@@ -263,7 +262,7 @@ components: {
   SaveShaperDialog
 }
 })
-export default class ShaperControls extends Mixins(StateMixin, FilesMixin) {
+export default class ShaperControls extends Mixins(StateMixin) {
     saveDialogState = {
         open: false,
         save: false,

@@ -358,6 +358,18 @@ export const SocketActions = {
     )
   },
 
+  async setActiveTension (tension: string) {
+    baseEmit(
+      'printer.setActiveTension', {
+        dispatch: 'void',
+        params: {
+          tension: tension
+        },
+        wait: Waits.onSetTension
+      }
+    )
+  },
+
   async setWatchBedMesh (value: boolean) {
     baseEmit(
       'printer.setWatchBedMesh', {
@@ -416,6 +428,14 @@ export const SocketActions = {
           action: action,
           args: args
         }
+      }
+    )
+  },
+
+  async stopPID () {
+    baseEmit(
+      'printer.pid_calibrate.stop_pid_calibrate', {
+        dispatch: 'void'
       }
     )
   },

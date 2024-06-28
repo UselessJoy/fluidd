@@ -23,6 +23,10 @@
         v-if="supportResonanceTester"
         class="mb-2 mb-sm-4"
       />
+      <BeltTension
+        v-if="supportResonanceTester"
+        class="mb-2 mb-sm-4"
+      />
       <end-stops-card class="mb-2 mb-sm-4" />
       <runout-sensors-card
         v-if="supportsRunoutSensors"

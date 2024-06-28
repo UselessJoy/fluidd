@@ -50,6 +50,7 @@ declare module 'vue' {
     AppWarnings: typeof import('./src/components/common/AppWarnings.vue')['default']
     AutoCloseConfirm: typeof import('./src/components/common/AutoCloseConfirm.vue')['default']
     BedScrewsAdjustDialog: typeof import('./src/components/common/BedScrewsAdjustDialog.vue')['default']
+    BeltTensionDialog: typeof import('./src/components/common/BeltTensionDialog.vue')['default']
     CollapsableCard: typeof import('./src/components/common/CollapsableCard.vue')['default']
     FlashMessage: typeof import('./src/components/common/FlashMessage.vue')['default']
     KlippyStatusCard: typeof import('./src/components/common/KlippyStatusCard.vue')['default']
