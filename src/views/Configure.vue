@@ -70,7 +70,7 @@ export default class Configure extends Mixins(StateMixin) {
   }
 
   get roots () {
-    const roots = ['logs', 'docs', 'config_examples']
+    const roots = ['logs', 'docs']
 
     const all_roots = this.$store.state.server.info.registered_directories || []
     // Добавить настройку для показа дополнительных директорий

@@ -62,7 +62,7 @@ export default class FileBrowserSettings extends Vue {
 
     get additionalRoots () {
       const roots = []
-      const excludeRoots = ['gcodes', 'config', 'timelapse', 'timelapse_frames', 'logs', 'docs', 'config_examples']
+      const excludeRoots = ['gcodes', 'config', 'timelapse', 'timelapse_frames', 'logs', 'docs']
       for (const root of this.$store.state.server.info.registered_directories || []) {
         if (!excludeRoots.includes(root) && !this.shown_registered_directories.includes(root)) {
           roots.push(root)

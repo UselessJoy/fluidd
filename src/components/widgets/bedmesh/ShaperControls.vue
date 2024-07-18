@@ -211,7 +211,6 @@
           <v-col cols="6">
             <app-btn
               :disabled="shaperGraphs.active === ''"
-              small
               block
               class="mb-2"
               @click="clearShaper()"
@@ -220,17 +219,46 @@
             </app-btn>
           </v-col>
           <v-col cols="6">
-            <app-btn
-              block
-              small
-              class="mb-2"
-              :loading="hasWait($waits.onShaperCalibrate)"
-              :disabled="printerPrinting || printerBusy"
-              :color="'primary'"
-              @click="sendGcode('SHAPER_CALIBRATE', $waits.onShaperCalibrate)"
+            <v-menu
+              left
+              offset-y
+              transition="slide-y-transition"
             >
-              {{ $t('app.general.btn.shaper_calibrate') }}
-            </app-btn>
+              <template #activator="{ on, attrs, value }">
+                <app-btn
+                  v-bind="attrs"
+                  class="mb-2"
+                  :color="'primary'"
+                  :disabled="!klippyReady || printerPrinting || printerBusy"
+                  v-on="on"
+                >
+                    {{ $t('app.general.btn.shaper_calibrate') }}
+                  <v-icon
+                    small
+                    class="ml-1"
+                    :class="{ 'rotate-180': value }"
+                  >
+                    $chevronDown
+                  </v-icon>
+                </app-btn>
+              </template>
+              <v-list dense>
+                <template v-for="axis of ['x', '-', 'y', '-', 'all']">
+                  <v-list-item
+                    v-if="axis != '-'"
+                    :key="axis"
+                    @click="sendGcode(`SHAPER_CALIBRATE AXIS=${axis}`, $waits.onShaperCalibrate)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        {{ $t(`app.shaper.axis.${axis}`) }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-divider v-else/>
+                </template>
+              </v-list>
+            </v-menu>
           </v-col>
         </v-row>
       </v-card-text>

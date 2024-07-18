@@ -61,6 +61,26 @@ app:
       part_fan: Part Fan 
       heater_fan: Heater Fan
     neopixel: neopixel
+  shaper:
+    btn:
+      clear_shaper: Clear Shaper
+    label:
+      chosen: Chosen
+      saved_graphs: Saved graphs
+      tmp_graphs: Tmp graphs
+    axis:
+      x: Axis Х
+      y: Axis Y
+      all: All
+    msg:
+      not_found: Not found
+      not_loaded: Not loaded
+    tooltip:
+      choose: Choose
+      delete: Delete
+      save: Save
+      load: Load
+      rename: Rename
   bedmesh:
     label:
       active: active

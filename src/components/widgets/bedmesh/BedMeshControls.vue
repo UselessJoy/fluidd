@@ -139,7 +139,6 @@
         <v-col cols="6">
           <app-btn
             :disabled="!meshLoaded || printerPrinting || printerBusy"
-            small
             block
             class="mb-2"
             @click="clearMesh()"
@@ -152,7 +151,6 @@
             <template #activator="{ on, attrs }">
               <app-btn
                 v-bind="attrs"
-                small
                 block
                 class="mb-2"
                 :loading="hasWait($waits.onMeshCalibrate)"

@@ -115,14 +115,14 @@ export const getters: GetterTree<FilesState, RootState> = {
           canConfigure: false,
           filterTypes: ['hidden_files', 'klipper_backup_files', 'moonraker_backup_files', 'crowsnest_backup_files']
         }
-      case 'config_examples':
-        return {
-          readonly: true,
-          accepts: [],
-          canView,
-          canConfigure: false,
-          filterTypes: ['hidden_files']
-        }
+      // case 'config_examples':
+      //   return {
+      //     readonly: true,
+      //     accepts: [],
+      //     canView,
+      //     canConfigure: false,
+      //     filterTypes: ['hidden_files']
+      //   }
       case 'docs':
         return {
           readonly: true,

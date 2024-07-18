@@ -128,7 +128,6 @@ export default class StatusCard extends Mixins(StateMixin, FilesMixin) {
       const fullFile = this.selectedFrame
         ? `frame${this.selectedFrame.toString().padStart(6, '0')}.${file.split('.').pop()}`
         : file
-
       return this.createFileUrl(fullFile, 'timelapse_frames')
     }
   }
