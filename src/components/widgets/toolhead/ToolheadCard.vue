@@ -127,7 +127,7 @@
               </v-list-item>
 
               <v-list-item
-                v-if="tool.name === 'belt_tension'"
+                v-else-if="tool.name === 'belt_tension'"
                 :key="tool.name"
                 :disabled="tool.disabled || (tool.wait && hasWait(tool.wait))"
                 @click="isOpenBeltDialog = true"
