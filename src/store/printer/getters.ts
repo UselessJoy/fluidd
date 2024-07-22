@@ -574,13 +574,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
           const color = Vue.$colorset.next(getKlipperType(e), e)
           let pretty = ""
-          if (name == "extruder")
+          if (name in ["extruder", "heater_bed"])
           {
-            pretty = Vue.$filters.startCase(i18n.tc('app.components.heaters.extruder'))
-          }
-          else if (name == "heater_bed")
-          {
-            pretty = Vue.$filters.startCase(i18n.tc('app.components.heaters.heater_bed'))
+            pretty = Vue.$filters.startCase(i18n.tc(`app.components.heaters.${name}`))
           }
           else
           {
@@ -667,7 +663,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
   /**
   * Return available fans and output pins
   */
-  getOutputs: (state, getters) => (filter?: string[]): Array<Fan | Led | OutputPin> => {
+  getOutputs: (state, getters, rootState) => (filter?: string[]): Array<Fan | Led | OutputPin> => {
     // Fans..
     const fans = [
       'temperature_fan',
@@ -741,9 +737,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
           : undefined
         let pretty =""
         const config = getters.getPrinterSettings(pin)
-        if (config?.locale)
+        const fluiddLocale = rootState.config.uiSettings.general.locale
+        if (config[`locale_${fluiddLocale}`])
         {
-          pretty = config.locale
+          pretty = config[`locale_${fluiddLocale}`]
         }
         else{
           pretty = Vue.$filters.startCase(name)
