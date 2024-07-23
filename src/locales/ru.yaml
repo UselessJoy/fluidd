@@ -438,7 +438,7 @@ app:
       turn_device_on: Вкл. %{device}
       turn_device_off: Выкл. %{device}
       uncategorized: Вне категории
-      unretract_extra_length: Дополнительная длина
+      unretract_extra_length: Дополнительная длина деретракта
       unretract_speed: Скорость деретракта
       used: Использовано
       username: Имя пользователя
