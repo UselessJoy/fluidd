@@ -5,18 +5,17 @@
       v-bind="$attrs"
       :title="$t('app.pid_calibrate.title.pid_calibrate_settings')"
       :save-button-text="$t('app.general.btn.accept')"
-      max-width="640"
+      width="40%"
       @save="sendBeltTension"
   >
       <v-card> 
         <v-card-text>
           <v-simple-table
-            v-if="beltTensions.length > 0"
             class="no-hover mb-4"
           >
             <thead class="font-weight-medium">
               <tr>
-                <th style="font-size: 16px;"> {{ $t('app.shaper.label.saved_graphs') }} </th>
+                <th style="font-size: 16px;"> {{ $t('app.shaper.label.graphs') }} </th>
               </tr>
             </thead>
             <tbody>
@@ -65,8 +64,8 @@
           </v-simple-table>
         </v-card-text>
 
-        <div v-if="beltLoaded" class="d-flex justify-center">
-          <img :src="beltTensionURL">
+        <div v-if="beltLoaded" class="d-flex justify-center ma-3">
+          <img :src="beltTensionURL" width="100%" height="auto">
         </div>
 
         <v-divider/>
@@ -90,7 +89,6 @@
             </app-btn>
         </v-card-actions>
       </v-card>
-      <v-spacer />
   </v-dialog>
 </template>
 
@@ -119,18 +117,17 @@ export default class BeltTensionDialog extends Mixins(StateMixin, FilesMixin) {
     return this.$store.getters['printer/getBeltTensions']
   }
 
-  // @Watch('activeBeltTension')
-  // async onActiveBeltTension (value: string) {
-  //   if (value === "") {
-  //     this.beltLoaded = false
-  //     this.beltTensionURL = ""
-  //     return
-  //   }
-  //   alert(value)
-  //   const url = await this.createFileUrlWithToken(value)
-  //   this.beltTensionURL = url
-  //   this.beltLoaded = true
-  // }
+  @Watch('activeBeltTension')
+  async onActiveBeltTension (value: string) {
+    if (value === "") {
+      this.beltLoaded = false
+      this.beltTensionURL = ""
+      return
+    }
+    const url = await this.createFileUrlWithToken(value)
+    this.beltTensionURL = url
+    this.beltLoaded = true
+  }
 
   sendBeltTension() {
     this.sendGcode("BELT_TENSION", this.$waits.onBeltTension)
@@ -141,16 +138,15 @@ export default class BeltTensionDialog extends Mixins(StateMixin, FilesMixin) {
   }
 
   loadTension(tension: string) {
-    alert(tension)
     SocketActions.setActiveTension(tension)
   }
 
-  // async mounted() {
-  //   if (this.activeBeltTension !== '') {
-  //     const url = await this.createFileUrlWithToken(this.activeBeltTension)
-  //     this.beltTensionURL = url
-  //     this.beltLoaded = true
-  //   }
-  // }
+  async mounted() {
+    if (this.activeBeltTension !== '') {
+      const url = await this.createFileUrlWithToken(this.activeBeltTension)
+      this.beltTensionURL = url
+      this.beltLoaded = true
+    }
+  }
 }
 </script>

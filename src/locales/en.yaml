@@ -68,6 +68,7 @@ app:
       chosen: Chosen
       saved_graphs: Saved graphs
       tmp_graphs: Tmp graphs
+      graphs: Graphs
     axis:
       x: Axis Х
       y: Axis Y
@@ -109,6 +110,7 @@ app:
   pid_calibrate:
     btn:
       add_temperature: Add temperature
+      belt_tension: Belt Tension
     title:
       pid_calibrate_settings: PID calibrate
     setting:

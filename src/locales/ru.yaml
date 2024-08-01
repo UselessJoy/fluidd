@@ -70,6 +70,7 @@ app:
       chosen: Выбран
       saved_graphs: Сохраненные графики
       tmp_graphs: Временные графики
+      graphs: Графики
     axis:
       x: Ось Х
       y: Ось Y
@@ -112,6 +113,7 @@ app:
   pid_calibrate:
     btn:
       add_temperature: Добавить температуру
+      belt_tension: Проверка натяжения ремней
     title:
       pid_calibrate_settings: Калибровка PID
     setting:

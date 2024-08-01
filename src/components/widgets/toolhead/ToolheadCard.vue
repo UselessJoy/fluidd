@@ -462,13 +462,13 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
         disabled: this.isManualProbeActive || this.printerPrinting,
         wait: this.$waits.onShaperCalibrate
       })
-      // tools.push({
-      //   name: 'belt_tension',
-      //   icon: '$sineWave',
-      //   label: this.$tc("app.tool.title.belt_tension"),
-      //   disabled: this.isManualProbeActive || this.printerPrinting,
-      //   wait: this.$waits.onBeltTension
-      // })
+      tools.push({
+        name: 'belt_tension',
+        icon: '$sineWave',
+        label: this.$tc("app.tool.title.belt_tension"),
+        disabled: this.isManualProbeActive || this.printerPrinting,
+        wait: this.$waits.onBeltTension
+      })
     }
     if (this.heatersSupportPid)
     tools.push({
