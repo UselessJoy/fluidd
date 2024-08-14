@@ -22,7 +22,7 @@
       >
         <app-btn-toolhead-move
           :color="axisButtonColor(zHomed)"
-          :disabled="axisButtonDisabled(zHomed, zHasMultipleSteppers)"
+          :disabled="axisButtonDisabled(zHomed, zHasMultipleSteppers) || isUsingMagnetProbe"
           icon="$up"
           @click="sendMoveGcode('Z', toolheadMoveLength, true)"
         />
@@ -213,6 +213,10 @@ export default class ToolheadControlCross extends Mixins(StateMixin, ToolheadMix
   
   get toolheadMoveDistances (): number[] {
     return this.$store.state.config.uiSettings.general.toolheadMoveDistances as number[]
+  }
+
+  get isUsingMagnetProbe(): boolean | undefined {
+    return this.$store.getters['printer/getProbe']?.is_using_magnet_probe
   }
 
   get toolheadMoveLength (): number {
