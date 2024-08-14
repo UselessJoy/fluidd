@@ -574,7 +574,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
 
           const color = Vue.$colorset.next(getKlipperType(e), e)
           let pretty = ""
-          if (name in ["extruder", "heater_bed"])
+          if (["extruder", "heater_bed"].includes(name))
           {
             pretty = Vue.$filters.startCase(i18n.tc(`app.components.heaters.${name}`))
           }
@@ -791,7 +791,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
   /**
    * Return available temperature probes / sensors.
    */
-  getSensors: (state, getters): Sensor[] => {
+  getSensors: (state, getters, rootState): Sensor[] => {
     const supportedSensors = [
       'temperature_sensor',
       'temperature_probe',
@@ -808,9 +808,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
           const color = Vue.$colorset.next(getKlipperType(item), item)
           const config = getters.getPrinterSettings(item)
           let pretty = ""
-          if (config.locale)
+          const fluiddLocale = rootState.config.uiSettings.general.locale
+          if (config[`locale_${fluiddLocale}`])
           {
-            pretty = config.locale
+            pretty = config[`locale_${fluiddLocale}`]
           }
           else{
             pretty = Vue.$filters.startCase(name)

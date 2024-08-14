@@ -52,6 +52,7 @@ declare module 'vue' {
     BedScrewsAdjustDialog: typeof import('./src/components/common/BedScrewsAdjustDialog.vue')['default']
     BeltTensionDialog: typeof import('./src/components/common/BeltTensionDialog.vue')['default']
     CollapsableCard: typeof import('./src/components/common/CollapsableCard.vue')['default']
+    DiagnosticsDialog: typeof import('./src/components/common/DiagnosticsDialog.vue')['default']
     FlashMessage: typeof import('./src/components/common/FlashMessage.vue')['default']
     KlippyStatusCard: typeof import('./src/components/common/KlippyStatusCard.vue')['default']
     ManualProbeDialog: typeof import('./src/components/common/ManualProbeDialog.vue')['default']

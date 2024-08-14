@@ -17,7 +17,7 @@
     />
 
     <v-layout
-      v-else
+      v-else-if="!onlyControllable"
       align-center
       justify-space-between
       :class="{ 'text--disabled': !klippyReady }"
@@ -50,6 +50,9 @@ import { SocketActions } from '@/api/socketActions'
 export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
   @Prop({ type: Object, required: true })
   readonly fan!: Fan
+
+  @Prop({type: Boolean, default: false})
+  readonly onlyControllable?: Boolean
 
   get prettyValue () {
     return (this.value === 0)

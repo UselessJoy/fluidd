@@ -28,6 +28,7 @@
       >
         <template v-for="(item, i) in all.col2">
           <OutputItem
+            :onlyControllable="onlyControllable"
             :key="item.key"
             :item="item"
           />
@@ -44,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins, Prop } from 'vue-property-decorator'
 import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
 import StateMixin from '@/mixins/state'
 import type { Fan, Led, OutputPin } from '@/store/printer/types'
@@ -54,7 +55,10 @@ import type { Fan, Led, OutputPin } from '@/store/printer/types'
     OutputItem
   }
 })
-export default class Outputs extends Mixins(StateMixin) {
+export default class Outputs extends Mixins(StateMixin){
+  @Prop({type: Boolean, default: false})
+  readonly onlyControllable?: Boolean
+
   get all () {
     const items: Array<Fan | OutputPin> = [
       ...this.$store.getters['printer/getAllFans'],
