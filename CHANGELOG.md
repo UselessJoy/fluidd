@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.7](https://github.com/UselessJoy/fluidd/compare/v0.8.6...v0.8.7) (2024-08-28)
+
 ### [0.8.6](https://github.com/UselessJoy/fluidd/compare/v0.8.5...v0.8.6) (2024-08-14)
 
 ### [0.8.5](https://github.com/UselessJoy/fluidd/compare/v0.8.4...v0.8.5) (2024-08-01)
