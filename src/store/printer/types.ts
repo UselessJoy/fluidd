@@ -58,7 +58,13 @@ export interface KlipperMessage {
   last_message_eventtime: number,
   message: string,
   message_type: FlashMessageTypes,
-  is_open: boolean
+  is_open: boolean,
+  timeout?: number 
+}
+
+export interface FilamentWatcher{
+  filament_type: string,
+  show_message: boolean
 }
 /*    END NEW    */
 

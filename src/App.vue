@@ -146,7 +146,7 @@ import BrowserMixin from '@/mixins/browser'
 import type { LinkPropertyHref, MetaPropertyName } from 'vue-meta'
 import { SocketActions } from './api/socketActions'
 import AutoCloseConfirm from '@/components/common/AutoCloseConfirm.vue'
-import type { KlipperMessage } from '@/store/printer/types'
+import type { KlipperMessage, FilamentWatcher } from '@/store/printer/types'
 import FileSystemDownloadDialog from '@/components/widgets/filesystem/FileSystemDownloadDialog.vue'
 import SpoolSelectionDialog from '@/components/widgets/spoolman/SpoolSelectionDialog.vue'
 import type { FlashMessage } from '@/types'
@@ -407,7 +407,20 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
     if (value.last_message_eventtime == .0 || !value.is_open) {
       return
     }
-    EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: 5000})
+    if (!this.filamentWatcher.show_message)
+      EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: this.klipperMessage?.timeout || 5000})
+  }
+
+  get filamentWatcher(): FilamentWatcher {
+    return this.$store.getters['printer/getFilamentWathcer']
+  }
+
+  @Watch('filamentWatcher', {deep: true})
+  async onCameraFanChange(fw: FilamentWatcher) {
+      if (fw.show_message)
+        EventBus.$emit(this.$tc('app.general.msg.pla_printing'), {type: 'warning', timeout: -1})
+      else
+        this.flashMessageState.open = false
   }
 
   @Watch('hasScrewImage')

@@ -192,6 +192,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.safety_printing
   },
 
+  getFilamentWathcer: (state) => {
+    return state.printer.filament_watcher
+  },
+  
   getQuiteMode: (state) => {
     return state.printer['tmc2209 stepper_x'].quite_mode || false
   },
@@ -618,7 +622,6 @@ export const getters: GetterTree<PrinterState, RootState> = {
       'fan'
     ])
   },
-
   /**
    * Return toolhead fans
    */

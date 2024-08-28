@@ -116,6 +116,10 @@ export const defaultState = (): PrinterState => {
         luft_timeout: 3.0,
         luft_overload: false
       },
+      filament_watcher: {
+        filament_type: "",
+        show_message: false
+      },
       virtual_sdcard: {
         file_position: 0,
         is_active: false,

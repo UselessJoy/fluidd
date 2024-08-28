@@ -6,6 +6,7 @@
       <v-col>
         <app-up-down-btn-group
           :values="values"
+          
           color="primary"
           :disabled="!klippyReady || printerPrinting || !homed"
           class="d-flex"
