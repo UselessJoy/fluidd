@@ -9,7 +9,7 @@
   >
     <v-card-text>
       <div v-if="graphLoaded" class="d-flex justify-center">
-        <img :src="activeImageURL">
+        <img :src="activeImageURL" width="100%" height="auto">
       </div>
       <span v-else>{{ $t('app.shaper.msg.not_loaded') }}</span>
     </v-card-text>

@@ -37,7 +37,6 @@ export interface ExtruderConfig {
 /*      NEW      */
 export interface AutoOff {
   autoOff: boolean;
-  timeAutoOff: number;
   autoOff_enable: boolean;
 }
 

@@ -208,7 +208,7 @@
           {{ $t('app.shaper.msg.not_found') }}
         </div>
         <v-row>
-          <v-col cols="6">
+          <v-col xs="12" sm="6" md="6" lg="6">
             <app-btn
               :disabled="shaperGraphs.active === ''"
               block
@@ -218,7 +218,7 @@
               {{ $t('app.shaper.btn.clear_shaper') }}
             </app-btn>
           </v-col>
-          <v-col cols="6">
+          <v-col xs="12" sm="6" md="6" lg="6">
             <v-menu
               left
               offset-y

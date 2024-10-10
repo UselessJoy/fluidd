@@ -136,7 +136,7 @@
         {{ $t('app.bedmesh.msg.not_found') }}
       </div>
       <v-row>
-        <v-col cols="6">
+        <v-col xs="12" sm="6" md="6" lg="6">
           <app-btn
             :disabled="!meshLoaded || printerPrinting || printerBusy"
             block
@@ -146,7 +146,7 @@
             {{ $t('app.general.btn.clear_profile') }}
           </app-btn>
         </v-col>
-        <v-col cols="6">
+        <v-col xs="12" sm="6" md="6" lg="6">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <app-btn

@@ -168,10 +168,6 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.virtual_sdcard.autoload_bed_mesh
   },
 
-  getTimeAutoOff: (state) => {
-    return state.printer.autooff.timeAutoOff
-  },
-
   getShowInterrupt: (state) => {
     return state.printer.virtual_sdcard.show_interrupt
   },

@@ -97,7 +97,6 @@ export const defaultState = (): PrinterState => {
       },
       autooff: {
         autoOff: false,
-        timeAutoOff: 0,
         autoOff_enable: false
       },
       locale: {

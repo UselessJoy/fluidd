@@ -482,7 +482,6 @@ export const Waits = Object.freeze({
   onGetWifiMode: 'onGetWifiMode',
   onGetIsScrewImage: 'onGetScrewImage',
   onGetAutoOff: 'onGetAutoOff',
-  onGetTimeAutoOff: 'onGetAutoOff',
   onGetAutoOffEnable: 'onGetAutoOffEnable',
   onShaperCalibrate: 'onShaperCalibrate',
   onBeltTension: 'onBeltTension',

@@ -359,10 +359,6 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
     return this.$store.getters['printer/getShowInterrupt']
   }
 
-  get timeAutoOff(): number {
-    return Math.round(this.$store.getters['printer/getTimeAutoOff'])
-  }
-
   get hasScrewImage(): boolean {
     return this.$store.getters['printer/getIsScrewImage']
   }
