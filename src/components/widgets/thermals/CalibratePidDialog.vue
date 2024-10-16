@@ -113,10 +113,10 @@ export default class CalibratePidDialog extends Mixins(StateMixin) {
 
         let temps: number[] = []
         if (this.currentHeater.startsWith('extruder')) {
-            temps = [215, 235, 240]
+            temps = [215, 235]
         }
         else if (this.currentHeater.startsWith('heater_bed')) {
-            temps = [65, 85, 90, 110]
+            temps = [65, 85, 110]
         }
         let heaterPresets = this.presets.find(preset => {return preset.name === this.currentHeater})
         if (heaterPresets) {

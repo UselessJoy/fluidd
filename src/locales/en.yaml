@@ -497,6 +497,7 @@ app:
         confirm_service_restart: Are you sure you want to restart the %{name} service?
         confirm_service_stop: Are you sure you want to stop the %{name} service?
         confirm_power_device_toggle: Are you sure? This will toggle the power of this device.
+        confirm_stop_pid: Are you sure? This will stop pid calibrate.
         unsaved_changes: You have unsaved changes. Are you sure you want to close this file?
         power_off: Printing is finished, the printer will be turned off after cooling the extruder
         no_file_preview: >-
@@ -568,6 +569,7 @@ app:
     tooltip:
       browse_metrics: Browse available metrics
       estop: Emergency Stop
+      stop_pid: Stop PID
       managed_by_moonraker: Managed by your moonraker configuration
       notifications: Notifications
       reload_klipper: Reloads klipper configuration.

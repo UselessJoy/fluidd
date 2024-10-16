@@ -529,6 +529,7 @@ app:
         confirm_cancel_print: Вы уверены, что хотите отменить текущую печать?
         confirm_emergency_stop: Вы уверены, что хотите аварийно остановить принтер?
         confirm_remove_user: Вы уверены, что хотите удалить пользователя %{username}?
+        confirm_stop_pid: Вы уверены, что хотите прервать калибровку PID?
     table:
       header:
         actions: Действия
