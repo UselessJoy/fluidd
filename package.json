@@ -1,6 +1,6 @@
 {
   "name": "fluidd",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "private": true,
   "type": "module",
   "description": "fluidd, a klipper web client.",
@@ -109,6 +109,7 @@
     "standard-version": "^9.5.0",
     "typescript": "^5.3.3",
     "unplugin-vue-components": "^0.26.0",
+    "v-calendar": "^2.4.2",
     "vite": "^5.0.12",
     "vite-plugin-checker": "^0.6.3",
     "vite-plugin-monaco-editor": "^1.1.0",
