@@ -20,7 +20,7 @@ export const mutations: MutationTree<GcodePreviewState> = {
   setLayers (state, payload) {
     Vue.set(state, 'layers', Object.freeze(payload.map(Object.freeze)))
   },
-  
+
   setParts (state, payload) {
     Vue.set(state, 'parts', Object.freeze(payload.map(Object.freeze)))
   },

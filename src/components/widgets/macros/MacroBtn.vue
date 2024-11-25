@@ -101,6 +101,7 @@ export default class MacroBtn extends Mixins(StateMixin) {
   get isMacroWithRawParam () {
     return ['m117', 'm118'].includes(this.macro.name)
   }
+
   get filteredListeners () {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { click, ...listeners } = this.$listeners
@@ -114,8 +115,7 @@ export default class MacroBtn extends Mixins(StateMixin) {
   /**
    * The formatted run command for a macro.
    */
-   get runCommand () {
-    let s = this.macro.name
+  get runCommand () {
     const command = this.macro.name.toUpperCase()
     if (this.params) {
       const params = this.isMacroWithRawParam
@@ -143,8 +143,7 @@ export default class MacroBtn extends Mixins(StateMixin) {
 
   mounted () {
     if (!this.macro.config || !this.macro.config.gcode || !this.opt) return []
-    for (const option of this.opt)
-    {
+    for (const option of this.opt) {
       const partision_option = option.split('.')
       this.params_locale[partision_option[0]] = partision_option[1].replace(/_/g, ' ')
     }
@@ -175,5 +174,4 @@ export default class MacroBtn extends Mixins(StateMixin) {
   .console-command :deep(.v-text-field__slot input) {
     font-family: monospace;
   }
-  
 </style>

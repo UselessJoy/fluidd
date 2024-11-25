@@ -144,7 +144,7 @@
             {{ warning }}
           </v-alert>
         </template>
-        
+
         <template v-if="'anomalies' in component">
           <v-alert
             v-for="(anomaly, index) in component.anomalies ?? []"

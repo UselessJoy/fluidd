@@ -34,10 +34,10 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 export default class AppDragOverlay extends Vue {
   @Prop({ type: Boolean })
   readonly value?: boolean
-  
+
   @Prop({ type: String, required: true })
   readonly message!: string
-  
+
   @Prop({ type: String, required: true })
   readonly icon!: string
 }

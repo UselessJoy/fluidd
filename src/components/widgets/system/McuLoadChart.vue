@@ -18,7 +18,7 @@
 
       <div class="chart-label">
         <span>{{ $t('app.system_info.label.mcu_awake', { mcu: mcu.toUpperCase() }) }}</span>
-        <span v-if="chartData.length">{{ chartData[chartData.length - 1].awake}}%</span>
+        <span v-if="chartData.length">{{ chartData[chartData.length - 1].awake }}%</span>
       </div>
 
       <!-- <div v-if="chartData && chartData.length" class="chart-label">

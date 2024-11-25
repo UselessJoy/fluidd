@@ -1,4 +1,3 @@
-
 <template>
   <app-dialog
     v-model="open"

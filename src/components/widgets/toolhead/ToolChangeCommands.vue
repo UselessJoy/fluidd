@@ -23,11 +23,11 @@
               @click="sendGcode(macro.name)"
             >
               <v-icon
-                  v-if="macro.spoolId && getSpoolById(macro.spoolId)"
-                  class="mr-1 spool-icon"
-                  :color="getSpoolColor(getSpoolById(macro.spoolId))"
-                >
-                  $filament
+                v-if="macro.spoolId && getSpoolById(macro.spoolId)"
+                class="mr-1 spool-icon"
+                :color="getSpoolColor(getSpoolById(macro.spoolId))"
+              >
+                $filament
               </v-icon>
               <span
                 v-else-if="macro.color"
@@ -39,7 +39,7 @@
                   background: macro.color
                 }"
               />
-                {{ macro.name }}
+              {{ macro.name }}
             </app-btn>
           </template>
           {{ macro.description }}
@@ -48,7 +48,7 @@
     </v-col>
   </v-row>
 </template>
-  
+
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
@@ -65,7 +65,6 @@ type ToolChangeCommand = {
 }
 @Component({})
 export default class ToolChangeCommands extends Mixins(StateMixin) {
-
   get availableCommands (): GcodeCommands {
     return this.$store.getters['printer/getAvailableCommands'] as GcodeCommands
   }
@@ -99,11 +98,10 @@ export default class ToolChangeCommands extends Mixins(StateMixin) {
   getSpoolById (id: number): Spool | undefined {
     return this.$store.getters['spoolman/getSpoolById'](id)
   }
-  
+
   getSpoolColor (spool: Spool | undefined) {
     return `#${spool?.filament.color_hex ?? (this.$vuetify.theme.dark ? 'fff' : '000')}`
   }
-
 }
 </script>
 

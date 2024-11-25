@@ -1,7 +1,7 @@
 <template>
   <v-toolbar dense>
     <v-spacer />
-    
+
     <v-tooltip bottom>
       <template #activator="{ on, attrs }">
         <v-btn
@@ -17,7 +17,7 @@
       </template>
       <span>{{ $t('app.general.btn.multiply') }}</span>
     </v-tooltip>
-    
+
     <v-tooltip bottom>
       <template #activator="{ on, attrs }">
         <v-btn

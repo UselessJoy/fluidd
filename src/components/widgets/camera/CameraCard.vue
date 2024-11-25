@@ -53,7 +53,6 @@ import type { WebcamConfig } from '@/store/webcams/types'
   }
 })
 export default class CameraCard extends Mixins(StateMixin) {
-
   collapsed = false
 
   get cols () {

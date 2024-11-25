@@ -81,6 +81,5 @@ export default class FileSystemBulkActions extends Mixins(StatesMixin) {
 
   @Prop({ type: String, required: true })
   readonly root!: string
-
 }
 </script>

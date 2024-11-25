@@ -34,20 +34,6 @@
           </v-icon>
         </v-list-item-icon>
       </v-list-item>
-
-      <v-list-item
-        @click="handleHostChangeWifiMode"
-      >
-        <v-list-item-title>{{ $t('app.general.btn.access_point') }}</v-list-item-title>
-        <v-list-item-icon>
-          <v-icon v-if="wifiMode == 'AP'" color="blue">
-                $accesspoint
-              </v-icon>
-              <v-icon v-else color="grey">
-                $accesspoint
-              </v-icon>
-        </v-list-item-icon>
-      </v-list-item>
     </v-list-group>
 
     <v-list-group
@@ -170,16 +156,15 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
     return services
       .filter(service => service.name !== 'klipper_mcu')
   }
-  
+
   get systemInfo (): SystemInfo | null {
     return this.$store.getters['server/getSystemInfo'] as SystemInfo | null
   }
 
-  
   get canControlHost (): boolean {
     return this.systemInfo?.virtualization?.virt_type !== 'container'
   }
-  
+
   async checkDialog (executableFunction: (service: ServiceInfo) => Promise<unknown>, service: ServiceInfo, action: string) {
     const result = (
       !(
@@ -190,8 +175,13 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
         this.$t(
           `app.general.simple_form.msg.confirm_service_${action}`,
           { name: service.name })?.toString(),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error',
-          buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+        {
+          title: this.$tc('app.general.label.confirm'),
+          color: 'card-heading',
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
+        }
       )
     )
     if (result) {
@@ -215,8 +205,13 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
   async handleHostReboot () {
     const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_reboot_host'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
     if (result) {
       this.$emit('click')
@@ -227,46 +222,33 @@ export default class SystemCommands extends Mixins(StateMixin, ServicesMixin) {
   async handleHostShutdown () {
     const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_shutdown_host'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
     if (result) {
       this.$emit('click')
       this.hostShutdown()
     }
   }
-  /*      NEW      */
 
-  get wifiMode(): string {
-    return this.$store.getters['printer/getWifiMode']
-  }
-
-  async handleHostChangeWifiMode () {
-    const result = await this.$confirm(
-      this.$tc('app.general.simple_form.msg.confirm_change_wifi_mode'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no')}
-    )
-    if (result) {
-      this.$emit('click')
-      this.addConsoleEntry(this.$tc('app.console.change_wifi'))
-      if (this.wifiMode == 'AP'){
-            this.hostChangeWifiMode('Default')
-          }
-          else {
-            this.hostChangeWifiMode('AP')
-          }
-    }
-  }
-  /*    END NEW    */
   async togglePowerDevice (device: Device, wait?: string) {
     const confirmOnPowerDeviceChange = this.$store.state.config.uiSettings.general.confirmOnPowerDeviceChange
     const result = (
       !confirmOnPowerDeviceChange ||
       await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_power_device_toggle'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+        {
+          title: this.$tc('app.general.label.confirm'),
+          color: 'card-heading',
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
+        }
       )
     )
     if (result) {

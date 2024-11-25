@@ -18,10 +18,6 @@
           />
         </template>
       </v-row>
-
-      <!-- <pre>{{ procStats[0] }}</pre>
-      <pre>{{ systemStats }}</pre>
-      <pre>{{ mcus }}</pre> -->
     </v-card-text>
   </collapsable-card>
 </template>

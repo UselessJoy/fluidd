@@ -131,7 +131,7 @@ export const actions: ActionTree<ServerState, RootState> = {
       commit('setServerConfig', payload.config)
     }
   },
-  
+
   async onLogsRollOver (_, payload?: { rolled_over?: string[], failed?: Record<string, string> }) {
     if (payload?.failed && Object.keys(payload.failed).length > 0) {
       const message = Object.values(payload.failed)

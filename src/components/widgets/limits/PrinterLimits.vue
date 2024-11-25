@@ -10,7 +10,7 @@
           lg="6"
         >
           <app-named-slider
-          :label="$t('app.general.label.velocity')"
+            :label="$t('app.general.label.velocity')"
             :value="velocity"
             :reset-value="defaultVelocity"
             :min="1"
@@ -113,7 +113,6 @@ import BrowserMixin from '@/mixins/browser'
 
 @Component({})
 export default class PrinterLimits extends Mixins(StateMixin, BrowserMixin) {
-
   get defaultVelocity (): number {
     return this.$store.getters['printer/getPrinterSettings']('printer.max_velocity') as number
   }

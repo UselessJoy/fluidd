@@ -35,13 +35,12 @@ warmStrategyCache({
 
 registerRoute(configPathname, configStrategy, 'GET')
 
-
 const denylist = import.meta.env.DEV
   ? undefined
   : [
-    /\/websocket/,
-    /\/(printer|api|access|machine|server)\//,
-    /\/webcam[2-4]?\//
+      /\/websocket/,
+      /\/(printer|api|access|machine|server)\//,
+      /\/webcam[2-4]?\//
     ]
 
 const allowlist = import.meta.env.DEV

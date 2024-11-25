@@ -145,7 +145,7 @@ export default class FileSystemAddMenu extends Mixins(StateMixin) {
   get accepts () {
     return this.rootProperties.accepts.join(',')
   }
-  
+
   get printerReady () {
     return (
       !this.printerPrinting &&

@@ -13,11 +13,6 @@ export class ColorSet {
       for (const item in options.colorList) {
         if ('base' in options.colorList[item]) {
           const opts = options.colorList[item] as ColorGenOption
-          // this.colorList[item] = new TinyColor(opts.base).analogous(opts.count, 20)
-          //   .map((color: TinyColor) => {
-          //     // const color = new TinyColor({ h: num, s: 0.8, l: 0.8 }).toHexString()
-          //     return { color: color.toHexString(), used: false }
-          //   })
           const base = new TinyColor(opts.base).toHsl()
           let h = base.h
           let l = base.l
@@ -34,7 +29,6 @@ export class ColorSet {
               l = l - lsplit
               return { color, used: false }
             })
-          // this.colorList[item].unshift({ color: opts.base, used: false })
         } else {
           const opts = options.colorList[item] as string[]
           this.colorList[item] = opts.map(color => {

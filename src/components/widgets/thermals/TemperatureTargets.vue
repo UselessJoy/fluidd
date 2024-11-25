@@ -18,7 +18,7 @@
           <th>
             {{ $t('app.chart.label.current') }}
           </th>
-          <th/>
+          <th />
           <th>
             {{ $t('app.chart.label.target') }}
           </th>
@@ -259,7 +259,6 @@ import type { ChartData } from '@/store/charts/types'
   }
 })
 export default class TemperatureTargets extends Mixins(StateMixin) {
-
   get extruder () {
     return this.$store.state.printer.printer.extruder
   }
@@ -299,7 +298,7 @@ export default class TemperatureTargets extends Mixins(StateMixin) {
   get showGasResistance () {
     return this.$store.state.config.uiSettings.general.showGasResistance
   }
-  
+
   setHeaterTargetTemp (heater: string, target: number) {
     this.sendGcode(`SET_HEATER_TEMPERATURE HEATER=${heater} TARGET=${target}`)
   }
@@ -323,7 +322,6 @@ export default class TemperatureTargets extends Mixins(StateMixin) {
     }
     return `${rateOfChange < 0 ? '' : '+'}${rateOfChange.toFixed(1)}`
   }
-
 }
 </script>
 

@@ -133,7 +133,7 @@ export default class Dashboard extends Mixins(StateMixin) {
   get hasSensors (): boolean {
     return this.$store.getters['sensors/getSensors'].length > 0
   }
-  
+
   get firmwareRetractionEnabled (): boolean {
     return 'firmware_retraction' in this.$store.getters['printer/getPrinterSettings']()
   }
@@ -202,7 +202,7 @@ export default class Dashboard extends Mixins(StateMixin) {
     this.menuCollapsed = (this.$el.clientWidth / this.columnCount) < 560
   }
 
-  handleUpdateLayout  () {
+  handleUpdateLayout () {
     this.$store.dispatch('layout/onLayoutChange', {
       name: this.$store.getters['layout/getSpecificLayoutName'],
       value: {

@@ -83,7 +83,6 @@ export default class FileSystemUploadDialog extends Mixins(StateMixin) {
 
   @Prop({ type: Array<FilesUpload>, required: true })
   readonly files!: FilesUpload[]
-
 }
 </script>
 

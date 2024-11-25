@@ -27,23 +27,20 @@ export const actions: ActionTree<PrinterState, RootState> = {
   },
 
   /*      NEW      */
-  async onGetWifiMode ({ commit }, payload) {
-    commit('setWifiMode', payload)
-  },
 
   async onGetAutoOff ({ commit }, payload) {
     commit('setAutoOff', payload)
   },
 
-  async onGetWatchBedMesh({ commit }, payload) {
+  async onGetWatchBedMesh ({ commit }, payload) {
     commit('setWatchBedMesh', payload)
   },
 
-  async onGetAutoloadBedMesh({ commit }, payload) {
+  async onGetAutoloadBedMesh ({ commit }, payload) {
     commit('setAutoloadBedMesh', payload)
   },
 
-  async onGetLedStatus({ commit}, payload) {
+  async onGetLedStatus ({ commit }, payload) {
     commit('setLedStatus', payload)
   },
 

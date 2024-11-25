@@ -1,6 +1,5 @@
 import type { Macro } from '@/store/macros/types'
 
-
 export interface Vendor {
   id: number;
   registered: Date;

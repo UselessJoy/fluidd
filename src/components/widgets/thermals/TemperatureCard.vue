@@ -133,7 +133,7 @@ export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
 
   @Ref('thermalchart')
   readonly thermalChartElement!: ThermalChart
-  
+
   get chartReady () {
     return (
       this.$store.state.socket.acceptingNotifications &&
@@ -213,7 +213,7 @@ export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
   get showGasResistance () {
     return this.$store.state.config.uiSettings.general.showGasResistance
   }
-  
+
   set showGasResistance (value: boolean) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.showGasResistance',
@@ -247,15 +247,18 @@ export default class TemperatureCard extends Mixins(StateMixin, BrowserMixin) {
       !['printing', 'busy', 'paused'].includes(this.$store.getters['printer/getPrinterState']) ||
       await this.$confirm(
         this.$tc('app.general.label.heaters_busy'),
-        { title: this.$tc('app.general.simple_form.msg.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+        {
+          title: this.$tc('app.general.simple_form.msg.confirm'),
+          color: 'card-heading',
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
+        }
       )
     )
     if (result) {
       SocketActions.turnOffHeaters()
-      //this.sendGcode('TURN_OFF_HEATERS')
     }
   }
-  
 }
 </script>

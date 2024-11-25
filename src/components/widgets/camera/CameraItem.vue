@@ -5,16 +5,16 @@
     v-on="$listeners"
   >
     <template v-if="cameraComponent">
-        <component
-          :is="cameraComponent"
-          ref="component-instance"
-          :camera="camera"
-          :crossorigin="crossorigin"
-          class="camera-image"
-          @raw-camera-url="rawCameraUrl = $event"
-          @frames-per-second="framesPerSecond = $event"
-          @playback="setupFrameEvents()"
-        />
+      <component
+        :is="cameraComponent"
+        ref="component-instance"
+        :camera="camera"
+        :crossorigin="crossorigin"
+        class="camera-image"
+        @raw-camera-url="rawCameraUrl = $event"
+        @frames-per-second="framesPerSecond = $event"
+        @playback="setupFrameEvents()"
+      />
     </template>
     <div v-else>
       Camera service not supported!
@@ -52,7 +52,6 @@
         <v-icon>$openInNew</v-icon>
       </a>
     </div>
-
   </v-sheet>
 </template>
 
@@ -125,7 +124,6 @@ export default class CameraItem extends Vue {
       }
     }
   }
-
 }
 </script>
 

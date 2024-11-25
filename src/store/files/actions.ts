@@ -14,12 +14,10 @@ export const actions: ActionTree<FilesState, RootState> = {
     commit('setReset')
   },
 
-  async onServerFilesGetDirectory ({ commit }, payload: { disk_usage: DiskUsage; files: (KlipperFile | KlipperFileWithMeta)[]; dirs: KlipperDir[]; __request__: any }) 
-  {
+  async onServerFilesGetDirectory ({ commit }, payload: { disk_usage: DiskUsage; files: (KlipperFile | KlipperFileWithMeta)[]; dirs: KlipperDir[]; __request__: any }) {
     const { disk_usage, files, dirs, __request__: request } = payload
     const { path } = request.params
-    const filteredDirs = dirs
-    .filter(file =>
+    const filteredDirs = dirs.filter(file =>
       !Globals.FILTERED_FOLDER_NAMES.includes(file.dirname) &&
       !Globals.FILTERED_FILES_PREFIX.some(e => file.dirname.startsWith(e)) &&
       !Globals.FILTERED_FILES_EXTENSION.some(e => file.dirname.endsWith(e))
@@ -30,8 +28,7 @@ export const actions: ActionTree<FilesState, RootState> = {
     SocketActions.serverGetRootUsage('config')
   },
 
-  async onServerGetRootUsage ({ commit }, payload: { disk_usage: DiskUsage; __request__: any }) 
-  {
+  async onServerGetRootUsage ({ commit }, payload: { disk_usage: DiskUsage; __request__: any }) {
     const { disk_usage, __request__: request } = payload
     const { root } = request.params
     commit(`setDiskUsage${root}`, disk_usage)
@@ -213,7 +210,7 @@ export const actions: ActionTree<FilesState, RootState> = {
   async removeFileDownload ({ commit }, payload) {
     commit('setRemoveFileDownload', payload)
   },
-  
+
   async updateCurrentPathByRoot ({ commit }, payload) {
     commit('setCurrentPath', payload)
   }

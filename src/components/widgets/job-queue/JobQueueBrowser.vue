@@ -116,7 +116,6 @@ export default class JobQueueBrowser extends Mixins(StateMixin) {
   handleContextMenu (event: MouseEvent, props: DataTableItemProps) {
     this.$emit('row-click', props.item, event)
   }
-
 }
 </script>
 

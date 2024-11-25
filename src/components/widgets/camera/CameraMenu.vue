@@ -69,7 +69,7 @@ export default class CamerasMenu extends Mixins(StateMixin) {
   get enabledWebcams (): WebcamConfig[] {
     return this.$store.getters['webcams/getEnabledWebcams'] as WebcamConfig[]
   }
-  
+
   get availableCameras (): Pick<WebcamConfig, 'uid' | 'name'>[] {
     return [
       {

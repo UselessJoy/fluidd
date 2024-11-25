@@ -42,12 +42,12 @@ export const mutations: MutationTree<MacrosState> = {
     }
   },
 
-  setUpdateAllVisible (state, payload: { macros: Macro[]; visible: boolean }) {
+  setUpdateAllVisible (state, payload: { macros: Macro[]; visible_new: boolean }) {
     payload.macros.forEach((macro: Macro) => {
       const i = state.stored.findIndex(m => m.name === macro.name)
       const processed = sanitizeMacroForStorage({
         ...macro,
-        visible: payload.visible
+        visible_new: payload.visible_new
       })
       if (i < 0) {
         state.stored.push(processed)

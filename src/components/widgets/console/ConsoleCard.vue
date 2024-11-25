@@ -154,7 +154,6 @@ import type { ConsoleEntry, ConsoleFilter } from '@/store/console/types'
   }
 })
 export default class ConsoleCard extends Vue {
-
   @Prop({ type: Boolean })
   readonly fullscreen?: boolean
 

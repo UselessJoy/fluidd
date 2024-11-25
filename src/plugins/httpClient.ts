@@ -1,5 +1,5 @@
 import _Vue from 'vue'
-import { EventBus} from '@/eventBus'
+import { EventBus } from '@/eventBus'
 import { consola } from 'consola'
 import axios, { AxiosError, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios'
 import { Globals } from '@/globals'
@@ -91,7 +91,6 @@ const createHttpClient = (store: Store<RootState>) => {
     } else {
       message = error.response.data
     }
-
     const url = error.config?.url || ''
     switch (error.response.status) {
       case 500:

@@ -14,11 +14,11 @@ export const getters: GetterTree<SpoolmanState, RootState> = {
   getAvailableSpools: (state) => {
     return state.availableSpools
   },
-  
+
   getSpoolById: (state) => {
     return (id: number) => state.availableSpools.find((spool: Spool) => spool.id === id)
   },
-  
+
   getConnected: (state) => {
     return state.connected
   },

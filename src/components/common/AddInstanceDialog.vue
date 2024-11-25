@@ -83,7 +83,7 @@ import webSocketWrapper from '@/util/web-socket-wrapper'
 
 @Component({})
 export default class AddInstanceDialog extends Mixins(StateMixin) {
-  @VModel({ type: Boolean})
+  @VModel({ type: Boolean })
     open?: boolean
 
   valid = true
@@ -203,11 +203,11 @@ export default class AddInstanceDialog extends Mixins(StateMixin) {
       url: Globals.DOCS_MULTIPLE_INSTANCES
     })
   }
-  
+
   get hosted () {
     return this.$store.state.config.hostConfig.hosted
   }
-  
+
   addInstance () {
     const apiConfig = this.$filters.getApiUrls(this.url)
     this.open = false

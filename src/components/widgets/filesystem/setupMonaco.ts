@@ -161,7 +161,6 @@ async function setupMonaco () {
   monaco.languages.registerFoldingRangeProvider('klipper-config', {
     provideFoldingRanges: (model) => {
       const linesContent = model.getLinesContent()
-      
       const sectionBlocks = linesContent
         .reduce((state, lineContent, index) => {
           const isSection = /^\[([^\]]+)\]/.test(lineContent)
@@ -280,8 +279,8 @@ async function setupMonaco () {
                   state.current.end = index
                 }
                 break
-              }
             }
+          }
           return state
         }, { result: [] } as ReduceState<monaco.languages.FoldingRange>)
         .result

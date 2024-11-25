@@ -1,5 +1,5 @@
 import getFilePaths from './get-file-paths'
-import type { KlipperFile  } from '@/store/files/types'
+import type { KlipperFile } from '@/store/files/types'
 
 /**
  * File Updates come in with the filename representing the filepath,

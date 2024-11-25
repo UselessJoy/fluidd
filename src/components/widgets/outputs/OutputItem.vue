@@ -8,8 +8,8 @@
 
     <output-fan
       v-if="fanTypes.includes(item.type)"
-      :onlyControllable="onlyControllable"
       :key="item.key"
+      :only-controllable="onlyControllable"
       :fan="item"
     />
 
@@ -36,11 +36,12 @@ import type { Fan, Led, OutputPin as IOutputPin } from '@/store/printer/types'
   }
 })
 export default class Outputs extends Vue {
-  @Prop({type: Boolean, default: false})
-  readonly onlyControllable?: Boolean
+  @Prop({ type: Boolean, default: false })
+  readonly onlyControllable?: boolean
 
   @Prop({ type: Object, required: true })
   readonly item!: Fan | Led | IOutputPin
+
   get pinTypes () {
     return [
       'output_pin',

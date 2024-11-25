@@ -1,7 +1,6 @@
 import { Globals } from '@/globals'
 import type { FilePaths } from '@/store/files/types'
 
-
 /**
  * Takes a filename and root and provides;
  * - the filename, with no path.

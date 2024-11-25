@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import type { GetterTree } from 'vuex'
 import type { RootState } from '../types'
-import type { PrinterState, Heater, Fan, Led, OutputPin, Sensor, RunoutSensor, KnownExtruder, MCU, Endstop, Probe, ExtruderStepper, Extruder, ExtruderConfig, ProbeName, Stepper, ScrewsTiltAdjustScrew, ScrewsTiltAdjust, BedScrews, BedSize, GcodeCommands, TimeEstimates } from './types'
+import type {
+  PrinterState, Heater, Fan, Led, OutputPin, Sensor, RunoutSensor, KnownExtruder,
+  MCU, Endstop, Probe, ExtruderStepper, Extruder, ExtruderConfig, ProbeName, Stepper,
+  ScrewsTiltAdjustScrew, ScrewsTiltAdjust, BedScrews, BedSize, GcodeCommands, TimeEstimates
+} from './types'
 import { get } from 'lodash-es'
 import getKlipperType from '@/util/get-klipper-type'
 import i18n from '@/plugins/i18n'
@@ -53,8 +57,8 @@ export const getters: GetterTree<PrinterState, RootState> = {
     ) {
       // need update
       // Хорошо бы локали добавить и в moonraker
-      if (state.printer.info.state_message == "Klippy Host not connected") {
-        return i18n.tc("app.printer.errors.klippy_host_not_connected")
+      if (state.printer.info.state_message === 'Klippy Host not connected') {
+        return i18n.tc('app.printer.errors.klippy_host_not_connected')
       }
       return state.printer.info.state_message.trim().replace(regex, '<br />')
     }
@@ -78,8 +82,9 @@ export const getters: GetterTree<PrinterState, RootState> = {
     // we're probably busy moving the toolhead or doing some other process.
     // Possible values are;
     // printing, busy, paused, ready, idle, standby
-    if (state1 == 'interrupt' || state2 == 'interrupt')
+    if (state1 === 'interrupt' || state2 === 'interrupt') {
       return 'interrupt'
+    }
     if (state1 && state2) {
       if (
         state2.toLowerCase() === 'paused' ||
@@ -125,9 +130,6 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.virtual_sdcard?.progress || 0
   },
   /*      NEW      */
-  getWifiMode: (state) => {
-    return state.printer.wifi_mode.wifiMode
-  },
 
   getShaperGraphs: (state) => {
     return state.printer.resonance_tester
@@ -191,11 +193,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
   getFilamentWathcer: (state) => {
     return state.printer.filament_watcher
   },
-  
+
   getQuiteMode: (state) => {
     return state.printer['tmc2209 stepper_x'].quite_mode || false
   },
-
 
   getPrintingIsPaused: (state) => {
     return state.printer.print_stats.state
@@ -242,17 +243,12 @@ export const getters: GetterTree<PrinterState, RootState> = {
         switch (type) {
           case 'file':
             return getters.getFileRelativePrintProgress
-
           case 'fileAbsolute':
             return getters.getFileAbsolutePrintProgress
-
           case 'slicer':
             return getters.getSlicerPrintProgress
-          
           case 'filament':
             return getters.getFilamentPrintProgress
-
-
           default:
             return 0
         }
@@ -352,7 +348,6 @@ export const getters: GetterTree<PrinterState, RootState> = {
       .reduce((a, b) => a + b, 0) / printEtaCalculationResults.length || 0
 
     const eta = Date.now() + etaLeft * 1000
-  
     return {
       progress: Math.floor(progress * 100),
       printDuration,
@@ -402,15 +397,12 @@ export const getters: GetterTree<PrinterState, RootState> = {
  * Return known extruders, giving them a friendly name.
  */
   getExtruders: (state) => {
-    const extruderCount = Object.keys(state.printer)
-    .filter(key => /^extruder\d{0,2}$/.exec(key))
-    .length
-
+    const extruderCount = Object.keys(state.printer).filter(key => /^extruder\d{0,2}$/.exec(key)).length
     return [...Array(extruderCount).keys()]
-    .map((index): KnownExtruder => ({
-      key: `extruder${index === 0 ? '' : index}`,
-      name: extruderCount === 1 ? 'Extruder' : `Extruder ${index}`
-    }))
+      .map((index): KnownExtruder => ({
+        key: `extruder${index === 0 ? '' : index}`,
+        name: extruderCount === 1 ? 'Extruder' : `Extruder ${index}`
+      }))
   },
 
   // Return the current extruder along with its configuration.
@@ -564,7 +556,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
           // Some heater items may have a prefix determining type.
           // Check for these and split as necessary.
           const keys = [
-            'heater_generic',
+            'heater_generic'
           ]
 
           const [type, nameFromSplit] = e.split(' ', 2)
@@ -573,13 +565,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
             : e
 
           const color = Vue.$colorset.next(getKlipperType(e), e)
-          let pretty = ""
-          if (["extruder", "heater_bed"].includes(name))
-          {
+          let pretty = ''
+          if (['extruder', 'heater_bed'].includes(name)) {
             pretty = Vue.$filters.startCase(i18n.tc(`app.components.heaters.${name}`))
-          }
-          else
-          {
+          } else {
             pretty = Vue.$filters.startCase(name)
           }
           const prettyName = Vue.$filters.startCase(pretty)
@@ -734,14 +723,12 @@ export const getters: GetterTree<PrinterState, RootState> = {
         const color = (applyColor.includes(type))
           ? Vue.$colorset.next(getKlipperType(pin), pin)
           : undefined
-        let pretty =""
+        let pretty = ''
         const config = getters.getPrinterSettings(pin)
         const fluiddLocale = rootState.config.uiSettings.general.locale
-        if (config[`locale_${fluiddLocale}`])
-        {
+        if (config[`locale_${fluiddLocale}`]) {
           pretty = config[`locale_${fluiddLocale}`]
-        }
-        else{
+        } else {
           pretty = Vue.$filters.startCase(name)
         }
         const prettyName = pretty
@@ -755,8 +742,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
           type,
           controllable: (controllable.includes(type))
         }
-        
-        if (leds.includes(type)){
+        if (leds.includes(type)) {
           output = {
             ...output,
             default_color: [config.initial_red, config.initial_green, config.initial_blue, config.initial_white]
@@ -806,13 +792,11 @@ export const getters: GetterTree<PrinterState, RootState> = {
           const name = nameFromSplit ?? item
           const color = Vue.$colorset.next(getKlipperType(item), item)
           const config = getters.getPrinterSettings(item)
-          let pretty = ""
+          let pretty = ''
           const fluiddLocale = rootState.config.uiSettings.general.locale
-          if (config[`locale_${fluiddLocale}`])
-          {
+          if (config[`locale_${fluiddLocale}`]) {
             pretty = config[`locale_${fluiddLocale}`]
-          }
-          else{
+          } else {
             pretty = Vue.$filters.startCase(name)
           }
           const prettyName = pretty
@@ -1070,15 +1054,14 @@ export const getters: GetterTree<PrinterState, RootState> = {
   },
 
   getHasRoundBed: (_, getters): boolean => {
-      const kinematics = getters.getPrinterSettings('printer.kinematics') || ''
-
-      return [
-        'delta',
-        'polar',
-        'rotary_delta',
-        'winch'
-      ].includes(kinematics)
-    },
+    const kinematics = getters.getPrinterSettings('printer.kinematics') || ''
+    return [
+      'delta',
+      'polar',
+      'rotary_delta',
+      'winch'
+    ].includes(kinematics)
+  },
 
   getBedSize: (state): BedSize | undefined => {
     const { axis_minimum, axis_maximum } = state.printer.toolhead
@@ -1101,7 +1084,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
     }
   },
 
-  getAsyncCommands: (state, getters, rootState, rootGetters): GcodeCommands | null => {  
+  getAsyncCommands: (state): GcodeCommands | null => {
     return state.printer.gcode.async_commands as GcodeCommands | null
   },
 
@@ -1117,8 +1100,7 @@ export const getters: GetterTree<PrinterState, RootState> = {
         return merged
       }
       return availableCommands
-    }
-    else if (asyncCommands) {
+    } else if (asyncCommands) {
       return asyncCommands
     }
 
@@ -1150,5 +1132,4 @@ export const getters: GetterTree<PrinterState, RootState> = {
       Object.keys(results).length > 0
     )
   }
-  
 }

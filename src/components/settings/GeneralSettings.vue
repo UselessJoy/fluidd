@@ -42,7 +42,7 @@
 
       <v-divider />
 
-      <app-setting 
+      <app-setting
         :title="$t('app.setting.label.klipper_language')"
         :sub-title="$t('app.setting.label.klipper_language_description')">
         <v-select
@@ -180,7 +180,6 @@
             deletable-chips
           />
         </app-setting>
-
       </template>
 
       <v-divider />
@@ -193,7 +192,7 @@
           @click.native.stop
         />
       </app-setting>
-      
+
       <v-divider />
 
       <app-setting :title="$t('app.setting.label.safety_printing')">
@@ -204,7 +203,7 @@
           @click.native.stop
         />
       </app-setting>
-      
+
       <v-divider />
 
       <app-setting
@@ -218,7 +217,7 @@
           @click.native.stop
         />
       </app-setting>
-      
+
       <v-divider />
 
       <app-setting
@@ -232,7 +231,7 @@
           @click.native.stop
         />
       </app-setting>
-      
+
       <v-divider />
 
       <app-setting
@@ -248,7 +247,7 @@
       </app-setting>
 
       <v-divider />
-      
+
       <app-setting
         :title="$t('app.setting.label.print_progress_calculation')"
         :sub-title="$t('app.setting.tooltip.average_calculation')"
@@ -407,8 +406,8 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       value,
       server: true
     })
-    SocketActions.setQuiteMode("stepper_x", value)
-    SocketActions.setQuiteMode("stepper_y", value)
+    SocketActions.setQuiteMode('stepper_x', value)
+    SocketActions.setQuiteMode('stepper_y', value)
   }
 
   get topNavPowerToggle () {
@@ -493,11 +492,11 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-  
+
   get sectionsToIgnorePendingConfigurationChanges (): string[] {
     return this.$store.state.config.uiSettings.general.sectionsToIgnorePendingConfigurationChanges as string[]
   }
-  
+
   set sectionsToIgnorePendingConfigurationChanges (value: string[]) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.sectionsToIgnorePendingConfigurationChanges',
@@ -505,11 +504,11 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-  
+
   get printInProgressLayout (): PrintInProgressLayout {
     return this.$store.state.config.uiSettings.general.printInProgressLayout as PrintInProgressLayout
   }
-  
+
   set printInProgressLayout (value: PrintInProgressLayout) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.printInProgressLayout',
@@ -517,7 +516,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-  
+
   get availablePrintInProgressLayouts () {
     return [
       {
@@ -530,7 +529,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       }
     ]
   }
-  
+
   get availablePrintProgressCalculation () {
     return [
       {
@@ -551,9 +550,11 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       }
     ]
   }
+
   get printProgressCalculation () {
     return this.$store.state.config.uiSettings.general.printProgressCalculation as PrintProgressCalculation
   }
+
   set printProgressCalculation (value: string) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.printProgressCalculation',
@@ -561,6 +562,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
+
   get availablePrintEtaCalculation () {
     return [
       {
@@ -573,9 +575,11 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       }
     ]
   }
+
   get printEtaCalculation () {
     return this.$store.state.config.uiSettings.general.printEtaCalculation as PrintEtaCalculation[]
   }
+
   set printEtaCalculation (value: PrintEtaCalculation[]) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.printEtaCalculation',
@@ -583,7 +587,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-  
+
   get enableDiagnostics () {
     return this.$store.state.config.uiSettings.general.enableDiagnostics
   }
@@ -600,8 +604,8 @@ export default class GeneralSettings extends Mixins(StateMixin) {
 
   get enableAutoOff (): boolean {
     // this.$store.state.config.uiSettings.general.autoOff_enable = this.$store.getters['printer/getAutoOffEnable']
-    //return this.$store.state.config.uiSettings.general.autoOff_enable
-     return this.$store.getters['printer/getAutoOffEnable']
+    // return this.$store.state.config.uiSettings.general.autoOff_enable
+    return this.$store.getters['printer/getAutoOffEnable']
   }
 
   set enableAutoOff (value: boolean) {
@@ -621,7 +625,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
     ]
   }
 
-  get currentKlipperLang(): string {
+  get currentKlipperLang (): string {
     return this.$store.getters['printer/getCurrentKlipperLang']
   }
 
@@ -635,7 +639,7 @@ export default class GeneralSettings extends Mixins(StateMixin) {
   }
 
   get safetyPrinting (): boolean {
-     return this.$store.getters['printer/getSafetyPrinting'].safety_enabled
+    return this.$store.getters['printer/getSafetyPrinting'].safety_enabled
   }
 
   set safetyPrinting (value: boolean) {
@@ -672,7 +676,6 @@ export default class GeneralSettings extends Mixins(StateMixin) {
     })
     SocketActions.setAutoloadBedMesh(value)
   }
-
 
   /*    END NEW    */
 }

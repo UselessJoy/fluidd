@@ -7,7 +7,6 @@ import type { FileWithPath } from '@/types'
 
 @Component
 export default class FilesMixin extends Vue {
-
   get apiUrl (): string {
     return this.$store.state.config.apiUrl as string
   }
@@ -51,8 +50,8 @@ export default class FilesMixin extends Vue {
         }).toString(), {
           title: this.$tc('app.general.title.gcode_preview'),
           color: 'card-heading',
-          icon: '$error', 
-          buttonTrueText: this.$tc('app.general.btn.yes'),  
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
           buttonFalseText: this.$tc('app.general.btn.no')
         })
     )
@@ -71,7 +70,7 @@ export default class FilesMixin extends Vue {
    * @param filename The filename to retrieve
    * @param path The path to the file
    */
-  async getFile<T = any>(filename: string, path: string, size = 0, options?: AxiosRequestConfig) {
+  async getFile<T = any> (filename: string, path: string, size = 0, options?: AxiosRequestConfig) {
     // Sort out the filepath
     const filepath = path ? `${path}/${filename}` : filename
 
@@ -209,9 +208,7 @@ export default class FilesMixin extends Vue {
   getFullPathAndFile (rootPath: string, file: File | FileWithPath): [string, File] {
     if ('path' in file) {
       return [
-        [rootPath, file.path]
-        .filter(path => !!path)
-        .join('/'),
+        [rootPath, file.path].filter(path => !!path).join('/'),
         file.file
       ]
     } else {
@@ -253,7 +250,6 @@ export default class FilesMixin extends Vue {
       const filepath = fullPath
         ? `${fullPath}/${fileObject.name}`
         : fileObject.name
-        
       const fileState = this.$store.state.files.uploads.find((u: FilesUpload) => u.filepath === filepath)
       if (fileState && !fileState?.cancelled) {
         try {

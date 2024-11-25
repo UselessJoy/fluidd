@@ -11,16 +11,16 @@
       @submit.prevent="handleSave"
     >
       <v-card
+        :class="{
+          'collapsable-card': titleShadow
+        }"
+      >
+        <v-card-title
+          class="card-heading py-2"
           :class="{
-            'collapsable-card': titleShadow
+            'collapsable-card-title': titleShadow
           }"
         >
-          <v-card-title
-            class="card-heading py-2"
-            :class="{
-              'collapsable-card-title': titleShadow
-            }"
-          >
           <slot name="title">
             <span class="focus--text">{{ title }}</span>
           </slot>
@@ -107,10 +107,10 @@ export default class AppDialog extends Vue {
 
   @Prop({ type: Boolean })
   readonly noActions?: boolean
-  
+
   @Prop({ type: Boolean })
   readonly titleShadow?: boolean
-  
+
   @PropSync('valid', { type: Boolean })
     validModel?: boolean
 

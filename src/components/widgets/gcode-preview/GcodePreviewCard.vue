@@ -167,7 +167,7 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin, Bro
   currentLayer = 0
   moveProgress = 0
   overlay = false
-  
+
   @Watch('layerCount')
   onLayerCountChanged () {
     this.currentLayer = 0
@@ -377,8 +377,13 @@ export default class GcodePreviewCard extends Mixins(StateMixin, FilesMixin, Bro
   async cancelObject (id: string) {
     const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_exclude_object'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
 
     if (result) {

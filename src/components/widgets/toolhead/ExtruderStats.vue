@@ -70,7 +70,6 @@ import ToolheadMixin from '@/mixins/toolhead'
 
 @Component({})
 export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
-
   get extrudeFactor (): number {
     return this.$store.state.printer.printer.gcode_move.extrude_factor || 1
   }

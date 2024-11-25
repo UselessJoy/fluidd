@@ -5,6 +5,10 @@
     >
       <v-spacer />
 
+      <app-date-picker
+        :title="$tc('app.general.label.calendar')"
+      />
+
       <app-column-picker
         v-if="headers"
         key-name="history"
@@ -44,7 +48,7 @@
         itemsPerPageText:$t('app.history.rows_per_page_text'),
         itemsPerPageAllText:$t('app.history.all'),
         pageText: $t('app.history.page_text')
-        }"   
+      }"
     >
       <template #expanded-item="{ headers, item }">
         <td
@@ -202,7 +206,6 @@ import getFilePaths from '@/util/get-file-paths'
 import type { HistoryItem } from '@/store/history/types'
 import { SocketActions } from '@/api/socketActions'
 import type { AppTableHeader } from '@/types'
-
 @Component({
   components: {
     JobHistoryItemStatus

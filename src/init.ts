@@ -176,11 +176,9 @@ export const appInit = async (apiConfig?: ApiConfig, hostConfig?: HostConfig): P
     if (!apiConnected && !apiAuthenticated) {
       break
     }
-    
     if (Object.keys(ROOTS).length === 0) {
       continue
     }
-    
     const result = await getMoorakerDatabase(apiConfig, NAMESPACE)
 
     apiAuthenticated = result.apiAuthenticated

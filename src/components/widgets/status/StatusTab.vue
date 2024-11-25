@@ -26,7 +26,7 @@
               :value="estimates.progress"
               color="primary"
             >
-            <span class="percentComplete focus--text">{{ estimates.progress }}%</span>
+              <span class="percentComplete focus--text">{{ estimates.progress }}%</span>
             </v-progress-circular>
           </v-col>
 
@@ -41,14 +41,14 @@
                 class="progress-button mx-2"
                 @click="handleViewThumbnail"
               >
-              <v-progress-circular
+                <v-progress-circular
                   :rotate="-90"
                   :size="90"
                   :width="7"
                   :value="estimates.progress"
                   color="primary"
                 >
-                <img
+                  <img
                     class="progress-button-image"
                     :src="thumbnail"
                   >
@@ -108,10 +108,10 @@
               sm="6"
             >
               <status-label :label="$t('app.general.label.requested_speed')">
-                <span v-if="liveVelocity > 0">{{ liveVelocity.toFixed(1)}} {{ $t('app.suffix.mm/s') }}</span>
+                <span v-if="liveVelocity > 0">{{ liveVelocity.toFixed(1) }} {{ $t('app.suffix.mm/s') }}</span>
               </status-label>
               <status-label :label="$t('app.general.label.flow')">
-                <span v-if="liveFlow > 0">{{ liveFlow.toFixed(1)}} {{ $t('app.suffix.mm³/s') }}</span>
+                <span v-if="liveFlow > 0">{{ liveFlow.toFixed(1) }} {{ $t('app.suffix.mm³/s') }}</span>
               </status-label>
               <status-label :label="$t('app.general.label.filament')">
                 <span v-if="filamentUsed > 0">{{ $filters.getReadableLengthString(filamentUsed) }}</span>
@@ -242,7 +242,7 @@ export default class StatusTab extends Mixins(StateMixin, FilesMixin, ToolheadMi
     value: 0,
     max: 0
   }
-  
+
   filePreviewState: any = {
     open: false,
     filename: '',
@@ -398,6 +398,7 @@ export default class StatusTab extends Mixins(StateMixin, FilesMixin, ToolheadMi
 
     return filamentUsed ?? 0
   }
+
   /**
    * Total filament according to the current file / slicer.
    */
@@ -410,20 +411,6 @@ export default class StatusTab extends Mixins(StateMixin, FilesMixin, ToolheadMi
   /**
    * Total filament according to the current file / slicer.
    */
-
-  //  async handleViewThumbnail () {
-  //   const file = this.current_file
-  //   const thumb = this.getThumb(file, 'gcodes', file.path, true, file.modified)
-
-  //   if (thumb) {
-  //     this.filePreviewState = {
-  //       open: true,
-  //       filename: file.filename,
-  //       src: thumb.url,
-  //       width: thumb.width
-  //     }
-  //   }
-  // }
   async handleViewThumbnail () {
     const file = this.current_file
     const thumb = this.getThumb(file, 'gcodes', file.path, true, file.modified)

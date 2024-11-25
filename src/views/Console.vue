@@ -1,7 +1,7 @@
 <template>
   <v-row :dense="$vuetify.breakpoint.smAndDown">
     <v-col cols="12">
-      <console-card fullscreen/>
+      <console-card fullscreen />
     </v-col>
   </v-row>
 </template>

@@ -39,13 +39,12 @@ export const getters: GetterTree<GcodePreviewState, RootState> = {
 
     const { minLayerHeight } = rootState.config.uiSettings.gcodePreview
 
-  
     moves.forEach((move, index) => {
       if (move.z !== undefined && z !== move.z) {
         z = move.z
         zStart = index
       }
-      
+
       if (move.e && move.e > 0 && (Number.isNaN(zLast) || z < zLast || z >= zNext)) {
         if (['x', 'y', 'i', 'j'].some(x => isKeyOf(x, move) && move[x] !== 0)) {
           zLast = z

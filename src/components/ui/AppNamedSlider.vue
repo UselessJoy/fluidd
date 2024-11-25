@@ -229,7 +229,7 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
       this.submitValue(this.resetValue)
     }
   }
-  
+
   handleFocus (event: FocusEvent) {
     this.hasFocus = true
     if (event.target instanceof HTMLInputElement) {
@@ -249,21 +249,22 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
     this.onSubmitValue = value
     this.submitValue(value)
   }
-  
+
   handleStart (value: number) {
     this.hasFocus = false
     this.$emit('start', value)
   }
+
   handleEnd (value: number) {
     this.onSubmitValue = value
     this.$emit('end', value)
   }
-  
+
   handleChange (value: number) {
     this.$emit('change', value)
     this.submitValue(value)
   }
-  
+
   created () {
     this.currentValue = this.inputValue.toString()
     this.onSubmitValue = this.inputValue
@@ -271,7 +272,6 @@ export default class AppNamedSlider extends Mixins(BrowserMixin) {
     this.internalLocked = this.locked
     this.internalMax = this.max
   }
-
 }
 </script>
 

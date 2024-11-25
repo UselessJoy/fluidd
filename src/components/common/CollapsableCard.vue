@@ -17,7 +17,7 @@
           align-self="center"
           class="text-no-wrap"
         >
-          <slot 
+          <slot
             name="title"
             :in-layout="inLayout"
           >
@@ -167,20 +167,20 @@ export default class CollapsableCard extends Vue {
   /**
    * Loading state.
    */
-  @Prop({ type: Boolean})
+  @Prop({ type: Boolean })
   readonly loading?: boolean
 
   /**
    * Enables dragging of the card. Also causes the card
    * to react to layoutMode state.
    */
-  @Prop({ type: Boolean})
+  @Prop({ type: Boolean })
   readonly draggable?: boolean
 
   /**
    * Whether this card is collapsable or not.
    */
-  @Prop({ type: Boolean})
+  @Prop({ type: Boolean })
   readonly collapsable?: boolean
 
   /**

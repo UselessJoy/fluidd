@@ -24,9 +24,9 @@
         />
       </app-setting>
 
-    <v-divider />
+      <v-divider />
 
-    <app-setting :title="$t('app.general.label.password')">
+      <app-setting :title="$t('app.general.label.password')">
         <v-text-field
           v-model="user.password"
           autocomplete="current-password"

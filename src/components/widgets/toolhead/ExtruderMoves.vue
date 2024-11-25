@@ -88,13 +88,16 @@ import type { VForm } from '@/types'
 export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
   @Ref('form')
   readonly form!: VForm
+
   valid = true
+
   get extrudeSpeed () {
     const extrudeSpeed = this.$store.state.config.uiSettings.toolhead.extrudeSpeed
     return extrudeSpeed === -1
       ? this.$store.state.config.uiSettings.general.defaultExtrudeSpeed
       : extrudeSpeed
   }
+
   set extrudeSpeed (value: number) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.toolhead.extrudeSpeed',
@@ -102,12 +105,14 @@ export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
       server: false
     })
   }
+
   get extrudeLength () {
     const extrudeLength = this.$store.state.config.uiSettings.toolhead.extrudeLength
     return extrudeLength === -1
       ? this.$store.state.config.uiSettings.general.defaultExtrudeLength
       : extrudeLength
   }
+
   set extrudeLength (value: number) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.toolhead.extrudeLength',
@@ -115,16 +120,20 @@ export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
       server: false
     })
   }
+
   @Watch('activeExtruder')
   activeExtruderChanged () {
     this.form.validate()
   }
+
   maxExtrudeLengthRule (value: number) {
     return this.$rules.numberLessThanOrEqual(this.maxExtrudeLength)(value)
   }
+
   maxExtrudeSpeedRule (value: number) {
     return this.$rules.numberLessThanOrEqual(this.maxExtrudeSpeed)(value)
   }
+
   sendRetractGcode (amount: number, rate: number, wait?: string) {
     if (this.valid) {
       const gcode = `M83
@@ -132,6 +141,7 @@ export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
       this.sendGcode(gcode, wait)
     }
   }
+
   sendExtrudeGcode (amount: number, rate: number, wait?: string) {
     if (this.valid) {
       const gcode = `M83
@@ -139,6 +149,7 @@ export default class ExtruderMoves extends Mixins(StateMixin, ToolheadMixin) {
       this.sendGcode(gcode, wait)
     }
   }
+
   mounted () {
     this.form.validate()
   }

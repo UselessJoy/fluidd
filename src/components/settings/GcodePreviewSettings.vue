@@ -266,11 +266,11 @@ export default class GcodePreviewSettings extends Vue {
       server: true
     })
   }
-  
+
   get drawOrigin () {
     return this.$store.state.config.uiSettings.gcodePreview.drawOrigin
   }
-  
+
   set drawOrigin (value: boolean) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.gcodePreview.drawOrigin',
@@ -278,7 +278,7 @@ export default class GcodePreviewSettings extends Vue {
       server: true
     })
   }
-  
+
   get drawBackground () {
     return this.$store.state.config.uiSettings.gcodePreview.drawBackground
   }
@@ -303,7 +303,7 @@ export default class GcodePreviewSettings extends Vue {
     })
   }
 
-  get minLayerHeight  () {
+  get minLayerHeight () {
     return this.$store.state.config.uiSettings.gcodePreview.minLayerHeight
   }
 
@@ -356,14 +356,15 @@ export default class GcodePreviewSettings extends Vue {
   }
 
   get hideSinglePartBoundingBox () {
-      return this.$store.state.config.uiSettings.gcodePreview.hideSinglePartBoundingBox
-    }
-    set hideSinglePartBoundingBox (value: boolean) {
-      this.$store.dispatch('config/saveByPath', {
-        path: 'uiSettings.gcodePreview.hideSinglePartBoundingBox',
-        value,
-        server: true
-      })
+    return this.$store.state.config.uiSettings.gcodePreview.hideSinglePartBoundingBox
+  }
+
+  set hideSinglePartBoundingBox (value: boolean) {
+    this.$store.dispatch('config/saveByPath', {
+      path: 'uiSettings.gcodePreview.hideSinglePartBoundingBox',
+      value,
+      server: true
+    })
   }
 
   handleReset () {

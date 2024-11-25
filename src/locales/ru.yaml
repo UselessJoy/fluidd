@@ -35,6 +35,20 @@ app:
     s: сек.
     m: мин.
     h: ч.
+  moonraker:
+    errors:
+      file_currently_in_use: Файл сейчас используется
+  calendar:
+    last:
+      one: последнюю печать
+      few: последние %{count} печати
+      other: последние %{count} печатей
+    last_week: последнюю неделю
+    last_mounth: последний месяц
+    last_year: последний год
+    show_for: Показать за
+    total_filament_for: Использовано филамента за
+    total_print_time_for: Время печати за
   thermal:
     temp: Температура
     power: Мощность
@@ -152,7 +166,6 @@ app:
     pause: ПАУЗА ПЕЧАТИ
     resume: ВОЗОБНОВЛЕНИЕ ПЕЧАТИ
     sdcard_reset_file: ОТМЕНА ПЕЧАТИ
-    change_wifi: Смена работы wifi...
   endpoint:
     error:
       cant_connect: >-
@@ -260,7 +273,6 @@ app:
       later: Позже
       delete_print: Отменить печать
       abort: Отменить
-      access_point: Точка доступа
       yes: Подтвердить
       no: Отмена
       off_now: Выключить сейчас
@@ -273,6 +285,7 @@ app:
       adjust_layout: Настроить компановку интерфейса панели управления
       adjusted: Настроено
       all: Все
+      select: Выбрать
       auth_unsure: Не знаете, почему вы это видите?
       begin_calibrate: Начать калибровку
       calibrate: Калибровка
@@ -360,6 +373,7 @@ app:
         Moonraker не смог запустить некоторые плагины, пожалуйста проверьте
         логи, обновите конфигурацию и перезагрузите moonraker.
     label:
+      calendar: Календарь
       accel_to_decel: Ускорение к замедлению
       acceleration: Ускорение
       accepted_screws: Примененные винты
@@ -504,7 +518,6 @@ app:
         invalid_aspect: Недопустимое соотношение сторон
       msg:
         confirm: Вы уверены?
-        confirm_change_wifi_mode: Вы уверены, что хотите переключить режим работы Wi-fi? <br> Соединение с принтером может быть прервано.
         confirm_rebuild: Печать была прервана. Продолжить печать?
         confirm_exclude_object: Вы уверены, что хотите исключить этот объект из печати?
         confirm_forcemove_toggle: Вы уверены? Это может повредить принтер.

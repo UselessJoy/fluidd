@@ -39,9 +39,8 @@ export const actions: ActionTree<TimelapseState, RootState> = {
         if (payload.status === 'error') {
           if (
             rootState.webcams.webcams.some(webcam => {
-            return webcam.enabled;
-          }))
-          {
+              return webcam.enabled
+            })) {
             // open snackbar
             EventBus.$emit(i18n.tc('app.timelapse.error.newframe'), { type: 'error' })
           }
@@ -101,11 +100,11 @@ export const actions: ActionTree<TimelapseState, RootState> = {
         break
       }
       case 'delete': {
-          commit('setLastFrame', {
-            count: 0,
-            uniqueCount: 0,
-            file: ""
-          })
+        commit('setLastFrame', {
+          count: 0,
+          uniqueCount: 0,
+          file: ''
+        })
         break
       }
       default: {

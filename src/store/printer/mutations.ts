@@ -17,19 +17,16 @@ export const mutations: MutationTree<PrinterState> = {
     Vue.set(state.printer, 'info', payload)
   },
   /*      NEW      */
-  setWifiMode (state, payload) {
-    state.printer.wifiMode = payload
-  },
 
   setAutoOff (state, payload) {
     state.printer.autooff = payload
   },
 
-  setWatchBedMesh(state, payload) {
+  setWatchBedMesh (state, payload) {
     state.printer.virtual_sdcard = payload
   },
 
-  setAutoloadBedMesh(state, payload) {
+  setAutoloadBedMesh (state, payload) {
     state.printer.virtual_sdcard = payload
   },
 
@@ -37,30 +34,30 @@ export const mutations: MutationTree<PrinterState> = {
     state.printer.locale = payload
   },
 
-  setSafetyPrinting(state, payload) {
+  setSafetyPrinting (state, payload) {
     state.printer.safety_printing = payload
   },
 
-  setQuiteMode(state, payload) {
+  setQuiteMode (state, payload) {
     state.printer.quite_mode = payload
   },
 
-  setLedStatus(state, payload) {
+  setLedStatus (state, payload) {
     state.printer.led_control = payload
   },
   setAutoEnable (state, payload) {
     state.printer.autooff = payload
   },
-  
+
   setTimeAutoOff (state, payload) {
     state.printer.autooff = payload
   },
 
-  setIsScrewImage(state, payload) {
+  setIsScrewImage (state, payload) {
     state.printer.screw_image = payload
   },
 
-  setHeatersIsWaiting(state, payload) {
+  setHeatersIsWaiting (state, payload) {
     state.printer.heaters = payload
   },
   /*    END NEW    */
@@ -87,11 +84,11 @@ export const mutations: MutationTree<PrinterState> = {
   setClearEndStops (state) {
     state.printer.endstops = {}
   },
-  
+
   setClearScrewsTiltAdjust (state) {
     state.printer.screws_tilt_adjust = {}
   },
-  
+
   setResetCurrentFile (state) {
     const newState = defaultState().printer.current_file
     consola.debug('resetting current file', newState)

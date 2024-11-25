@@ -16,4 +16,3 @@ export const EventBus = {
     EventBus.bus.$emit('flashMessage', opts) // custom message
   }
 }
-

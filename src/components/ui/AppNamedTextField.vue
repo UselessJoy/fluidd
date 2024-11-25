@@ -80,7 +80,7 @@ export default class AppNamedTextField extends Mixins(StateMixin) {
 
   @Prop({ type: Array<InputValidationRules> })
   readonly rules?: InputValidationRules[]
-  
+
   handleReset () {
     if (this.resetValue !== undefined) {
       this.inputValue = this.resetValue

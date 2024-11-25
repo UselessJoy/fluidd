@@ -121,6 +121,5 @@ export default class MetricsCollectorConfig extends Vue {
       this.metric.collector.substring(selectionEnd)
     }
   }
-  
 }
 </script>

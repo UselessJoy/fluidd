@@ -59,7 +59,7 @@
         class="py-0"
         dense
       >
-        <v-list-item 
+        <v-list-item
           @click="$filters.routeTo($router, '/settings#auth')"
         >
           <v-list-item-icon>
@@ -68,7 +68,6 @@
           <v-list-item-content>
             <v-list-item-title>{{ $t('app.general.label.manage_accounts') }}</v-list-item-title>
           </v-list-item-content>
-          
         </v-list-item>
 
         <template v-if="!isTrustedOnly">
@@ -89,7 +88,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { startCase, capitalize } from 'lodash-es'
 
 @Component({})
 export default class AppNotificationMenu extends Vue {
@@ -103,7 +101,7 @@ export default class AppNotificationMenu extends Vue {
       this.user.username === '_TRUSTED_USER_' ||
       this.user.username === '_API__API_KEY_USER_USER_'
     ) {
-      return 'trusted_user'//capitalize(startCase(this.user.username))
+      return 'trusted_user' // capitalize(startCase(this.user.username))
     } else {
       return this.user.username
     }

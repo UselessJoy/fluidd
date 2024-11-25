@@ -15,7 +15,7 @@
           class="mt-0"
           hide-details="auto"
         />
-      </app-setting>    
+      </app-setting>
       <v-divider />
       <app-setting
         :title="$t('app.general.label.name')"
@@ -33,7 +33,7 @@
           ]"
         />
       </app-setting>
-    <v-divider />
+      <v-divider />
       <app-setting
         :title="$t('app.setting.label.type')"
         :r-cols="8"
@@ -49,7 +49,7 @@
           item-text="text"
         />
       </app-setting>
-    <v-divider />
+      <v-divider />
       <app-setting
         :title="type.text"
         :r-cols="8"

@@ -619,7 +619,6 @@ export default class GcodePreview extends Mixins(StateMixin, BrowserMixin) {
   getUiSetting<T extends keyof GcodePreviewConfig> (name: T) {
     return this.$store.state.config.uiSettings.gcodePreview[name]
   }
-  
 }
 </script>
 

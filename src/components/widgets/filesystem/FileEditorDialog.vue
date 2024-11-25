@@ -197,7 +197,7 @@ export default class FileEditorDialog extends Mixins(StateMixin, BrowserMixin) {
   }
 
   get useTextOnlyEditor () {
-    return this.isMobileUserAgent  || !this.isWebAssemblySupported
+    return this.isMobileUserAgent || !this.isWebAssemblySupported
   }
 
   get isUploading (): boolean {
@@ -234,8 +234,13 @@ export default class FileEditorDialog extends Mixins(StateMixin, BrowserMixin) {
       !this.showDirtyEditorWarning ||
       await this.$confirm(
         this.$tc('app.general.simple_form.msg.unsaved_changes'),
-        { title: this.$tc('app.general.label.unsaved_changes'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+        {
+          title: this.$tc('app.general.label.unsaved_changes'),
+          color: 'card-heading',
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
+        }
       )
     )
     if (result) {

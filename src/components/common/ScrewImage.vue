@@ -18,7 +18,6 @@
       </v-card>
     </div>
   </template> -->
-  
 <!-- <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, VModel } from 'vue-property-decorator'

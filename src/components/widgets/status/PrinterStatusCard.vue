@@ -40,7 +40,7 @@
         </v-btn>
       </v-tabs>
     </template>
-    
+
     <template #menu>
       <status-controls
         v-if="printerPrinting || printerPaused || filename"
@@ -105,7 +105,7 @@ export default class PrinterStatusCard extends Mixins(StateMixin) {
     return this.$store.state.printer.printer.print_stats.filename
   }
 
-  get hasInterruptedFile() {
+  get hasInterruptedFile () {
     return this.$store.getters['printer/getHasInterruptedFile']
   }
 
@@ -141,12 +141,12 @@ export default class PrinterStatusCard extends Mixins(StateMixin) {
     SocketActions.printerPrintStart(filename)
   }
 
-  reprintInterrupt() {
+  reprintInterrupt () {
     SocketActions.printerPrintRebuild()
   }
 
-  sendRunInterruptFile() {
-    this.sendGcode("SDCARD_RUN_FILE")
+  sendRunInterruptFile () {
+    this.sendGcode('SDCARD_RUN_FILE')
   }
 }
 </script>

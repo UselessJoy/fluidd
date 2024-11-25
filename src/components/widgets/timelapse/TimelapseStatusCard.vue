@@ -8,10 +8,10 @@
       <v-row>
         <div
           v-if="frameCount"
-          :style="{filter: isRendering ? `saturate(${renderProgress}%)` : 'none', position: 'relative', transform: 
-            `rotateX(${camera?.flip_vertical ? 180 : 0}deg) 
-            rotateY(${camera?.flip_horizontal ? 180 : 0}deg) 
-            rotate(${camera?.rotation}deg)`, alignItems: 'center'}"
+          :style="{filter: isRendering ? `saturate(${renderProgress}%)` : 'none', position: 'relative', transform:
+            `rotateX(${camera?.flip_vertical ? 180 : 0}deg)
+             rotateY(${camera?.flip_horizontal ? 180 : 0}deg)
+             rotate(${camera?.rotation}deg)`, alignItems: 'center'}"
         >
           <img
             :src="previewUrl"
@@ -166,7 +166,7 @@ export default class StatusCard extends Mixins(StateMixin, FilesMixin) {
     return 0
   }
 
-  mounted() {
+  mounted () {
     SocketActions.oldFrames()
   }
 }

@@ -77,7 +77,8 @@ import MacroBtn from './MacroBtn.vue'
 @Component({
   components: {
     MacroBtn
-  }})
+  }
+})
 export default class Macros extends Mixins(StateMixin) {
   get macros () {
     return this.$store.getters['macros/getVisibleMacros']

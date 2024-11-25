@@ -33,10 +33,10 @@ const parseLine = (line: string) => {
     .split(';', 2)[0]
 
   const [, gcodeCommand, gcodeCommandArgs = ''] = clearedLine
-  .split(/^([gm][0-9]+)\s*/i)
+    .split(/^([gm][0-9]+)\s*/i)
 
   const [, macroCommand, macroCommandArgs = ''] = clearedLine
-  .split(/^(SET_PRINT_STATS_INFO|EXCLUDE_OBJECT_DEFINE|SET_RETRACTION)\s+/i)
+    .split(/^(SET_PRINT_STATS_INFO|EXCLUDE_OBJECT_DEFINE|SET_RETRACTION)\s+/i)
 
   if (gcodeCommand) {
     return {
@@ -57,7 +57,6 @@ const parseLine = (line: string) => {
     type: 'other' as const
   }
 }
-
 
 const decimalRound = (a: number) => {
   return Math.round(a * 10000) / 10000
@@ -101,60 +100,59 @@ const parseGcode = (gcode: string, sendProgress: (filePosition: number) => void)
             newLayerForNextMove = true
           }
           break
-          case 'EXCLUDE_OBJECT_DEFINE':
-            if ('polygon' in args && args.polygon) {
-              const polygonData = JSON.parse(args.polygon) as [number, number][]
-  
-              const part: Part = {
-                polygon: polygonData
-                  .map(([x, y]): Point => ({
-                    x,
-                    y
-                  }))
-              }
-  
-              parts.push(Object.freeze(part))
+        case 'EXCLUDE_OBJECT_DEFINE':
+          if ('polygon' in args && args.polygon) {
+            const polygonData = JSON.parse(args.polygon) as [number, number][]
+
+            const part: Part = {
+              polygon: polygonData
+                .map(([x, y]): Point => ({
+                  x,
+                  y
+                }))
             }
+            parts.push(Object.freeze(part))
+          }
           break
         case 'SET_RETRACTION':
-            if ('retract_length' in args) {
-              fwretraction.length = +args.retract_length
-            }
-            if ('unretract_extra_length' in args) {
-              fwretraction.extrudeExtra = +args.unretract_extra_length
-            }
-            break
-        }
+          if ('retract_length' in args) {
+            fwretraction.length = +args.retract_length
+          }
+          if ('unretract_extra_length' in args) {
+            fwretraction.extrudeExtra = +args.unretract_extra_length
+          }
+          break
+      }
     } else if (type === 'gcode') {
       switch (command) {
         case 'G0':
         case 'G1': {
-            const params = [
-              'x', 'y', 'z', 'e'
-            ]
-            if (params.some(param => param in args)) {
-              move = {
-                ...pick(args, params),
-                filePosition: toolhead.filePosition
+          const params = [
+            'x', 'y', 'z', 'e'
+          ]
+          if (params.some(param => param in args)) {
+            move = {
+              ...pick(args, params),
+              filePosition: toolhead.filePosition
             } satisfies LinearMove
           }
           break
         }
         case 'G2':
         case 'G3': {
-            const params = [
-              'x', 'y', 'z', 'e',
-              'i', 'j', 'k', 'r'
-            ]
-            if (params.some(param => param in args)) {
-              move = {
-                ...pick(args, params),
-                direction: command === 'G2'
-                  ? 'clockwise'
-                  : 'counter-clockwise',
-                filePosition: toolhead.filePosition
-              } satisfies ArcMove
-            }
+          const params = [
+            'x', 'y', 'z', 'e',
+            'i', 'j', 'k', 'r'
+          ]
+          if (params.some(param => param in args)) {
+            move = {
+              ...pick(args, params),
+              direction: command === 'G2'
+                ? 'clockwise'
+                : 'counter-clockwise',
+              filePosition: toolhead.filePosition
+            } satisfies ArcMove
+          }
           break
         }
         case 'G10':

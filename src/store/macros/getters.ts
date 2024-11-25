@@ -4,7 +4,8 @@ import type { RootState } from '../types'
 
 export const MACRO_DEFAULTS = {
   alias: '',
-  visible: true,
+  visible: false,
+  visible_new: false,
   disabledWhilePrinting: false,
   color: '',
   categoryId: '0',
@@ -55,7 +56,6 @@ export const getters: GetterTree<MacrosState, RootState> = {
 
   getMacroByName: (state, getters) => (...names: string[]) => {
     const macros = getters.getMacros as Macro[]
-    
     for (const name of names) {
       const macro = macros.find(macro => macro.name === name)
 
@@ -75,7 +75,7 @@ export const getters: GetterTree<MacrosState, RootState> = {
       .map(({ id, name }) => ({
         id,
         name,
-        macros: getters.getMacrosByCategory(id).filter((macro: Macro) => macro.visible) as Macro[]
+        macros: getters.getMacrosByCategory(id).filter((macro: Macro) => macro.visible_new) as Macro[]
       }))
       .filter(category => category.macros.length > 0)
       .sort((a, b) => {
@@ -121,7 +121,7 @@ export const getters: GetterTree<MacrosState, RootState> = {
         const macros = getters.getMacrosByCategory(id) as Macro[]
         const count = macros.length
         const visible = macros
-          .filter(macro => macro.visible)
+          .filter(macro => macro.visible_new)
           .length
 
         return {

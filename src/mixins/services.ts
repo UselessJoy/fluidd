@@ -4,8 +4,6 @@ import { Component } from 'vue-property-decorator'
 
 @Component
 export default class ServicesMixin extends Vue {
-
-  
   get moonrakerServiceName (): string {
     return this.$store.state.server.system_info?.instance_ids?.moonraker as string || 'moonraker'
   }
@@ -36,12 +34,7 @@ export default class ServicesMixin extends Vue {
   hostShutdown () {
     SocketActions.machineShutdown()
   }
-  /*      NEW      */
-  hostChangeWifiMode (wifi_mode: string)
-  {
-    SocketActions.changeWifiMode(wifi_mode)
-  }
-  /*    END NEW    */
+
   /**
    * Restart the klipper service itself.
    */

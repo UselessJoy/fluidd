@@ -31,6 +31,7 @@ export default class AppSettingsNav extends Vue {
   get isVisible () {
     return !this.$vuetify.breakpoint.mobile
   }
+
   get items () {
     return [
       { name: this.$t('app.setting.title.general'), hash: '#general', visible: true },
@@ -61,6 +62,5 @@ export default class AppSettingsNav extends Vue {
   get supportsSpoolman () {
     return this.$store.getters['server/componentSupport']('spoolman')
   }
-  
 }
 </script>

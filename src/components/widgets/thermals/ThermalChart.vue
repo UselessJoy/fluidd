@@ -172,7 +172,6 @@ export default class ThermalChart extends Mixins(BrowserMixin) {
                 param.seriesName &&
                 param.value[param.seriesName] != null
               ) {
-                const name = param.seriesName.split(' ', 2).pop()
                 text += `
                   <div>
                     ${param.marker}

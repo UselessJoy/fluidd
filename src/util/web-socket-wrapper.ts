@@ -22,7 +22,6 @@ const webSocketWrapper = (url: string, signal?: AbortSignal) => {
 
     const connection = new WebSocket(url)
 
-
     connection.onopen = (event) => {
       debug('opened', event)
       dispose()

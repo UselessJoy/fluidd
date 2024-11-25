@@ -70,14 +70,14 @@ export const Filters = {
   getNavigatorLocales: () => {
     return navigator.languages ?? [navigator.language]
   },
-  
+
   getAllLocales: () => {
     return [
       i18n.locale,
       ...Filters.getNavigatorLocales()
     ]
   },
-  
+
   getDateFormat: (override?: string): DateTimeFormat => {
     return {
       locales: Filters.getAllLocales(),
@@ -85,7 +85,7 @@ export const Filters = {
     }
   },
 
-  getTimeFormat: (override?: string): DateTimeFormat  => {
+  getTimeFormat: (override?: string): DateTimeFormat => {
     return {
       locales: Filters.getAllLocales(),
       ...TimeFormats[override ?? store.state.config.uiSettings.general.timeFormat]
@@ -239,9 +239,11 @@ export const Filters = {
    */
   getReadableFileSizeString (fileSizeInBytes: number) {
     let i = -1
-    const byteUnits = [' ' + i18n.t('app.metrics.kB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'), 
-                       ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'), 
-                       ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')]
+    const byteUnits = [
+      ' ' + i18n.t('app.metrics.kB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'),
+      ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'),
+      ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')
+    ]
     if (fileSizeInBytes === 0) return `0${byteUnits[0]}`
     do {
       fileSizeInBytes = fileSizeInBytes / 1024
@@ -253,9 +255,11 @@ export const Filters = {
 
   getReadableDataRateString (dataRateInBytesPerSec: number) {
     let i = -1
-    const byteUnits = [' ' + i18n.t('app.metrics.kB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'), 
-                       ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'), 
-                       ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')]
+    const byteUnits = [
+      ' ' + i18n.t('app.metrics.kB'), ' ' + i18n.t('app.metrics.MB'), ' ' + i18n.t('app.metrics.GB'),
+      ' ' + i18n.t('app.metrics.TB'), ' ' + i18n.t('app.metrics.PB'), ' ' + i18n.t('app.metrics.EB'),
+      ' ' + i18n.t('app.metrics.ZB'), ' ' + i18n.t('app.metrics.YB')
+    ]
     if (dataRateInBytesPerSec === 0) return `0${byteUnits[0]}`
     do {
       dataRateInBytesPerSec = dataRateInBytesPerSec / 1024
@@ -291,12 +295,12 @@ export const Filters = {
   getReadableFrequencyString (frequencyInHz: number) {
     let i = 0
     const frequencyUnits = [
-                              ' ' + i18n.t('app.metrics.Hz'), 
-                              ' ' + i18n.t('app.metrics.kHz'), 
-                              ' ' + i18n.t('app.metrics.MHz'), 
-                              ' ' + i18n.t('app.metrics.GHz'),
-                              ' ' + i18n.t('app.metrics.THz'),
-                            ]
+      ' ' + i18n.t('app.metrics.Hz'),
+      ' ' + i18n.t('app.metrics.kHz'),
+      ' ' + i18n.t('app.metrics.MHz'),
+      ' ' + i18n.t('app.metrics.GHz'),
+      ' ' + i18n.t('app.metrics.THz')
+    ]
     while (frequencyInHz >= 1000) {
       frequencyInHz = frequencyInHz / 1000
       i++
@@ -309,12 +313,13 @@ export const Filters = {
      */
   getReadableResistanceString (resistanceInOhms: number) {
     let i = 0
-    const resistanceUnits = [' ' + i18n.t('app.metrics.Om'), 
-                              ' ' + i18n.t('app.metrics.kOm'), 
-                              ' ' + i18n.t('app.metrics.MOm'), 
-                              ' ' + i18n.t('app.metrics.GOm'),
-                              ' ' + i18n.t('app.metrics.TOm'),
-                            ]
+    const resistanceUnits = [
+      ' ' + i18n.t('app.metrics.Om'),
+      ' ' + i18n.t('app.metrics.kOm'),
+      ' ' + i18n.t('app.metrics.MOm'),
+      ' ' + i18n.t('app.metrics.GOm'),
+      ' ' + i18n.t('app.metrics.TOm')
+    ]
     while (resistanceInOhms >= 1000) {
       resistanceInOhms = resistanceInOhms / 1000
       i++
@@ -491,7 +496,7 @@ export const Rules = {
   },
 
   numberArrayUnique (array: number[], index: number) {
-    return (v: number) => array.every((val, i) => { return i === index ? true : +val !== +v}) || i18n.t('app.general.simple_form.error.uniquearray')
+    return (v: number) => array.every((val, i) => { return i === index ? true : +val !== +v }) || i18n.t('app.general.simple_form.error.uniquearray')
   },
 
   passwordNotEqualUsername (username?: string | null) {

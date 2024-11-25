@@ -22,6 +22,7 @@ sdpSemantics: 'unified-plan'
 export default class WebrtcCamerastreamerCamera extends Mixins(CameraMixin) {
   @Ref('streamingElement')
   readonly cameraVideo!: HTMLVideoElement
+
   pc: RTCPeerConnection | null = null
   remoteId: string | null = null
   startPlayback () {
@@ -91,6 +92,7 @@ export default class WebrtcCamerastreamerCamera extends Mixins(CameraMixin) {
       .then(response => response.json())
       .catch(e => consola.error('[WebrtcCamerastreamerCamera] setUrl', e))
   }
+
   stopPlayback () {
     this.pc?.close()
     this.pc = null

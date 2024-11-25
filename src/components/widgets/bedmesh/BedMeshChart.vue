@@ -10,10 +10,6 @@
       :init-options="{ renderer: 'canvas' }"
       autoresize
     />
-
-    <!-- <pre>legends: {{ opts.legend }}</pre> -->
-
-    <!-- <pre>series: {{ opts.series.length }}</pre> -->
   </div>
 </template>
 

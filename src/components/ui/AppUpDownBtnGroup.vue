@@ -1,60 +1,60 @@
 <template>
-    <app-btn-group>
-      <app-btn
-        v-for="value in valuesDown"
-        :key="`l${value}`"
-        :color="color"
-        :disabled="disabled"
-        class="value"
-        @click="$emit('click', -value)"
-      >
-        -{{ value }}
-      </app-btn>
-  
-      <slot />
-  
-      <app-btn
-        v-for="value in valuesUp"
-        :key="`r${value}`"
-        :color="color"
-        :disabled="disabled"
-        class="value"
-        @click="$emit('click', value)"
-      >
-        +{{ value }}
-      </app-btn>
-    </app-btn-group>
-  </template>
-  
-  <script lang="ts">
-  import { Component, Vue, Prop } from 'vue-property-decorator'
-  @Component({})
-  export default class AppUpDownBtnGroup extends Vue {
-    @Prop({ type: Array<Number>, required: true })
-    readonly values!: number[]
+  <app-btn-group>
+    <app-btn
+      v-for="value in valuesDown"
+      :key="`l${value}`"
+      :color="color"
+      :disabled="disabled"
+      class="value"
+      @click="$emit('click', -value)"
+    >
+      -{{ value }}
+    </app-btn>
 
-    @Prop({ type: String })
-    readonly color?: string
+    <slot />
 
-    @Prop({ type: Boolean })
-    readonly disabled?: boolean
+    <app-btn
+      v-for="value in valuesUp"
+      :key="`r${value}`"
+      :color="color"
+      :disabled="disabled"
+      class="value"
+      @click="$emit('click', value)"
+    >
+      +{{ value }}
+    </app-btn>
+  </app-btn-group>
+</template>
 
-    get valuesDown (): number[] {
-      return [...this.values]
-        .sort((a, b) => b - a)
-    }
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator'
+@Component({})
+export default class AppUpDownBtnGroup extends Vue {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  @Prop({ type: Array<Number>, required: true })
+  readonly values!: number[]
 
-    get valuesUp (): number[] {
-      return [...this.values]
-        .sort((a, b) => a - b)
-    }
+  @Prop({ type: String })
+  readonly color?: string
 
+  @Prop({ type: Boolean })
+  readonly disabled?: boolean
+
+  get valuesDown (): number[] {
+    return [...this.values]
+      .sort((a, b) => b - a)
   }
-  </script>
-  
-  <style lang="scss" scoped>
-    .v-btn.value {
-      min-width: 44px;
-      padding: 0px;
-    }
-  </style>
+
+  get valuesUp (): number[] {
+    return [...this.values]
+      .sort((a, b) => a - b)
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  .v-btn.value {
+    min-width: 44px;
+    padding: 0px;
+  }
+</style>

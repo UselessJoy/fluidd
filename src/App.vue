@@ -14,7 +14,6 @@
       class="background-logo"
     />
 
-
     <app-bar
       @toolsdrawer="handleToolsDrawerChange"
       @navdrawer="handleNavDrawerChange"
@@ -28,29 +27,28 @@
       :timeout="flashMessageState.timeout"
     />
     <auto-close-confirm
-    v-if="autoOff"
-    v-model="autoOff"
-    :title = "$tc('app.general.label.power')"
-    :color = "'card-heading'"
-    :message = "$tc(`app.general.simple_form.msg.power_off`)"
-    :icon="'$warning'"
-    :buttons="autooffConfirmButtons"
-    @result="onResultAutoOff"
+      v-if="autoOff"
+      v-model="autoOff"
+      :title="$tc('app.general.label.power')"
+      :color="'card-heading'"
+      :message="$tc(`app.general.simple_form.msg.power_off`)"
+      :icon="'$warning'"
+      :buttons="autooffConfirmButtons"
+      @result="onResultAutoOff"
     />
     <auto-close-confirm
-    v-if="showInterrupt"
-    v-model="showInterrupt"
-    :title = "$tc('app.general.label.power')"
-    :color = "'card-heading'"
-    :message = "$tc(`app.general.simple_form.msg.confirm_rebuild`)"
-    :icon="'$warning'"
-    :buttons="interruptConfirmButtons"
-    @result="onResultInterrupt"
+      v-if="showInterrupt"
+      v-model="showInterrupt"
+      :title="$tc('app.general.label.power')"
+      :color="'card-heading'"
+      :message="$tc(`app.general.simple_form.msg.confirm_rebuild`)"
+      :icon="'$warning'"
+      :buttons="interruptConfirmButtons"
+      @result="onResultInterrupt"
     />
     <template v-if="hasScrewImage && showModal">
       <div class="parent_modal_div">
-        <v-card class="modal v-dialog"
-          >
+        <v-card class="modal v-dialog">
           <v-card-text class="text-center">
             <img :src="screw">
             <br>
@@ -145,7 +143,6 @@ import FilesMixin from '@/mixins/files'
 import BrowserMixin from '@/mixins/browser'
 import type { LinkPropertyHref, MetaPropertyName } from 'vue-meta'
 import { SocketActions } from './api/socketActions'
-import AutoCloseConfirm from '@/components/common/AutoCloseConfirm.vue'
 import type { KlipperMessage, FilamentWatcher } from '@/store/printer/types'
 import FileSystemDownloadDialog from '@/components/widgets/filesystem/FileSystemDownloadDialog.vue'
 import SpoolSelectionDialog from '@/components/widgets/spoolman/SpoolSelectionDialog.vue'
@@ -177,23 +174,25 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
   safety = false
   open = false
   showModal = false
-  last_state = ""
-  now_state = ""
+  last_state = ''
+  now_state = ''
   flashMessageState: FlashMessage = {
     open: false,
     text: undefined,
     type: undefined
   }
+
   interruptConfirmButtons = [
-    {type: 'yes', text:  this.$tc('app.general.btn.continue_print'), color: 'primary'}, 
-    {type: 'accept', text:  this.$tc('app.general.btn.later'), color: 'primary'}, 
-    {type: 'no', text: this.$tc('app.general.btn.delete_print'), color: 'grey'}
+    { type: 'yes', text: this.$tc('app.general.btn.continue_print'), color: 'primary' },
+    { type: 'accept', text: this.$tc('app.general.btn.later'), color: 'primary' },
+    { type: 'no', text: this.$tc('app.general.btn.delete_print'), color: 'grey' }
   ]
 
   autooffConfirmButtons = [
-    {type: 'yes', text: this.$tc('app.general.btn.off_now'), color: 'primary'}, 
-    {type: 'no', text: this.$tc('app.general.btn.no'), color: 'grey'}
+    { type: 'yes', text: this.$tc('app.general.btn.off_now'), color: 'primary' },
+    { type: 'no', text: this.$tc('app.general.btn.no'), color: 'grey' }
   ]
+
   // Our app is in a loading state when the socket isn't quite ready, or
   // our translations are loading.
   get theme (): ThemeConfig {
@@ -235,6 +234,7 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
   get loading () {
     return this.hasWait(this.$waits.onLoadLanguage)
   }
+
   get progress (): number {
     const progress = this.$store.getters['printer/getPrintProgress'] as number
     return Math.floor(progress * 100)
@@ -351,15 +351,15 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
   }
 
   /*      NEW      */
-  get autoOff(): boolean {
+  get autoOff (): boolean {
     return this.$store.getters['printer/getAutoOff']
   }
 
-  get showInterrupt(): boolean {
+  get showInterrupt (): boolean {
     return this.$store.getters['printer/getShowInterrupt']
   }
 
-  get hasScrewImage(): boolean {
+  get hasScrewImage (): boolean {
     return this.$store.getters['printer/getIsScrewImage']
   }
 
@@ -367,69 +367,66 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
     return this.$store.getters['config/getScrewImage']('screw_image', ['.png', '.jpg', '.jpeg'])
   }
 
-  get printingPaused() {
+  get printingPaused () {
     return this.$store.getters['printer/getPrintingIsPaused']
   }
 
-  onResultAutoOff(result: string) {
-    if (result == "yes"){
+  onResultAutoOff (result: string) {
+    if (result === 'yes') {
       SocketActions.machineShutdown()
-    }
-    else{
+    } else {
       SocketActions.offAutoOff()
     }
   }
 
-  onResultInterrupt(result: string) {
-    if (result == "yes"){
+  onResultInterrupt (result: string) {
+    if (result === 'yes') {
       this.addConsoleEntry(this.$tc('app.console.restart_gcode'))
       SocketActions.printerPrintRebuild()
-    }
-    else if (result == "accept"){
-      this.sendGcode("SDCARD_PASS_FILE")
-    }
-    else {
+    } else if (result === 'accept') {
+      this.sendGcode('SDCARD_PASS_FILE')
+    } else {
       this.addConsoleEntry(this.$tc('app.console.interrupt_gcode'))
       SocketActions.deleteInterruptedFile()
     }
   }
 
-  get klipperMessage(): KlipperMessage {
+  get klipperMessage (): KlipperMessage {
     return this.$store.getters['printer/getKlipperMessage']
   }
 
-  @Watch('klipperMessage', {deep: true})
+  @Watch('klipperMessage', { deep: true })
   async onOpenMessage (value: KlipperMessage) {
-    if (value.last_message_eventtime == .0 || !value.is_open) {
+    if (value.last_message_eventtime === 0.0 || !value.is_open) {
       return
     }
-    if (!this.filamentWatcher.show_message)
-      EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: this.klipperMessage?.timeout || 5000})
+    if (!this.filamentWatcher.show_message) { EventBus.$emit(this.klipperMessage.message, { type: this.klipperMessage.message_type, timeout: this.klipperMessage?.timeout || 5000 }) }
   }
 
-  get filamentWatcher(): FilamentWatcher {
+  get filamentWatcher (): FilamentWatcher {
     return this.$store.getters['printer/getFilamentWathcer']
   }
 
-  @Watch('filamentWatcher', {deep: true})
-  async onCameraFanChange(fw: FilamentWatcher) {
-      if (fw.show_message)
-        EventBus.$emit(this.$tc('app.general.msg.pla_printing'), {type: 'warning', timeout: -1})
-      else
-        this.flashMessageState.open = false
+  @Watch('filamentWatcher', { deep: true })
+  async onCameraFanChange (fw: FilamentWatcher) {
+    if (fw.show_message) {
+      EventBus.$emit(this.$tc('app.general.msg.pla_printing'), { type: 'warning', timeout: -1 })
+    } else {
+      this.flashMessageState.open = false
+    }
   }
 
   @Watch('hasScrewImage')
-   async onScrewImage (value: boolean) {
-     if (!value) {
-       return
-     }
-     const url = await this.createFileUrlWithToken(this.screwImage, 'config')
-     this.screw = url
-     this.showModal = true
-   }
+  async onScrewImage (value: boolean) {
+    if (!value) {
+      return
+    }
+    const url = await this.createFileUrlWithToken(this.screwImage, 'config')
+    this.screw = url
+    this.showModal = true
+  }
 
-  async closeModal() {
+  async closeModal () {
     this.showModal = false
   }
   /*    END NEW    */
@@ -551,7 +548,6 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
       }
     }
   }
-
 }
 
 </script>

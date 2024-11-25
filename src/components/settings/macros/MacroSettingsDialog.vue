@@ -56,20 +56,6 @@
       </app-setting>
 
       <v-divider />
-
-      <!-- <app-setting
-          title="Assign to"
-        >
-          <v-select
-            :items="['Console', 'Tool', 'Bed mesh controls']"
-            v-model="assign"
-            clearable
-            hide-details
-            dense
-            filled
-          ></v-select>
-        </app-setting>
-        <v-divider /> -->
       <app-setting
         :title="$t('app.general.label.disabled_while_printing')"
       >
@@ -87,7 +73,7 @@
         :title="$t('app.general.label.visible')"
       >
         <v-switch
-          v-model="newMacro.visible"
+          v-model="newMacro.visible_new"
           class="mt-0 pt-0"
           color="primary"
           hide-details

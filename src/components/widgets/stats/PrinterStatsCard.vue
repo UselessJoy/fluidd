@@ -24,7 +24,9 @@
     <v-card-text>
       <div class="mb-4">
         <v-layout justify-space-between>
-          <div class="grey--text text--darken-2">{{ isEqualUsage ? $t('app.file_system.label.disk_internal_usage') : $t('app.file_system.label.disk_gcode_usage') }}</div>
+          <div class="grey--text text--darken-2">
+            {{ isEqualUsage ? $t('app.file_system.label.disk_internal_usage') : $t('app.file_system.label.disk_gcode_usage') }}
+          </div>
         </v-layout>
         <v-progress-linear
           :size="90"
@@ -32,8 +34,7 @@
           :value="fileSystemGcodesUsedPercent"
           color="primary"
           class="my-1"
-        >
-        </v-progress-linear>
+        />
         <v-layout justify-space-between>
           <div class="grey--text">
             <span class="focus--text">
@@ -99,10 +100,10 @@
               {{ $filters.formatCounterSeconds(rollup.total_print_time) }}
             </div>
             <div class="secondary--text">
-              {{ $t('app.general.label.total_print_time_avg') }}
+              {{ $t('app.calendar.total_print_time_for') }} {{ $t(`app.calendar.last.${key}`, {count: jobs.length}) }}
             </div>
             <div class="focus--text">
-              {{ $filters.formatCounterSeconds(rollup.print_avg) }}
+              {{ $filters.formatCounterSeconds(jobsTime) }}
             </div>
           </v-card>
         </v-col>
@@ -118,10 +119,10 @@
               {{ $filters.getReadableLengthString(rollup.total_filament_used) }}
             </div>
             <div class="secondary--text">
-              {{ $t('app.general.label.total_filament_avg') }}
+              {{ $t('app.calendar.total_filament_for') }} {{ $t(`app.calendar.last.${key}`, {count: jobs.length}) }}
             </div>
             <div class="focus--text">
-              {{ $filters.getReadableLengthString(rollup.filament_avg) }}
+              {{ $filters.getReadableLengthString(jobsFilamentUsed) }}
             </div>
           </v-card>
         </v-col>
@@ -131,10 +132,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import JobHistory from '@/components/widgets/history/JobHistory.vue'
 import { SocketActions } from '@/api/socketActions'
 import type { DiskUsage } from '@/store/files/types'
+import type { HistoryItem } from '@/store/history/types'
 
 @Component({
   components: {
@@ -160,14 +162,48 @@ export default class PrinterStatsCard extends Vue {
   // get fileSystemUsage (): DiskUsage {
   //   return this.$store.getters['files/getUsage']
   // }
-  
+
+  get key (): string {
+    let key = ''
+    switch (this.jobs.length) {
+      case 1:
+        key = 'one'
+        break
+      case 2:
+      case 3:
+      case 4:
+        key = 'few'
+        break
+      default:
+        key = 'other'
+    }
+    return key
+  }
+
+  get jobs (): HistoryItem[] {
+    return this.$store.getters['history/getHistory']
+  }
+
+  jobsFilamentUsed = 0
+  jobsTime = 0
+
+  @Watch('jobs', { deep: true })
+  onChangeHistory (jobs: HistoryItem[]) {
+    this.jobsFilamentUsed = 0
+    this.jobsTime = 0
+    for (const job of jobs) {
+      this.jobsFilamentUsed += job.filament_used
+      this.jobsTime += job.total_duration
+    }
+  }
+
   get fileSystemGcodesUsedPercent () {
     const total = this.fileSystemGcodeUsage.total
     const used = this.fileSystemGcodeUsage.used
     return Math.floor((used / total) * 100).toFixed()
   }
 
-  get isEqualUsage(): boolean {
+  get isEqualUsage (): boolean {
     return this.fileSystemGcodeUsage.total === this.fileSystemConfiglUsage.total
   }
 
@@ -175,10 +211,10 @@ export default class PrinterStatsCard extends Vue {
     return this.$store.getters['files/getGcodesUsage']
   }
 
-  get fileSystemConfiglUsage(): DiskUsage {
+  get fileSystemConfiglUsage (): DiskUsage {
     return this.$store.getters['files/getConfigUsage']
   }
-  
+
   get supportsHistoryComponent () {
     return this.$store.getters['server/componentSupport']('history')
   }
@@ -186,17 +222,22 @@ export default class PrinterStatsCard extends Vue {
   async handleResetStats () {
     const result = await this.$confirm(
       this.$tc('app.history.msg.confirm_stats'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
     if (result) {
       SocketActions.serverHistoryResetTotals()
     }
   }
 
-  mounted() {
-   SocketActions.serverGetRootUsage('gcodes')
-   SocketActions.serverGetRootUsage('config')
+  mounted () {
+    SocketActions.serverGetRootUsage('gcodes')
+    SocketActions.serverGetRootUsage('config')
   }
 }
 </script>

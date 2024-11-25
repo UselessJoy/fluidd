@@ -23,28 +23,6 @@
     </template>
     <span><slot /></span>
   </v-tooltip>
-
-  <!-- <v-tooltip right :disabled="isMobileViewport">
-    <template v-slot:activator="{ attrs, on }">
-      <router-link
-        :to="to"
-        :exact="exact"
-        custom
-        v-slot="{ navigate, isActive }"
-      >
-        <button
-          v-bind="attrs"
-          v-on="on"
-          v-ripple
-          @click="navigate"
-          :class="{ 'active': isActive }"
-        >
-          <v-icon>{{ icon }}</v-icon>
-        </button>
-      </router-link>
-    </template>
-    <slot></slot>
-  </v-tooltip> -->
 </template>
 
 <script lang="ts">
@@ -66,7 +44,6 @@ export default class AppNavItem extends Mixins(StateMixin, BrowserMixin) {
 
   @Prop({ type: String })
   readonly icon?: string
-
 }
 
 </script>

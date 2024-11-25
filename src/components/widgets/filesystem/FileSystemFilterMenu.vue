@@ -93,7 +93,7 @@ export default class FileSystemFilterMenu extends Vue {
     if (rootFilterTypes.includes('print_start_time') && this.supportsHistoryComponent) {
       filters.push({
         type: 'print_start_time',
-        text: this.$tc('app.file_system.filters.label.print_start_time'),
+        text: this.$tc('app.file_system.filters.label.print_start_time')
         // desc: this.$tc('app.file_system.filters.label.print_start_time_desc')
       })
     }
@@ -134,7 +134,6 @@ export default class FileSystemFilterMenu extends Vue {
         text: this.$tc('app.file_system.filters.label.crowsnest_backup_files')
       })
     }
-    
     return filters
   }
 

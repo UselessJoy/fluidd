@@ -13,7 +13,6 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class AppBtn extends Vue {
-
   get classes () {
     // Only apply the text change if this isn't;
     // - an icon, fab, outlined or text button and

@@ -141,7 +141,7 @@ export default class Retract extends Mixins(StateMixin, BrowserMixin) {
   get defaults () {
     return this.$store.getters['printer/getPrinterSettings']('firmware_retraction') || {}
   }
-  
+
   setRetractLength (val: number) {
     this.sendGcode(`SET_RETRACTION RETRACT_LENGTH=${val}`, this.$waits.onSetRetractLength)
   }

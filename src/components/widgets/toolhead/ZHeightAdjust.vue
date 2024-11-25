@@ -143,7 +143,6 @@ import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import type { GcodeCommands } from '@/store/printer/types'
 
-
 @Component({})
 export default class ZHeightAdjust extends Mixins(StateMixin) {
   moveDistanceValue: number | null = null

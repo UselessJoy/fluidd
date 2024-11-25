@@ -69,7 +69,7 @@ export const mutations: MutationTree<ConsoleState> = {
   setPromptDialogOpen (state, payload: boolean) {
     state.promptDialog.open = payload
   },
-  
+
   /**
    * Defines the list of available commands
    */

@@ -1,5 +1,5 @@
 import type { GetterTree } from 'vuex'
-import type { MeshState, KlipperMesh, AppMeshes, MeshProfiles } from './types'
+import type { MeshState, KlipperMesh, AppMeshes } from './types'
 import type { RootState } from '../types'
 import { transformMesh } from '@/util/transform-mesh'
 
@@ -15,26 +15,25 @@ export const getters: GetterTree<MeshState, RootState> = {
   /**
    * Returns all available bed meshes, including those only in memory / currently loaded.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getBedMeshes: (state, getters, rootState, rootGetters): KlipperMesh[] => {
     const meshes: KlipperMesh[] = []
     const klipperMeshes = rootState.printer.printer.bed_mesh
-    if (!klipperMeshes.profiles || !klipperMeshes.unsaved_profiles || !klipperMeshes)
+    if (!klipperMeshes.profiles || !klipperMeshes.unsaved_profiles || !klipperMeshes) {
       return meshes
-    const profiles:string[] =  Object.keys(klipperMeshes.profiles)
+    }
+    const profiles:string[] = Object.keys(klipperMeshes.profiles)
     const unsaved_profiles:string[] = klipperMeshes.unsaved_profiles
     // alert(klipperMeshes.unsaved_profiles)
     const currentProfile = rootState.printer.printer.bed_mesh.profile_name || ''
-    for (const profile of profiles)
-    {
-      if (currentProfile === profile)
-      {
-          meshes.push({
-            ...rootState.printer.printer.bed_mesh,
-            active: true,
-            unsaved: unsaved_profiles.includes(profile)
-          })
-      }
-      else {
+    for (const profile of profiles) {
+      if (currentProfile === profile) {
+        meshes.push({
+          ...rootState.printer.printer.bed_mesh,
+          active: true,
+          unsaved: unsaved_profiles.includes(profile)
+        })
+      } else {
         meshes.push({
           profile_name: profile,
           active: false,

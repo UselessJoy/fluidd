@@ -76,7 +76,6 @@ import type { ToolheadControlStyle } from '@/store/config/types'
   }
 })
 export default class Toolhead extends Mixins(StateMixin, ToolheadMixin) {
-  
   get showPressureAdvance (): boolean {
     return this.activeExtruder?.pressure_advance !== undefined
   }

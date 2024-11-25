@@ -17,14 +17,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Globals } from '@/globals'
-import { EventBus } from '@/eventBus'
 import type { ConsoleEntry, GcodeHelp } from '@/store/console/types'
 
 @Component({})
 export default class ConsoleItem extends Vue {
   @Prop({ type: Object, default: () => {} })
   readonly value!: ConsoleEntry
-  type = ""
+
+  type = ''
   get knownCommands () {
     return this.$store.getters['console/getAllKnownCommands'] as GcodeHelp
   }
@@ -37,7 +37,7 @@ export default class ConsoleItem extends Vue {
         return match
       })
     }
-    message = message.replace(/\(error\)|\(warning\)|\(suggestion\)|\(success\)|!!|\/\//gm, "")
+    message = message.replace(/\(error\)|\(warning\)|\(suggestion\)|\(success\)|!!|\/\//gm, '')
     return (this.value.type === 'command')
       ? `${Globals.CONSOLE_SEND_PREFIX}<a class="primary--text text--lighten-1">${message}</a>`
       : message
@@ -62,15 +62,15 @@ export default class ConsoleItem extends Vue {
     }
     if (this.value.message.startsWith('(warning)')) {
       // EventBus.$emit(this.value.message.replace(/\(warning\)/gm, ""), {type: 'warning', timeout: 5000})
-      return {'warning--text': true}
+      return { 'warning--text': true }
     }
     if (this.value.message.startsWith('(success)')) {
       // EventBus.$emit(this.value.message.replace(/\(success\)/gm, ""), {type: 'success', timeout: 5000})
-      return {'success--text': true}
+      return { 'success--text': true }
     }
     if (this.value.message.startsWith('(suggestion)')) {
       // EventBus.$emit(this.value.message.replace(/\(suggestion\)/gm, ""), {type: 'accent', timeout: 5000})
-      return {'accent--text': true}
+      return { 'accent--text': true }
     }
     return { 'secondary--text': true }
   }

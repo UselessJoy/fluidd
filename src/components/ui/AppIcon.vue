@@ -12,15 +12,13 @@ import type { ThemeConfig } from '@/store/config/types'
 
 @Component({})
 export default class AppIcon extends Vue {
-
   get theme (): ThemeConfig {
     return this.$store.state.config.uiSettings.theme as ThemeConfig
   }
-  
+
   get logoSrc () {
     return `${import.meta.env.BASE_URL}${this.theme.logo.src}`
   }
-
 }
 </script>
 

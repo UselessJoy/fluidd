@@ -8,8 +8,15 @@
       cols="12"
       md="8"
     >
-      <bed-mesh-card fullscreen class="mb-2"/>
-      <ShaperCard v-if="supportResonanceTester" fullscreen class="mb-2"/>
+      <bed-mesh-card
+        fullscreen
+        class="mb-2"
+      />
+      <ShaperCard
+        v-if="supportResonanceTester"
+        fullscreen
+        class="mb-2"
+      />
     </v-col>
     <v-col
       cols="12"
@@ -39,7 +46,6 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
-
 import BedMeshCard from '@/components/widgets/bedmesh/BedMeshCard.vue'
 import BedMeshControls from '@/components/widgets/bedmesh/BedMeshControls.vue'
 import EndStopsCard from '@/components/widgets/endstops/EndStopsCard.vue'

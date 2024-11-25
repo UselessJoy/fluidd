@@ -123,14 +123,14 @@ export const getters: GetterTree<FilesState, RootState> = {
       //     canConfigure: false,
       //     filterTypes: ['hidden_files']
       //   }
-      case 'docs':
-        return {
-          readonly: true,
-          accepts: [],
-          canView,
-          canConfigure: false,
-          filterTypes: ['hidden_files']
-        }
+      // case 'docs':
+      //   return {
+      //     readonly: true,
+      //     accepts: [],
+      //     canView,
+      //     canConfigure: false,
+      //     filterTypes: ['hidden_files']
+      //   }
       case 'logs':
         return {
           readonly: false,

@@ -272,7 +272,7 @@ declare module 'vue/types/vue' {
   }
 }
 
-interface SocketPluginOptions  {
+interface SocketPluginOptions {
   url: string;
   token?: string;
   reconnectEnabled?: boolean;

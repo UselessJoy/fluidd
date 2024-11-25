@@ -1,24 +1,24 @@
 <template>
-    <v-form
-      ref="form"
-      @submit.prevent="handleSubmit"
+  <v-form
+    ref="form"
+    @submit.prevent="handleSubmit"
+  >
+    <v-text-field
+      v-bind="$attrs"
+      v-model="currentValue"
+      v-on="filteredListeners"
+      @focus="handleFocus"
+      @blur="handleBlur"
     >
-      <v-text-field
-        v-bind="$attrs"
-        v-model="currentValue"
-        v-on="filteredListeners"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      >
-        <slot
-          v-for="slot in Object.keys($slots)"
-          :slot="slot"
-          :name="slot"
-        />
-      </v-text-field>
-    </v-form>
-  </template>
-  
+      <slot
+        v-for="slot in Object.keys($slots)"
+        :slot="slot"
+        :name="slot"
+      />
+    </v-text-field>
+  </v-form>
+</template>
+
 <script lang="ts">
 import type { VForm } from '@/types'
 import { Component, Vue, VModel, Watch, Ref } from 'vue-property-decorator'
@@ -53,7 +53,7 @@ export default class AppTextField extends Vue {
   }
 
   handleFocus (event: FocusEvent) {
-  this.hasFocus = true
+    this.hasFocus = true
     if (event.target instanceof HTMLInputElement) {
       event.target.select()
       this.$emit('focus', event)

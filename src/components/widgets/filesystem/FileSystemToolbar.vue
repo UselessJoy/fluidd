@@ -143,9 +143,9 @@
           :key="index"
           @change="$emit('root-change', root)"
         >
-        <span>
-          {{ $t('app.filesystem.'+root) }}
-        </span>
+          <span>
+            {{ $t('app.filesystem.'+root) }}
+          </span>
         </v-tab>
       </v-tabs>
     </template>
@@ -236,7 +236,7 @@ export default class FileSystemToolbar extends Mixins(StatesMixin) {
     this.$emit('upload', files, print)
   }
 
-  hasMediaFiles() {
+  hasMediaFiles () {
     return SocketActions.serverHasMedia()
   }
 }

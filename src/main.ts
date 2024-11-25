@@ -31,6 +31,7 @@ import { HttpClientPlugin } from './plugins/httpClient'
 import { FiltersPlugin } from './plugins/filters'
 import { SocketPlugin } from './plugins/socketClient'
 import { ColorSetPlugin } from './plugins/colorSet'
+import VDatePicker from 'v-calendar'
 // Main App component
 import App from './App.vue'
 
@@ -54,6 +55,10 @@ Vue.use(VuetifyConfirm, {
 Vue.use(InlineSvgPlugin)
 Vue.use(Vue2TouchEvents)
 
+// Use v-calendar & v-date-picker components
+Vue.use(VDatePicker, {
+  componentPrefix: 'vc'// Use <vc-calendar /> instead of <v-calendar />
+})
 Vue.use(HttpClientPlugin, {
   store
 })

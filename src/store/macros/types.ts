@@ -8,6 +8,7 @@ export interface Macro {
   name: string;
   alias?: string;
   visible: boolean;
+  visible_new: boolean;
   categoryId?: string;
   category?: MacroCategory;
   assignTo?: string;

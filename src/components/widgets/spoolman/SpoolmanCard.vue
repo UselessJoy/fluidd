@@ -15,7 +15,7 @@
       >
         {{ $t('app.spoolman.label.change_spool') }}
       </app-btn>
-      
+
       <v-menu
         v-else
         bottom
@@ -194,7 +194,7 @@
             size="55px"
           >
             $warning
-        </v-icon>
+          </v-icon>
         </v-col>
       </v-row>
     </v-card-text>
@@ -247,6 +247,5 @@ export default class SpoolmanCard extends Mixins(StateMixin) {
   getSpoolColor (spool?: Spool) {
     return `#${spool?.filament.color_hex ?? (this.$vuetify.theme.dark ? 'fff' : '000')}`
   }
-
 }
 </script>

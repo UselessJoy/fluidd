@@ -4,8 +4,6 @@ import { Component } from 'vue-property-decorator'
 
 @Component
 export default class StateMixin extends Vue {
-
-
   get authenticated (): boolean {
     return this.$store.getters['auth/getAuthenticated'] as boolean
   }
@@ -37,7 +35,7 @@ export default class StateMixin extends Vue {
   get klippyState (): string {
     return this.$store.getters['printer/getKlippyState'] as string
   }
-  
+
   get klippyStateMessage (): string {
     return this.$store.getters['printer/getKlippyStateMessage'] as string
   }
@@ -46,6 +44,7 @@ export default class StateMixin extends Vue {
   get printerState (): string {
     return this.$store.getters['printer/getPrinterState'] as string
   }
+
   // Returns a boolean indicating if the printer is busy.
   get printerBusy (): boolean {
     return (this.printerState.toLowerCase() === 'paused') as boolean
@@ -95,11 +94,11 @@ export default class StateMixin extends Vue {
   /**
    * Send a gcode script.
    */
-  get heaterWaiting() {
+  get heaterWaiting () {
     return this.$store.getters['printer/getHeatersIsWaiting']
   }
 
-  get asyncCommands() {
+  get asyncCommands () {
     return this.$store.getters['printer/getAsyncCommands']
   }
 
@@ -110,9 +109,8 @@ export default class StateMixin extends Vue {
         return SocketActions.printerAsyncCommand(gcode, wait)
       }
     }
-    if (this.heaterWaiting)
-    {
-      SocketActions.printerOpenMessage("warning","on_wait_temperature")
+    if (this.heaterWaiting) {
+      SocketActions.printerOpenMessage('warning', 'on_wait_temperature')
     }
     SocketActions.printerGcodeScript(gcode, wait)
     this.addConsoleEntry(gcode)
@@ -128,8 +126,13 @@ export default class StateMixin extends Vue {
       !confirmOnEstop ||
       await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_emergency_stop'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+        {
+          title: this.$tc('app.general.label.confirm'),
+          color: 'card-heading',
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
+        }
       )
     )
     if (result) {

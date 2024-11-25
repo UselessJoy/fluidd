@@ -204,7 +204,7 @@ export const SocketActions = {
       'machine.timelapse.delete_frames', {})
   },
 
-  async machineTimelapseSaveFrames ( wait?: string) {
+  async machineTimelapseSaveFrames (wait?: string) {
     baseEmit(
       'machine.timelapse.saveframes', {
         wait
@@ -270,7 +270,7 @@ export const SocketActions = {
     )
   },
 
-  async printerObjectsQuery(objects: {[key: string]: null}) {
+  async printerObjectsQuery (objects: {[key: string]: null}) {
     baseEmit(
       'printer.objects.query', {
         dispatch: 'printer/onPrinterObjectsQuery',
@@ -303,10 +303,10 @@ export const SocketActions = {
       dispatch: 'printer/onGetIsScrewImage',
       wait: Waits.onGetIsScrewImage
     }
-   )
+    )
   },
 
-  async setAutoOff (value: boolean, wait?: string) {
+  async setAutoOff (value: boolean) {
     baseEmit(
       'printer.setautooff', {
         dispatch: 'void',
@@ -351,7 +351,9 @@ export const SocketActions = {
       'printer.setQuiteMode', {
         dispatch: 'void',
         params: {
+          // eslint-disable-next-line object-shorthand
           stepper: stepper,
+          // eslint-disable-next-line object-shorthand
           quite_mode: quite_mode
         }
       }
@@ -363,6 +365,7 @@ export const SocketActions = {
       'printer.setActiveTension', {
         dispatch: 'void',
         params: {
+          // eslint-disable-next-line object-shorthand
           tension: tension
         },
         wait: Waits.onSetTension
@@ -392,24 +395,6 @@ export const SocketActions = {
     )
   },
 
-  async getWifiMode () {
-    baseEmit('printer.getwifimode', {
-      dispatch: 'printer/onGetWifiMode',
-      wait: Waits.onGetWifiMode
-    }
-   )
-  },
-  async changeWifiMode (wifi_mode: string) {
-    baseEmit(
-      'printer.setwifimode', {
-        dispatch: 'void',
-        params: {
-          wifi_mode: wifi_mode
-        }
-      }
-    )
-  },
-
   async turnOffHeaters () {
     baseEmit(
       'printer.turn_off_heaters', {
@@ -425,7 +410,9 @@ export const SocketActions = {
       'printer.resonance_tester.action', {
         dispatch: 'void',
         params: {
+          // eslint-disable-next-line object-shorthand
           action: action,
+          // eslint-disable-next-line object-shorthand
           args: args
         }
       }
@@ -479,13 +466,13 @@ export const SocketActions = {
     )
   },
 
-  async printerOpenMessage(message_type: string, message: string) {
+  async printerOpenMessage (msg_type: string, msg: string) {
     baseEmit(
       'printer.open_message', {
         dispatch: 'void',
         params: {
-          message_type: message_type,
-          message: message
+          message_type: msg_type,
+          message: msg
         }
       }
     )
@@ -753,7 +740,7 @@ export const SocketActions = {
     baseEmit(
       'server.files.metascan', {
         dispatch: 'files/onFileMetaData',
-        params: { filename: filepath}
+        params: { filename: filepath }
       }
     )
   },
@@ -781,7 +768,8 @@ export const SocketActions = {
       {
         dispatch: 'files/onServerGetRootUsage',
         wait,
-        params: {root: root}
+        // eslint-disable-next-line object-shorthand
+        params: { root: root }
       }
     )
   },
@@ -932,7 +920,7 @@ export const SocketActions = {
       }
     )
   },
-  
+
   async serverWebcamsWrite (webcam: WebcamConfig) {
     baseEmit(
       'server.webcams.post_item', {
@@ -950,13 +938,13 @@ export const SocketActions = {
       }
     )
   },
-  
+
   async serverSensorsList () {
     baseEmit(
       'server.sensors.list', {
         dispatch: 'sensors/onSensorsList'
       }
-    )  
+    )
   },
 
   async serverSpoolmanGetSpoolId () {

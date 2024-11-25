@@ -100,6 +100,7 @@ export default class SystemControl extends Mixins(StateMixin, FilesMixin, Servic
   getKlippyLog () {
     this.downloadFile('klippy.log', '')
   }
+
   getMoonrakerLog () {
     this.downloadFile('moonraker.log', '')
   }

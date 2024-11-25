@@ -6,7 +6,7 @@
     :class="{ 'no-pointer-events': dragState.overlay }"
     flat
   >
-  <!-- Эффект уже реализован в app.vue + здесь из-за него багует + есть блокирующие окна скачивания -->
+    <!-- Эффект уже реализован в app.vue + здесь из-за него багует + есть блокирующие окна скачивания -->
     <!-- @dragover="handleDragOver"
     @dragenter.self.prevent="handleDragEnter"
     @dragleave.self.prevent="handleDragLeave"
@@ -258,6 +258,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       URL.revokeObjectURL(this.filePreviewState.src)
     }
   }
+
   // Gets available roots.
   get availableRoots (): string[] {
     const roots = !Array.isArray(this.roots)
@@ -271,17 +272,17 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
     }
     return roots
   }
-  
+
   // Properties of the current root.
-  get rootProperties (): RootProperties  {
+  get rootProperties (): RootProperties {
     return this.$store.getters['files/getRootProperties'](this.currentRoot) as RootProperties
   }
-  
+
   // If this root is available or not.
   get disabled () {
     return !this.$store.getters['files/isRootAvailable'](this.currentRoot)
   }
-  
+
   @Watch('disabled')
   onDisabledChange (val: boolean) {
     // We know this always fires on mount, so we rely on it for our initial
@@ -290,7 +291,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       this.loadFiles(this.currentPath)
     }
   }
-  
+
   // The available headers, based on the current root and system configuration.
   get headers (): AppTableHeader[] {
     // Base headers. All roots have these.
@@ -328,8 +329,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
           configurable: true
         }
       ]
-    }
-    else if (this.currentRoot === 'media') {
+    } else if (this.currentRoot === 'media') {
       headers = [
         ...headers,
         { text: this.$t('app.general.table.header.height'), value: 'object_height', configurable: true },
@@ -345,7 +345,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
         { text: this.$t('app.general.table.header.estimated_time'), value: 'estimated_time', configurable: true },
         { text: this.$t('app.general.table.header.first_layer_bed_temp'), value: 'first_layer_bed_temp', configurable: true },
         { text: this.$t('app.general.table.header.first_layer_extr_temp'), value: 'first_layer_extr_temp', configurable: true },
-        { text: this.$t('app.general.table.header.chamber_temp'), value: 'chamber_temp', configurable: true },
+        { text: this.$t('app.general.table.header.chamber_temp'), value: 'chamber_temp', configurable: true }
       ]
     }
     // Final headers. All roots have these.
@@ -427,8 +427,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
             }
             break
           case 'gcodes_files':
-            if (file.type === 'file' && !this.rootProperties.accepts.includes("."+file.extension))
-            {
+            if (file.type === 'file' && !this.rootProperties.accepts.includes('.' + file.extension)) {
               return false
             }
             break
@@ -563,8 +562,8 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
     if (this.disabled) return
     const [title, label] = item.type === 'file'
       ? [this.$t('app.file_system.title.rename_file'), this.$t('app.file_system.label.file_name')]
-      : [this.$t('app.file_system.title.rename_dir'), this.$t('app.file_system.label.dir_name')]   
-      this.fileNameDialogState = {
+      : [this.$t('app.file_system.title.rename_dir'), this.$t('app.file_system.label.dir_name')]
+    this.fileNameDialogState = {
       open: true,
       title,
       label,
@@ -613,7 +612,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
     if (this.disabled) return
     this.goToFileDialogOpen = true
   }
-  
+
   handleFileOpenDialog (file: AppFile, mode: 'edit' | 'view' | undefined = undefined) {
     const viewOnly = mode
       ? mode === 'view'
@@ -656,6 +655,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       .finally(() => this.$store.dispatch('files/removeFileDownload'))
       .catch(e => e)
   }
+
   async handlePreviewGcode (file: AppFile | AppFileWithMeta) {
     this.getGcode(file)
       .then(response => response?.data)
@@ -693,6 +693,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       }
     }
   }
+
   /**
    * ===========================================================================
    * Core file handling.
@@ -736,6 +737,7 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       }
     }
   }
+
   handleMove (source: FileBrowserEntry | FileBrowserEntry[], destination: AppDirectory) {
     let destinationPath = `${this.currentPath}/${destination.dirname}`
     if (destination.dirname === '..') {
@@ -766,7 +768,6 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       dataTransfer.setData('text/plain', url)
       dataTransfer.setData('text/uri-list', url)
     }
-
 
     setFileDataTransferDataInDataTransfer(dataTransfer, 'files', {
       path: this.currentPath,
@@ -804,8 +805,13 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       : [file]
     const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_delete', items.length),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error',
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
     if (result) {
       this.filePreviewState.open = false
@@ -948,7 +954,6 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
       }
     }
   }
-
 }
 
 </script>

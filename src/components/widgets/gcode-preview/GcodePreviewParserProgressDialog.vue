@@ -10,7 +10,7 @@
     right
     :vertical="$vuetify.breakpoint.smAndDown"
   >
-  <template v-if="file">
+    <template v-if="file">
       <div class="mb-2">
         {{ $t('app.gcode.label.parsing_file') }}: {{ file.filename }}
       </div>

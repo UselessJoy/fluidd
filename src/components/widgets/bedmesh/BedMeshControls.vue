@@ -36,7 +36,7 @@
           :key="item.profile_name"
         >
           <td class="">
-            {{ item.profile_name.search(/^profile_\d+$/) !== -1 ? $t('app.bedmesh.default', {i: item.profile_name.split('_')[1]}) : item.profile_name}}
+            {{ item.profile_name.search(/^profile_\d+$/) !== -1 ? $t('app.bedmesh.default', {i: item.profile_name.split('_')[1]}) : item.profile_name }}
           </td>
           <td>
             <v-chip
@@ -120,7 +120,6 @@
               </template>
               <span>{{ $t('app.bedmesh.tooltip.delete') }}</span>
             </v-tooltip>
-
           </td>
         </tr>
       </tbody>
@@ -136,7 +135,12 @@
         {{ $t('app.bedmesh.msg.not_found') }}
       </div>
       <v-row>
-        <v-col xs="12" sm="6" md="6" lg="6">
+        <v-col
+          xs="12"
+          sm="6"
+          md="6"
+          lg="6"
+        >
           <app-btn
             :disabled="!meshLoaded || printerPrinting || printerBusy"
             block
@@ -146,7 +150,12 @@
             {{ $t('app.general.btn.clear_profile') }}
           </app-btn>
         </v-col>
-        <v-col xs="12" sm="6" md="6" lg="6">
+        <v-col
+          xs="12"
+          sm="6"
+          md="6"
+          lg="6"
+        >
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <app-btn
@@ -290,7 +299,7 @@ export default class BedMesh extends Mixins(StateMixin, ToolheadMixin) {
 
   saveDialogState = {
     open: false,
-    profile: ""
+    profile: ''
   }
 
   get matrix () {
@@ -387,23 +396,23 @@ export default class BedMesh extends Mixins(StateMixin, ToolheadMixin) {
   handleMeshCalibrate (config: {name: string; savePermanently: boolean}) {
     if (!config.savePermanently) {
       this.sendGcode(`BED_MESH_CALIBRATE PROFILE="${config.name}"`)
-    }
-    else {
+    } else {
       this.sendGcode(`BED_MESH_CALIBRATE PROFILE="${config.name}" SAVE_PERMANENTLY=TRUE`)
     }
   }
 
   handleOpenCalibrateDialog () {
-    let reserved: string[] = [];
-    let i = 0;
-    let name = "";
-    for (const prof of this.meshProfiles)
-      if (prof.startsWith("profile_"))
-        i = reserved.push(prof);
-    while (name === "")
-    {
-      name = reserved.findIndex(prof => prof === `profile_${i}`) === -1 ? `profile_${i}` : "";
-      i++;
+    const reserved: string[] = []
+    let i = 0
+    let name = ''
+    for (const prof of this.meshProfiles) {
+      if (prof.startsWith('profile_')) {
+        i = reserved.push(prof)
+      }
+    }
+    while (name === '') {
+      name = reserved.findIndex(prof => prof === `profile_${i}`) === -1 ? `profile_${i}` : ''
+      i++
     }
     this.saveDialogState = {
       open: true,

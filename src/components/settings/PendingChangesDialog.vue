@@ -37,12 +37,12 @@ export default class PendingChangesDialog extends Vue {
         } else {
           const sectionEntryNameValues = Object.entries(sectionEntries)
             .map(([entryName, entryValue]) => `${entryName}: ${entryValue}`)
-            previous.changed.push(`[${sectionName}]\n${sectionEntryNameValues.join('\n')}`)
+          previous.changed.push(`[${sectionName}]\n${sectionEntryNameValues.join('\n')}`)
         }
         return previous
       }, { changed: [], deleted: [] } as { changed: string[], deleted: string[] })
 
-      const lines = [...changed]
+    const lines = [...changed]
     if (deleted.length > 0) {
       lines.push(`# ${this.$t('app.general.msg.pending_configuration_sections_deleted')}\n${deleted.join('\n')}`)
     }

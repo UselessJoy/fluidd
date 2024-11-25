@@ -24,7 +24,7 @@
         outlined
         hide-details
         v-on="$listeners"
-        >
+      >
         <template #prepend>
           <app-btn
             v-if="resetValue !== undefined"

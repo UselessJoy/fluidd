@@ -49,14 +49,13 @@ export const mutations: MutationTree<LayoutState> = {
             ]
           }
         }
-       // diagnostics specific layout updates
-       if (layoutKey.startsWith('diagnostics')) {
-        const diagnostics = payload.layouts[layoutKey] as DiagnosticsCardContainer
-
-        for (const diagnosticsCardConfigs of Object.values(diagnostics)) {
-          for (const diagnosticsCardConfig of diagnosticsCardConfigs) {
-            for (const axis of diagnosticsCardConfig.axes) {
-              for (const metric of axis.metrics) {
+        // diagnostics specific layout updates
+        if (layoutKey.startsWith('diagnostics')) {
+          const diagnostics = payload.layouts[layoutKey] as DiagnosticsCardContainer
+          for (const diagnosticsCardConfigs of Object.values(diagnostics)) {
+            for (const diagnosticsCardConfig of diagnosticsCardConfigs) {
+              for (const axis of diagnosticsCardConfig.axes) {
+                for (const metric of axis.metrics) {
                   metric.style.fillColor = metric.style.fillColor ?? null
                 }
               }

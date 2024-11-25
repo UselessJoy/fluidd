@@ -9,7 +9,6 @@ import type { AppTableHeader } from '@/types'
 import type { FileFilterType } from '../files/types'
 import { TinyColor } from '@ctrl/tinycolor'
 
-
 export const actions: ActionTree<ConfigState, RootState> = {
   /**
    * Reset our store
@@ -163,7 +162,7 @@ export const actions: ActionTree<ConfigState, RootState> = {
     commit('setFileSystemSortDesc', payload)
     SocketActions.serverWrite(`uiSettings.fileSystem.sortDesc.${payload.root}`, state.uiSettings.fileSystem.sortDesc[payload.root])
   },
-  
+
   /**
    * Remove a temp preset
    */
@@ -181,7 +180,7 @@ export const actions: ActionTree<ConfigState, RootState> = {
       SocketActions.serverWrite(`uiSettings.tableHeaders.${payload.name}`, state.uiSettings.tableHeaders[payload.name])
     }
   },
-  
+
   async updateTheme ({ state, dispatch }, payload: Partial<ThemeConfig>) {
     const updatedTheme: ThemeConfig = {
       ...state.uiSettings.theme,
@@ -196,9 +195,9 @@ export const actions: ActionTree<ConfigState, RootState> = {
       server: true
     })
   },
-  
+
   /*      NEW      */
-  async onGetIsScrewImage({commit}, payload) {
+  async onGetIsScrewImage ({ commit }, payload) {
     commit('setIsScrewImage', payload)
   }
   /*    END NEW    */

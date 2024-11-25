@@ -110,7 +110,6 @@
           >
             {{ $t('app.general.title.settings') }}
           </app-nav-item>
-          
           <!-- Later or not needed -->
           <!-- <app-nav-item
             icon="$ref"
@@ -138,7 +137,7 @@ import BrowserMixin from '@/mixins/browser'
 @Component({})
 export default class AppNavDrawer extends Mixins(StateMixin, BrowserMixin) {
   @VModel({ type: Boolean })
-  open?: boolean
+    open?: boolean
 
   get supportsHistory () {
     return this.$store.getters['server/componentSupport']('history')
@@ -163,7 +162,6 @@ export default class AppNavDrawer extends Mixins(StateMixin, BrowserMixin) {
   get showSubNavigation () {
     return this.hasSubNavigation && this.socketConnected && this.authenticated
   }
-
 }
 </script>
 

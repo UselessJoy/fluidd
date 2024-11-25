@@ -1,7 +1,7 @@
 <template>
   <app-dialog
     v-model="open"
-    :saveButtonText="$t('app.general.btn.begin_calibrate')"
+    :save-button-text="$t('app.general.btn.begin_calibrate')"
     :title="$t('app.general.btn.calibrate')"
     max-width="450"
     @save="handleSubmit()"
@@ -13,15 +13,9 @@
         filled
         required
         class="mb-4"
-        
         hide-details="auto"
-        
         :placeholder="$t('app.bedmesh.default', {i: base_name.split('_')[1]})"
       />
-      <!-- :label="$t('app.bedmesh.label.profile_name')" -->
-      <!-- :rules="[
-          $rules.required
-        ]" -->
       <v-checkbox
         v-model="savePermanently"
         :label="$t('app.bedmesh.label.save_permanently')"
@@ -55,13 +49,11 @@ export default class SaveMeshDialog extends Mixins(StateMixin, ToolheadMixin) {
   savePermanently = false
 
   handleSubmit () {
-    if (this.name == '') {
+    if (this.name === '') {
       this.$emit('calibrate', { name: this.base_name, savePermanently: this.savePermanently })
-    }
-    else {
+    } else {
       this.$emit('calibrate', { name: this.name, savePermanently: this.savePermanently })
     }
-    
     this.open = false
   }
 }

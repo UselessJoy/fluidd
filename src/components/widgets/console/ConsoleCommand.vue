@@ -55,7 +55,7 @@ export default class ConsoleCommand extends Vue {
 
   @Prop({ type: Boolean })
   readonly disabled?: boolean
-  
+
   @Prop({ type: Boolean })
   readonly autofocus?: boolean
 
@@ -141,7 +141,6 @@ export default class ConsoleCommand extends Vue {
       }
     }
   }
-  
 }
 </script>
 

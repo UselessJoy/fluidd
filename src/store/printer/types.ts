@@ -1,4 +1,4 @@
-import type { FlashMessageTypes } from "@/types";
+import type { FlashMessageTypes } from '@/types'
 
 export interface PrinterState {
   printer: Printer;
@@ -58,7 +58,7 @@ export interface KlipperMessage {
   message: string,
   message_type: FlashMessageTypes,
   is_open: boolean,
-  timeout?: number 
+  timeout?: number
 }
 
 export interface FilamentWatcher{

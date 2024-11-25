@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import Vue from 'vue'
 import type { ActionTree } from 'vuex'
 import { consola } from 'consola'
@@ -95,10 +96,14 @@ export const actions: ActionTree<SocketState, RootState> = {
       // This is pretty bad, should get moonraker to fix this response.
       let message = ''
       try {
+        // eslint-disable-next-line no-useless-escape
         message = payload.message.replace(/'|\'/g, '\"')
         message = JSON.parse(message).message.replace("Дом", "\"Дом\"")
       } catch (e) {
         message = payload.message
+      }
+      if (message === 'File currently in use') {
+        message = i18n.tc('app.moonraker.errors.file_currently_in_use')
       }
       EventBus.$emit(message, { type: 'error' })
     }
@@ -253,5 +258,5 @@ export const actions: ActionTree<SocketState, RootState> = {
   async notifySpoolmanStatusChanged ({ dispatch }, payload) {
     dispatch('spoolman/onStatusChanged', payload.spoolman_connected, { root: true })
   }
-  
+
 }

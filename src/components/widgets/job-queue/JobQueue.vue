@@ -1,5 +1,5 @@
 <template>
-   <v-card
+  <v-card
     :class="{ 'no-pointer-events': overlay }"
     @dragover="handleDragOver"
     @dragenter.self.prevent
@@ -136,8 +136,13 @@ export default class JobQueue extends Vue {
   async handleRemoveAll () {
     const result = await this.$confirm(
       this.$tc('app.job_queue.msg.confirm'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
 
     if (result) {
@@ -156,14 +161,14 @@ export default class JobQueue extends Vue {
 
     SocketActions.serverJobQueueDeleteJobs(jobIds)
   }
-  
+
   handleMultiplyDialog (jobs: QueuedJob | QueuedJob[]) {
     this.multiplyJobDialogState = {
       open: true,
       job: jobs
     }
   }
-  
+
   handleMultiply (jobs: QueuedJob | QueuedJob[], copies: number) {
     const filenames = Array.isArray(jobs)
       ? jobs.map(job => job.filename)
@@ -173,7 +178,7 @@ export default class JobQueue extends Vue {
       .flat()
     SocketActions.serverJobQueuePostJob(multipliedFilenames)
   }
-  
+
   handleDragOver (event: DragEvent) {
     if (
       event.dataTransfer &&
@@ -202,6 +207,5 @@ export default class JobQueue extends Vue {
       SocketActions.serverJobQueuePostJob(filenames)
     }
   }
-  
 }
 </script>

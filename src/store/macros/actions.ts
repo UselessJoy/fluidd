@@ -42,10 +42,10 @@ export const actions: ActionTree<MacrosState, RootState> = {
     // Save to moonraker.
     SocketActions.serverWrite(Globals.MOONRAKER_DB.fluidd.ROOTS.macros.name + '.stored', state.stored)
   },
-  
+
   saveAllOn ({ state, commit }, macros) {
     // Commit the change...
-    commit('setUpdateAllVisible', { macros, visible: true })
+    commit('setUpdateAllVisible', { macros, visible_new: true })
 
     // Save to moonraker.
     SocketActions.serverWrite(Globals.MOONRAKER_DB.fluidd.ROOTS.macros.name + '.stored', state.stored)
@@ -53,7 +53,7 @@ export const actions: ActionTree<MacrosState, RootState> = {
 
   saveAllOff ({ state, commit }, macros) {
     // Commit the change...
-    commit('setUpdateAllVisible', { macros, visible: false })
+    commit('setUpdateAllVisible', { macros, visible_new: false })
 
     // Save to moonraker.
     SocketActions.serverWrite(Globals.MOONRAKER_DB.fluidd.ROOTS.macros.name + '.stored', state.stored)

@@ -77,7 +77,7 @@
     </div>
   </app-dialog>
 </template>
-  
+
 <script lang="ts">
 import StateMixin from '@/mixins/state'
 import type { Macro } from '@/store/macros/types'
@@ -99,43 +99,43 @@ type PrintStatsMacroVariables = {
 export default class PauseAtLayerDialog extends Mixins(StateMixin) {
   @VModel({ type: Boolean })
     open?: boolean
-    
+
   pauseNextLayer: PauseNextLayer = {
     enable: false,
     call: 'PAUSE'
   }
-  
+
   pauseAtLayer: PauseAtLayer = {
     enable: false,
     call: 'PAUSE',
     layer: 0
   }
-  
+
   get setPauseNextLayerMacro () : Macro | undefined {
     return this.$store.getters['macros/getMacroByName']('set_pause_next_layer') as Macro | undefined
   }
-  
+
   get setPauseAtLayerMacro () : Macro | undefined {
     return this.$store.getters['macros/getMacroByName']('set_pause_at_layer') as Macro | undefined
   }
-  
+
   get setPrintStatsInfoMacro () : Macro | undefined {
     return this.$store.getters['macros/getMacroByName']('set_print_stats_info') as Macro | undefined
   }
-  
+
   get printStatsMacroVariables () {
     const variables: PrintStatsMacroVariables = this.setPrintStatsInfoMacro?.variables ?? {}
     return variables
   }
-  
+
   get currentLayer () {
     return this.$store.state.printer.printer.print_stats.info?.current_layer ?? 0
   }
-  
+
   get totalLayers () {
     return this.$store.state.printer.printer.print_stats.info?.total_layer ?? 0
   }
-  
+
   sendAccept () {
     const gcodes: string[] = []
     if (this.setPauseNextLayerMacro) {
@@ -155,7 +155,7 @@ export default class PauseAtLayerDialog extends Mixins(StateMixin) {
     this.sendGcode(gcodes.join('\n'))
     this.open = false
   }
-  
+
   mounted () {
     const { pause_at_layer, pause_next_layer } = this.printStatsMacroVariables
     this.pauseNextLayer = {
@@ -167,6 +167,5 @@ export default class PauseAtLayerDialog extends Mixins(StateMixin) {
       ...pause_at_layer
     }
   }
-  
 }
 </script>

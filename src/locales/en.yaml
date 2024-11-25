@@ -145,7 +145,6 @@ app:
     pause: PAUSE
     resume: RESUME
     sdcard_reset_file: SDCARD_RESET_FILE
-    change_wifi: Change Wifi mode...
   endpoint:
     error:
       cant_connect: >-
@@ -482,7 +481,6 @@ app:
         invalid_aspect: Invalid Aspect Ratio
       msg:
         confirm: Are you sure?
-        confirm_change_wifi_mode: Are you sure you want to change wi-fi node? Connection can be lost
         confirm_rebuild: Printing was interrupted. Continue print?
         confirm_cancel_print: Are you sure you want to cancel the current print?
         confirm_clear_mesh: The printer is currently busy. Are you sure you want to clear the bed mesh?

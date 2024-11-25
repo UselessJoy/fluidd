@@ -97,7 +97,7 @@ export const actions: ActionTree<ConsoleState, RootState> = {
         .forEach(entry => dispatch('onUpdatePromptDialog', entry))
     }
   },
-  
+
   async onUpdatePromptDialog ({ commit }, payload: ConsoleEntry) {
     const parsedMessage = (
       payload.type === 'action' &&
@@ -156,7 +156,7 @@ export const actions: ActionTree<ConsoleState, RootState> = {
       }
     }
   },
-  
+
   /**
    * Klipper provides us with a list of available gcode commands
    * based on the current configuration.

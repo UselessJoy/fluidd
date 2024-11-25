@@ -96,7 +96,7 @@
             item-value="first_layer_height"
           >
             <span v-if="item.first_layer_height !== undefined">
-              {{ item.first_layer_height}} {{ $t('app.suffix.mm') }}
+              {{ item.first_layer_height }} {{ $t('app.suffix.mm') }}
             </span>
           </file-row-item>
 
@@ -322,7 +322,7 @@ export default class FileSystemBrowser extends Mixins(FilesMixin) {
   @PropSync('dragState', { type: Boolean, required: true })
     dragStateModel!: boolean
 
-    @Prop({ type: Boolean })
+  @Prop({ type: Boolean })
   readonly disabled?: boolean
 
   @Prop({ type: Boolean })
@@ -362,22 +362,25 @@ export default class FileSystemBrowser extends Mixins(FilesMixin) {
       const filteredSelectedItems = this.selected
         .filter(item => item.name !== '..')
       const draggedItems = filteredSelectedItems.length > 0
-          ? filteredSelectedItems
-          : [this.dragItem]
-          return draggedItems
+        ? filteredSelectedItems
+        : [this.dragItem]
+      return draggedItems
     }
     return []
   }
-  
+
   get sortBy () {
     return this.$store.state.config.uiSettings.fileSystem.sortBy[this.root] as string | null ?? 'modified'
   }
+
   set sortBy (value: string | null | undefined) {
     this.$store.dispatch('config/updateFileSystemSortBy', { root: this.root, value: value ?? null })
   }
+
   get sortDesc () {
     return this.$store.state.config.uiSettings.fileSystem.sortDesc[this.root] as boolean | null ?? true
   }
+
   set sortDesc (value: boolean | null | undefined) {
     this.$store.dispatch('config/updateFileSystemSortDesc', { root: this.root, value: value ?? null })
   }
@@ -443,7 +446,7 @@ export default class FileSystemBrowser extends Mixins(FilesMixin) {
 
   // Fake a drag image when the user drags a file or folder.
   handleDragStart (item: FileBrowserEntry, event: DragEvent) {
-    if (this.dragStateModel  !== true) {
+    if (this.dragStateModel !== true) {
       this.dragItem = item
       this.dragStateModel = true
     }

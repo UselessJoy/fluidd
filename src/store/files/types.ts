@@ -2,6 +2,8 @@ import type { KlipperFileMeta, KlipperFileMetaThumbnail } from './types.metadata
 import type { HistoryItem } from '@/store/history/types'
 export type { KlipperFileMeta, KlipperFileMetaThumbnail }
 
+export interface KlipperFileWithMeta extends KlipperFile, KlipperFileMeta {}
+
 export interface FilesState {
   uploads: FilesUpload[];
   download: FileDownload | null;
@@ -33,9 +35,6 @@ export interface KlipperFile {
   job_id?: string | null;
 }
 
-export interface KlipperFileWithMeta extends KlipperFile, KlipperFileMeta {
-}
-
 export interface KlipperDir {
   dirname: string;
   modified: number | string;
@@ -54,7 +53,6 @@ export interface AppFile extends KlipperFile {
 export interface AppFileWithMeta extends AppFile, KlipperFileMeta {
   history: HistoryItem;
 }
-export interface KlipperFileWithMeta extends KlipperFile, KlipperFileMeta {}
 
 export interface AppFileThumbnail extends KlipperFileMetaThumbnail {
   url: string;
@@ -122,7 +120,7 @@ export interface RootProperties {
   filterTypes: FileFilterType[]
 }
 
-export interface MoonrakerRootFile  {
+export interface MoonrakerRootFile {
   path: string;
   modified: number;
   size: number;

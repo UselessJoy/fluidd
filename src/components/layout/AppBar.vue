@@ -38,19 +38,21 @@
 
     <div class="toolbar-supplemental">
       <div v-if="isPIDCalibrating">
-        <app-btn v-if="windowWidth > 600"
+        <app-btn
+          v-if="windowWidth > 600"
           :disabled="!klippyReady"
           class="mx-1"
           @click="stopPID"
         >
           {{ $t('app.general.tooltip.stop_pid') }}
         </app-btn>
-        <app-btn v-else
+        <app-btn
+          v-else
           :disabled="!klippyReady"
-          @click="stopPID"
           small
           fab
           color="transparent"
+          @click="stopPID"
         >
           <v-icon>$cancelled</v-icon>
         </app-btn>
@@ -65,7 +67,6 @@
           @click="saveConfigAndRestart"
         />
       </div>
-      
       <div v-if="socketConnected && !isMobileViewport && authenticated">
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
@@ -232,11 +233,12 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     return this.$store.getters['server/componentSupport']('authorization')
   }
 
-  created() {
-    const onResize = () => this.windowWidth = window.innerWidth;
-    onResize();
-    window.addEventListener('resize', onResize);
-    this.$once('hook:beforeDestroy', () => window.removeEventListener('resize', onResize));
+  created () {
+    // eslint-disable-next-line no-return-assign
+    const onResize = () => this.windowWidth = window.innerWidth
+    onResize()
+    window.addEventListener('resize', onResize)
+    this.$once('hook:beforeDestroy', () => window.removeEventListener('resize', onResize))
   }
 
   get instances () {
@@ -287,10 +289,11 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   get inLayout (): boolean {
     return (this.$store.state.config.layoutMode)
   }
+
   get showSaveConfigAndRestart (): boolean {
-       return this.$store.state.config.uiSettings.general.showSaveConfigAndRestart as boolean
+    return this.$store.state.config.uiSettings.general.showSaveConfigAndRestart as boolean
   }
-  
+
   get sectionsToIgnorePendingConfigurationChanges (): string[] {
     return this.$store.state.config.uiSettings.general.sectionsToIgnorePendingConfigurationChanges as string[]
   }
@@ -362,8 +365,13 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   async stopPID () {
     const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_stop_pid'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
     result && SocketActions.stopPID()
   }
@@ -377,7 +385,7 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   }
 
   handleResetLayout () {
-    const pathLayouts: Record<string, string>  = {
+    const pathLayouts: Record<string, string> = {
       '/diagnostics': 'diagnostics'
     }
 
@@ -424,8 +432,13 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
       !confirmOnPowerDeviceChange ||
       await this.$confirm(
         this.$tc('app.general.simple_form.msg.confirm_power_device_toggle'),
-        { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+        {
+          title: this.$tc('app.general.label.confirm'),
+          color: 'card-heading',
+          icon: '$error',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
+        }
       )
     )
 

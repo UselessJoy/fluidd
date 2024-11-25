@@ -63,6 +63,5 @@ export default class OutputPin extends Mixins(StateMixin, BrowserMixin) {
     }
     this.sendGcode(`SET_PIN PIN=${this.pin.name} VALUE=${target}`, `${this.$waits.onSetOutputPin}${this.pin.name}`)
   }
-  
 }
 </script>

@@ -47,10 +47,10 @@
       justify="start"
       class="mb-2"
     >
-      <v-col 
+      <v-col
         cols="auto"
         :class="{
-        'mr-12': !canHomeXY,
+          'mr-12': !canHomeXY,
         }"
       >
         <app-btn-toolhead-move
@@ -196,7 +196,6 @@ type Axis = 'X' | 'Y' | 'Z'
 
 @Component({})
 export default class ToolheadControlCross extends Mixins(StateMixin, ToolheadMixin) {
-  
   moveLength: number | null = null
 
   get forceMove (): boolean {
@@ -210,7 +209,7 @@ export default class ToolheadControlCross extends Mixins(StateMixin, ToolheadMix
   get canHomeXY (): boolean {
     return !this.hasRoundBed
   }
-  
+
   get toolheadMoveDistances (): number[] {
     return this.$store.state.config.uiSettings.general.toolheadMoveDistances as number[]
   }

@@ -30,7 +30,6 @@ export default class ToolheadMixin extends Vue {
     )
   }
 
-
   get filamentDiameter (): number {
     return this.activeExtruder?.config?.filament_diameter || 1.75
   }
@@ -90,9 +89,8 @@ export default class ToolheadMixin extends Vue {
   get isBedScrewsAdjustActive (): boolean {
     return this.$store.getters['printer/getIsBedScrewsAdjustActive'] as boolean
   }
-  
+
   get hasScrewsTiltAdjustResults (): boolean {
     return this.$store.getters['printer/getHasScrewsTiltAdjustResults'] as boolean
   }
-  
 }

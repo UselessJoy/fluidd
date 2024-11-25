@@ -29,15 +29,6 @@ export default class JobHistoryItemStatus extends Mixins(FilesMixin) {
   @Prop({ type: Object, required: true })
   readonly job!: HistoryItem
 
-  // get status () {
-  //   if (this.job.status === 'completed') return 'completed'
-  //   if (this.job.status === 'in_progress') return 'in_progress'
-  //   if (this.job.status.indexOf('_')) {
-  //     return this.job.status.split('_').pop()
-  //   }
-  //   return this.job.status
-  // }
-
   get icon () {
     const iconMap: Record<string, string> = {
       completed: '$checkedCircle',

@@ -3,8 +3,8 @@
     :title="$t('app.general.title.system_overview')"
     icon="$desktopTower"
   >
-  <template #menu>
-      <v-tooltip 
+    <template #menu>
+      <v-tooltip
         v-if="canRolloverLogs"
         bottom
       >
@@ -104,7 +104,7 @@ import StateMixin from '@/mixins/state'
 @Component({})
 export default class PrinterStatsCard extends Mixins(StateMixin) {
   rolloverLogsDialogOpen = false
-  
+
   get systemInfo (): SystemInfo | null {
     return this.$store.getters['server/getSystemInfo']
   }

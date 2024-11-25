@@ -276,7 +276,6 @@ export default class AppColorPicker extends Vue {
     this.inputWhiteValue = this.currentWhiteColor.red
   }
 
-
   handleReset () {
     this.currentPrimaryColor.set(this.inputPrimaryColor)
     this.currentWhiteColor.set(this.inputWhiteColor)

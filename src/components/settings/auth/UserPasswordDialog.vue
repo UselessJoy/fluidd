@@ -34,7 +34,7 @@
           ]"
         />
       </app-setting>
-    <v-divider />
+      <v-divider />
       <app-setting :title="$t('app.general.label.new_password')">
         <v-text-field
           v-model="password"

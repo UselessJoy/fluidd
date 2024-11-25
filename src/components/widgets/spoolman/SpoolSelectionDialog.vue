@@ -7,7 +7,7 @@
   >
     <template #title>
       <span class="focus--text">
-        {{$tc('app.spoolman.title.spool_selection', targetMacro ? 2 : 1, { macro: targetMacro })}}
+        {{ $tc('app.spoolman.title.spool_selection', targetMacro ? 2 : 1, { macro: targetMacro }) }}
       </span>
 
       <v-spacer />
@@ -20,7 +20,7 @@
       >
         <template #activator="{ on, attrs, value }">
           <app-btn
-          v-bind="attrs"
+            v-bind="attrs"
             small
             class="ms-1 my-1"
             v-on="on"
@@ -47,7 +47,7 @@
             :key="camera.uid"
             @click="cameraScanSource = camera.uid"
           >
-          <v-list-item-icon>
+            <v-list-item-icon>
               <v-icon>
                 $camera
               </v-icon>
@@ -120,7 +120,7 @@
             class="row-select px-1"
             @click.prevent="selectedSpool = selectedSpool === item.id ? null : item.id"
           >
-          <td>
+            <td>
               <div class="d-flex">
                 <v-icon
                   :color="`#${item.filament.color_hex ?? ($vuetify.theme.dark ? 'fff' : '000')}`"
@@ -186,12 +186,7 @@
         <v-icon class="mr-2">
           {{ filename ? '$printer' : '$send' }}
         </v-icon>
-        {{ filename 
-          ? $t('app.general.btn.print') 
-          : $tc('app.spoolman.btn.select', 
-            targetMacro 
-              ? 2 
-              : 1, { macro: targetMacro }) }}
+        {{ filename ? $t('app.general.btn.print') : $tc('app.spoolman.btn.select', targetMacro ? 2 : 1, { macro: targetMacro }) }}
       </app-btn>
     </template>
     <QRReader
@@ -202,230 +197,250 @@
   </app-dialog>
 </template>
 
-  <script lang="ts">
-  import { Component, Mixins, Watch } from 'vue-property-decorator'
-  import StateMixin from '@/mixins/state'
-  import { SocketActions } from '@/api/socketActions'
-  import type { MacroWithSpoolId, Spool } from '@/store/spoolman/types'
-  import BrowserMixin from '@/mixins/browser'
-  import QRReader from '@/components/widgets/spoolman/QRReader.vue'
-  import type { WebcamConfig } from '@/store/webcams/types'
-  import QrScanner from 'qr-scanner'
-  import type { AppTableHeader } from '@/types'
+<script lang="ts">
+import { Component, Mixins, Watch } from 'vue-property-decorator'
+import StateMixin from '@/mixins/state'
+import { SocketActions } from '@/api/socketActions'
+import type { MacroWithSpoolId, Spool } from '@/store/spoolman/types'
+import BrowserMixin from '@/mixins/browser'
+import QRReader from '@/components/widgets/spoolman/QRReader.vue'
+import type { WebcamConfig } from '@/store/webcams/types'
+import QrScanner from 'qr-scanner'
+import type { AppTableHeader } from '@/types'
 
-  @Component({
-    components: { QRReader }
-  })
-  export default class SpoolSelectionDialog extends Mixins(StateMixin, BrowserMixin) {
-    search = ''
-    selectedSpoolId: number | null = null
-    cameraScanSource: null | string = null
-    hasDeviceCamera = false
+@Component({
+  components: { QRReader }
+})
+export default class SpoolSelectionDialog extends Mixins(StateMixin, BrowserMixin) {
+  search = ''
+  selectedSpoolId: number | null = null
+  cameraScanSource: null | string = null
+  hasDeviceCamera = false
 
-    async mounted () {
-        this.hasDeviceCamera = await QrScanner.hasCamera()
-    }
+  async mounted () {
+    this.hasDeviceCamera = await QrScanner.hasCamera()
+  }
 
-    @Watch('open')
-    onOpen () {
-      if (this.open) {
-        if (this.targetMacro) {
-          const macro: MacroWithSpoolId | undefined = this.$store.getters['macros/getMacroByName'](this.targetMacro.toLowerCase())
-          this.selectedSpoolId = macro?.variables.spool_id ?? null
-        }
-        if (this.currentFileName) {
-          // prefetch file metadata
-          SocketActions.serverFilesMetadata(this.currentFileName)
-        }
-        if (this.hasDeviceCamera && this.preferDeviceCamera) {
-            this.$nextTick(() => (this.cameraScanSource = 'device'))
-        } else {
-            const autoOpenCameraId = this.autoOpenQRDetectionCamera
-            if (this.$store.getters['webcams/getWebcamById'](autoOpenCameraId)) {
-                this.$nextTick(() => (this.cameraScanSource = autoOpenCameraId))
-            }
+  @Watch('open')
+  onOpen () {
+    if (this.open) {
+      if (this.targetMacro) {
+        const macro: MacroWithSpoolId | undefined = this.$store.getters['macros/getMacroByName'](this.targetMacro.toLowerCase())
+        this.selectedSpoolId = macro?.variables.spool_id ?? null
+      }
+      if (this.currentFileName) {
+        // prefetch file metadata
+        SocketActions.serverFilesMetadata(this.currentFileName)
+      }
+      if (this.hasDeviceCamera && this.preferDeviceCamera) {
+        this.$nextTick(() => (this.cameraScanSource = 'device'))
+      } else {
+        const autoOpenCameraId = this.autoOpenQRDetectionCamera
+        if (this.$store.getters['webcams/getWebcamById'](autoOpenCameraId)) {
+          this.$nextTick(() => (this.cameraScanSource = autoOpenCameraId))
         }
       }
     }
+  }
 
-    get open () {
-      return this.$store.state.spoolman.dialog.show
-    }
+  get open () {
+    return this.$store.state.spoolman.dialog.show
+  }
 
-    set open (val: boolean) {
-      this.$store.commit('spoolman/setDialogState', {
-        ...this.$store.state.spoolman.dialog,
-        show: val
+  set open (val: boolean) {
+    this.$store.commit('spoolman/setDialogState', {
+      ...this.$store.state.spoolman.dialog,
+      show: val
+    })
+  }
+
+  get availableSpools (): Spool[] {
+    const spools = []
+    for (const spool of this.$store.state.spoolman.availableSpools) {
+      if (spool.archived) {
+        continue
+      }
+      let filamentName = spool.filament.name
+      if (spool.filament.vendor) {
+        filamentName = `${spool.filament.vendor.name} - ${filamentName}`
+      }
+      spools.push({
+        ...spool,
+        filament_name: filamentName,
+        material: spool.filament.material
       })
     }
+    return spools
+  }
 
-    get availableSpools (): Spool[] {
-      const spools = []
-      for (const spool of this.$store.state.spoolman.availableSpools) {
-        if (spool.archived) {
-          continue
+  get headers (): AppTableHeader[] {
+    const headers = [
+      'filament_name',
+      'id',
+      'material',
+      'location',
+      'comment',
+      'last_used'
+    ].map((value) => ({
+      text: this.$tc(`app.spoolman.label.${value}`),
+      value,
+      configurable: value !== 'filament_name'
+    }))
+    return this.$store.getters['config/getMergedTableHeaders'](headers, 'spoolman')
+  }
+
+  get visibleHeaders (): AppTableHeader[] {
+    return this.headers.filter(header => header.visible || header.visible === undefined)
+  }
+
+  get selectedSpool () {
+    return this.selectedSpoolId
+  }
+
+  set selectedSpool (id: number | null) {
+    this.selectedSpoolId = id
+  }
+
+  get filename () {
+    let filename = this.$store.state.spoolman.dialog.filename
+    if (!filename) {
+      return
+    } else if (filename.startsWith('/')) {
+      filename = filename.slice(1)
+    }
+    return filename
+  }
+
+  get currentFileName () {
+    return this.filename || this.$store.state.printer.printer.print_stats.filename
+  }
+
+  get currentFile () {
+    const splitFilepath = this.currentFileName.split('/')
+    const filename = splitFilepath.pop()
+    const filepath = splitFilepath.join('/')
+    return this.$store.getters['files/getFile'](filepath ? `gcodes/${filepath}` : 'gcodes', filename)
+  }
+
+  get targetMacro (): string | undefined {
+    return this.$store.state.spoolman.dialog.targetMacro
+  }
+
+  get enabledWebcams (): WebcamConfig[] {
+    return this.$store.getters['webcams/getEnabledWebcams'] as WebcamConfig[]
+  }
+
+  get availableCameras (): Pick<WebcamConfig, 'uid' | 'name'>[] {
+    const cameras: Pick<WebcamConfig, 'uid' | 'name'>[] = this.enabledWebcams
+      .filter(camera => camera.service !== 'iframe')
+    if (this.hasDeviceCamera) {
+      // always show device camera first
+      cameras.unshift({
+        name: this.$t('app.spoolman.label.device_camera').toString(),
+        uid: 'device'
+      })
+    }
+    return cameras
+  }
+
+  handleQRCodeDetected (id: number) {
+    this.cameraScanSource = null
+    this.selectedSpoolId = id
+    if (
+      !this.availableSpools
+        .filter(spool => this.filterResults('', this.search, spool))
+        .some(spool => spool.id === id)
+    ) {
+      // clear filter if selected spool isn't in filter results
+      this.search = ''
+    }
+    if (this.autoSelectSpoolOnMatch) {
+      this.handleSelectSpool()
+    }
+  }
+
+  async handleSelectSpool () {
+    if (!this.selectedSpool) {
+      // no spool selected
+      const confirmation = await this.$confirm(
+        this.$tc('app.spoolman.msg.no_spool'),
+        {
+          title: this.$tc('app.general.label.confirm'),
+          color: 'card-heading',
+          icon: '$warning',
+          buttonTrueText: this.$tc('app.general.btn.yes'),
+          buttonFalseText: this.$tc('app.general.btn.no')
         }
-        let filamentName = spool.filament.name
-        if (spool.filament.vendor) {
-          filamentName = `${spool.filament.vendor.name} - ${filamentName}`
-        }
-        spools.push({
-          ...spool,
-          filament_name: filamentName,
-          material: spool.filament.material
-        })
-      }
-      return spools
-    }
-
-    get headers (): AppTableHeader[] {
-      const headers = [
-        'filament_name',
-        'id',
-        'material',
-        'location',
-        'comment',
-        'last_used'
-        ].map((value) => ({
-          text: this.$tc(`app.spoolman.label.${value}`),
-          value,
-          configurable: value !== 'filament_name'
-        }))
-        return this.$store.getters['config/getMergedTableHeaders'](headers, 'spoolman')
-    }
-
-    get visibleHeaders (): AppTableHeader[] {
-      return this.headers.filter(header => header.visible || header.visible === undefined)
-    }
-
-    get selectedSpool () {
-      return this.selectedSpoolId
-    }
-
-    set selectedSpool (id: number | null) {
-      this.selectedSpoolId = id
-    }
-
-    get filename () {
-      let filename = this.$store.state.spoolman.dialog.filename
-      if (!filename) {
+      )
+      if (!confirmation) {
         return
-      } else if (filename.startsWith('/')) {
-        filename = filename.slice(1)
       }
-      return filename
     }
-
-    get currentFileName () {
-      return this.filename || this.$store.state.printer.printer.print_stats.filename
-    }
-
-    get currentFile () {
-      const splitFilepath = this.currentFileName.split('/')
-      const filename = splitFilepath.pop()
-      const filepath = splitFilepath.join('/')
-      return this.$store.getters['files/getFile'](filepath ? `gcodes/${filepath}` : 'gcodes', filename)
-    }
-
-    get targetMacro (): string | undefined {
-      return this.$store.state.spoolman.dialog.targetMacro
-    }
-
-    get enabledWebcams (): WebcamConfig[] {
-      return this.$store.getters['webcams/getEnabledWebcams'] as WebcamConfig[]
-    }
-
-    get availableCameras (): Pick<WebcamConfig, 'uid' | 'name'>[] {
-      const cameras: Pick<WebcamConfig, 'uid' | 'name'>[] = this.enabledWebcams
-        .filter(camera => camera.service !== 'iframe')
-      if (this.hasDeviceCamera) {
-        // always show device camera first
-        cameras.unshift({
-          name: this.$t('app.spoolman.label.device_camera').toString(),
-          uid: 'device'
-        })
+    const spool = this.availableSpools.find(spool => spool.id === this.selectedSpool)
+    if (spool && this.filename && (this.warnOnFilamentTypeMismatch || this.warnOnNotEnoughFilament)) {
+      let requiredLength = 0 // l[mm]
+      if (this.currentFile) {
+        if (this.warnOnFilamentTypeMismatch) {
+          const fileMaterials = this.currentFile.filament_type?.toLowerCase()
+            .split(';').map((x: string) => x.replace(/"/g, ''))
+          const spoolMaterial = spool.filament.material?.toLowerCase()
+          if (spoolMaterial && fileMaterials && !fileMaterials.includes(spoolMaterial)) {
+            // filament materials don't match
+            const confirmation = await this.$confirm(
+              this.$tc('app.spoolman.msg.mismatched_filament'),
+              {
+                title: this.$tc('app.general.label.confirm'),
+                color: 'card-heading',
+                icon: '$warning',
+                buttonTrueText: this.$tc('app.general.btn.yes'),
+                buttonFalseText: this.$tc('app.general.btn.no')
+              }
+            )
+            if (!confirmation) {
+              return
+            }
+          }
+        }
+        requiredLength = this.currentFile?.filament_total ?? 0
+        if (this.$store.getters['printer/getPrinterState'] !== 'idle') {
+          // subtract already printed length
+          requiredLength -= this.$store.state.printer.printer.print_stats?.filament_used ?? 0
+          requiredLength = Math.max(requiredLength, 0)
+        }
       }
-      return cameras
-    }
-
-    handleQRCodeDetected (id: number) {
-        this.cameraScanSource = null
-        this.selectedSpoolId = id
-        if (
-            !this.availableSpools
-            .filter(spool => this.filterResults('', this.search, spool))
-            .some(spool => spool.id === id)
-        ) {
-            // clear filter if selected spool isn't in filter results
-            this.search = ''
-        }
-        if (this.autoSelectSpoolOnMatch) {
-            this.handleSelectSpool()
-        }
-    }
-
-    async handleSelectSpool () {
-      if (!this.selectedSpool) {
-        // no spool selected
+      if (!requiredLength) {
+        // missing file metadata
         const confirmation = await this.$confirm(
-          this.$tc('app.spoolman.msg.no_spool'),
-          { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
-            buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+          this.$tc('app.spoolman.msg.no_required_length'),
+          {
+            title: this.$tc('app.general.label.confirm'),
+            color: 'card-heading',
+            icon: '$warning',
+            buttonTrueText: this.$tc('app.general.btn.yes'),
+            buttonFalseText: this.$tc('app.general.btn.no')
+          }
         )
         if (!confirmation) {
           return
         }
       }
-      const spool = this.availableSpools.find(spool => spool.id === this.selectedSpool)
-      if (spool && this.filename && (this.warnOnFilamentTypeMismatch || this.warnOnNotEnoughFilament)) {
-        let requiredLength = 0 // l[mm]
-        if (this.currentFile) {
-          if (this.warnOnFilamentTypeMismatch) {
-            const fileMaterials = this.currentFile.filament_type?.toLowerCase()
-              .split(';').map((x: string) => x.replace(/"/g, ''))
-            const spoolMaterial = spool.filament.material?.toLowerCase()
-            if (spoolMaterial && fileMaterials && !fileMaterials.includes(spoolMaterial)) {
-              // filament materials don't match
-              const confirmation = await this.$confirm(
-                this.$tc('app.spoolman.msg.mismatched_filament'),
-                { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
-                  buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
-              )
-              if (!confirmation) {
-                return
-              }
-            }
-          }
-          requiredLength = this.currentFile?.filament_total ?? 0
-          if (this.$store.getters['printer/getPrinterState'] !== 'idle') {
-            // subtract already printed length
-            requiredLength -= this.$store.state.printer.printer.print_stats?.filament_used ?? 0
-            requiredLength = Math.max(requiredLength, 0)
-          }
+      if (this.warnOnNotEnoughFilament) {
+        let remainingLength = spool.remaining_length
+        if (!remainingLength && spool.remaining_weight) {
+          // l[mm] = m[g]/D[g/cm³]/A[mm²]*(1000mm³/cm³)
+          remainingLength = spool.remaining_weight / spool.filament.density / (Math.PI * (spool.filament.diameter / 2) ** 2) * 1000
         }
-        if (!requiredLength) {
-          // missing file metadata
-          const confirmation = await this.$confirm(
-            this.$tc('app.spoolman.msg.no_required_length'),
-            { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
-              buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
-          )
-          if (!confirmation) {
-            return
-          }
-        }
-        if (this.warnOnNotEnoughFilament) {
-          let remainingLength = spool.remaining_length
-          if (!remainingLength && spool.remaining_weight) {
-            // l[mm] = m[g]/D[g/cm³]/A[mm²]*(1000mm³/cm³)
-            remainingLength = spool.remaining_weight / spool.filament.density / (Math.PI * (spool.filament.diameter / 2) ** 2) * 1000
-          }
-          if (typeof remainingLength === 'number' && requiredLength >= remainingLength) {
-          // not enough filament
+        if (typeof remainingLength === 'number' && requiredLength >= remainingLength) {
+        // not enough filament
           const confirmation = await this.$confirm(
             this.$tc('app.spoolman.msg.no_filament'),
-            { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$warning',
-              buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+            {
+              title: this.$tc('app.general.label.confirm'),
+              color: 'card-heading',
+              icon: '$warning',
+              buttonTrueText: this.$tc('app.general.btn.yes'),
+              buttonFalseText: this.$tc('app.general.btn.no')
+            }
           )
           if (!confirmation) {
             return
@@ -453,7 +468,7 @@
       this.open = false
       return
     }
-    
+
     await SocketActions.serverSpoolmanPostSpoolId(this.selectedSpool ?? undefined)
     if (this.filename) {
       await SocketActions.printerPrintStart(this.filename)
@@ -513,13 +528,12 @@
       server: true
     })
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
-  .spool-table tr td {
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
-  }
+.spool-table tr td {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
 </style>

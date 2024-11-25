@@ -73,7 +73,7 @@ export const mutations: MutationTree<FilesState> = {
       } else {
         const dirIndex = directory.dirs.findIndex(file => file.dirname === paths.filename)
         if (dirIndex >= 0) {
-            directory.dirs.splice(dirIndex, 1)
+          directory.dirs.splice(dirIndex, 1)
         }
       }
     }
@@ -123,7 +123,7 @@ export const mutations: MutationTree<FilesState> = {
   setRemoveFileDownload (state) {
     state.download = null
   },
-  
+
   setCurrentPath (state, payload) {
     Vue.set(state.currentPaths, payload.root, payload.path)
   },
@@ -138,6 +138,5 @@ export const mutations: MutationTree<FilesState> = {
 
   setDiskUsageconfig (state, payload) {
     Vue.set(state, 'disk_usage_config', payload)
-  },
-
+  }
 }

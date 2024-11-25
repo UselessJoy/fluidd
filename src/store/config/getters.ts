@@ -26,7 +26,6 @@ export const getters: GetterTree<ConfigState, RootState> = {
   getHostConfig: (state) => {
     return state.hostConfig
   },
-
   /**
    * Return temp presets. Ensure we only return a preset
    * for a known heater or fan, incase things change
@@ -82,7 +81,7 @@ export const getters: GetterTree<ConfigState, RootState> = {
       }
     }
   },
-  
+
   getCustomThemeFile: (state, getters, rootState, rootGetters) => (filename: string, extensions: string[]) => {
     const files = rootGetters['files/getRootFiles']('config') as MoonrakerRootFile[] | undefined
 

@@ -207,6 +207,7 @@ export default class AppNotificationMenu extends Mixins(BrowserMixin) {
     if (this.color === 'transparent') return 'info'
     return this.color
   }
+
   /**
    * If no defined icon, pull from a standard set based on notification type.
    */
@@ -292,6 +293,7 @@ export default class AppNotificationMenu extends Mixins(BrowserMixin) {
   }
 
   :deep(.notification-description) {
+    line-clamp: 5;
     -webkit-line-clamp: 5;
   }
 

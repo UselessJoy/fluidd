@@ -48,6 +48,7 @@ import { Component, Prop, VModel, Vue } from 'vue-property-decorator'
 export default class McuInformationDialog extends Vue {
   @VModel({ type: Boolean })
     open?: boolean
+
   @Prop({ type: Object, required: true })
   readonly mcu!: MCU
 }

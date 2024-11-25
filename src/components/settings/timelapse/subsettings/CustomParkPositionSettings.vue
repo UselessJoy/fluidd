@@ -106,6 +106,7 @@ export default class CustomParkPositionSettings extends Mixins(StateMixin) {
       SocketActions.machineTimelapseSetSettings({ park_custom_pos_y: value })
     }
   }
+
   get bedSize (): BedSize {
     const bedSize = this.$store.getters['printer/getBedSize'] as BedSize | undefined
     return bedSize ?? {
@@ -115,7 +116,7 @@ export default class CustomParkPositionSettings extends Mixins(StateMixin) {
       maxY: Infinity
     }
   }
-  
+
   get settings (): TimelapseSettings {
     return this.$store.getters['timelapse/getSettings']
   }

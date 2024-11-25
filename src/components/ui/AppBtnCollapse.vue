@@ -47,7 +47,7 @@ export default class AppBtnCollapse extends Vue {
     enabledModel?: boolean
 
   @Prop({ type: Boolean })
-    readonly inLayout?: boolean
+  readonly inLayout?: boolean
 }
 </script>
 

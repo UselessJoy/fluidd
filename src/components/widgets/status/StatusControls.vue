@@ -104,13 +104,13 @@ import PauseAtLayerDialog from './PauseAtLayerDialog.vue'
     JobHistoryItemStatus,
     ExcludeObjectsDialog,
     PauseResumeBtn,
-    PauseAtLayerDialog,
+    PauseAtLayerDialog
   }
 })
 export default class StatusControls extends Mixins(StateMixin) {
   showExcludeObjectDialog = false
   showPauseAtLayerDialog = false
-  
+
   get filename () {
     return this.$store.state.printer.printer.print_stats.filename
   }
@@ -126,8 +126,13 @@ export default class StatusControls extends Mixins(StateMixin) {
   async cancelPrint () {
     const result = await this.$confirm(
       this.$tc('app.general.simple_form.msg.confirm_cancel_print'),
-      { title: this.$tc('app.general.label.confirm'), color: 'card-heading', icon: '$error', 
-        buttonTrueText: this.$tc('app.general.btn.yes'),  buttonFalseText: this.$tc('app.general.btn.no') }
+      {
+        title: this.$tc('app.general.label.confirm'),
+        color: 'card-heading',
+        icon: '$error',
+        buttonTrueText: this.$tc('app.general.btn.yes'),
+        buttonFalseText: this.$tc('app.general.btn.no')
+      }
     )
     if (result) {
       SocketActions.printerPrintCancel()
@@ -146,7 +151,7 @@ export default class StatusControls extends Mixins(StateMixin) {
   }
 
   resetFile () {
-    this.sendGcode("SDCARD_RESET_FILE")
+    this.sendGcode('SDCARD_RESET_FILE')
   }
 }
 </script>

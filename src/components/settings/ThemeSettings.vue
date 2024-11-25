@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-subheader id="theme">
@@ -9,7 +8,7 @@
       dense
       class="mb-4"
     >
-    <app-setting>
+      <app-setting>
         <template #title>
           <span>{{ $t('app.setting.label.theme_preset') }}</span>
           <app-inline-help
@@ -71,14 +70,18 @@
           @click.native.stop
         />
       </app-setting>
-      
       <v-divider />
 
-      <app-setting v-if="now_led == ledEnabled && now_led == true" :title="$t('app.setting.label.lighting_color')">
-        <AppColorPickerDialog v-for="(item, i) in allLeds"
+      <app-setting
+        v-if="ledEnabled"
+        :title="$t('app.setting.label.lighting_color')"
+      >
+        <AppColorPickerDialog
+          v-for="(item, i) in allLeds"
+          :key="i"
           :led="item"
-          :v-model ="open"
-          :buttonColor="themeColor"
+          :v-model="open"
+          :button-color="themeColor"
           :title="$t('app.setting.btn.select_color')"
         />
       </app-setting>
@@ -98,18 +101,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import { IroColor } from '@irojs/iro-core'
 import type { ThemePreset, ThemeConfig } from '@/store/config/types'
-import ThemePicker from '../ui/AppColorPicker.vue'
 import type { Led } from '@/store/printer/types'
 import OutputItem from '@/components/widgets/outputs/OutputItem.vue'
 import AppColorPickerDialog from '../ui/AppColorPickerDialog.vue'
 import AppColorPicker from '../ui/AppColorPicker.vue'
 @Component({
   components: {
-    ThemePicker,
     OutputItem,
     AppColorPickerDialog,
     AppColorPicker
@@ -117,7 +118,6 @@ import AppColorPicker from '../ui/AppColorPicker.vue'
 })
 export default class ThemeSettings extends Mixins(StateMixin) {
   open = false
-  now_led = false
 
   get allLeds () {
     const items: Array<Led> = [
@@ -127,21 +127,16 @@ export default class ThemeSettings extends Mixins(StateMixin) {
   }
 
   get ledEnabled (): boolean {
-    return this.now_led = this.$store.getters['printer/getLedControl'].enabled
+    return this.$store.getters['printer/getLedControl'].enabled
   }
 
   set ledEnabled (value: boolean) {
-    this.now_led = value
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.general.led_enabled',
       value,
       server: true
     })
-    this.now_led = value
-    value ? 
-    this.sendGcode(`ENABLE_LED_EFFECTS`)
-    :
-    this.sendGcode(`DISABLE_LED_EFFECTS`)
+    value ? this.sendGcode('ENABLE_LED_EFFECTS') : this.sendGcode('DISABLE_LED_EFFECTS')
   }
 
   get theme (): ThemeConfig {
@@ -170,7 +165,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
   get themeColor () {
     return this.theme.color
   }
-  
+
   set themeColor (value: string) {
     if (this.theme.color.toLowerCase() !== value.toLowerCase()) {
       this.updateTheme({
@@ -178,7 +173,7 @@ export default class ThemeSettings extends Mixins(StateMixin) {
       })
     }
   }
-  
+
   handleChangeThemeColor (value: { channel: string; color: IroColor }) {
     const color = value.color.hexString
     if (this.theme.color.toLowerCase() !== color.toLowerCase()) {
@@ -187,7 +182,6 @@ export default class ThemeSettings extends Mixins(StateMixin) {
       })
     }
   }
-
 
   get isDark () {
     return this.theme.isDark

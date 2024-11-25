@@ -44,15 +44,14 @@ import { Component, Mixins, Prop } from 'vue-property-decorator'
 import type { Fan } from '@/store/printer/types'
 import StateMixin from '@/mixins/state'
 import BrowserMixin from '@/mixins/browser'
-import { SocketActions } from '@/api/socketActions'
 
 @Component({})
 export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
   @Prop({ type: Object, required: true })
   readonly fan!: Fan
 
-  @Prop({type: Boolean, default: false})
-  readonly onlyControllable?: Boolean
+  @Prop({ type: Boolean, default: false })
+  readonly onlyControllable?: boolean
 
   get prettyValue () {
     return (this.value === 0)
@@ -62,20 +61,17 @@ export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
 
   get value () {
     let fan = {} as Fan
-    for (let field in this.$store.state.printer.printer) {
+    for (const field in this.$store.state.printer.printer) {
       if (field === this.fan.key) {
-        
         fan = this.$store.state.printer.printer[field]
         // alert(`fan speed ${JSON.stringify(fan)}`)
-      } 
+      }
     }
     // this.fan.speed = Math.round(fan.speed || 0)
     // if (!this.fan.speed) return Math.round(fan.speed || 0)
     const speed = (fan.speed || 0) / (this.fan.config.max_power || 1)
     return Math.round(speed * 100)
   }
-
-
 
   handleChange (target: number) {
     // If this is a controllable fan, it's either the part fan [fan] or a generic fan [fan_generic].
@@ -94,7 +90,7 @@ export default class OutputFan extends Mixins(StateMixin, BrowserMixin) {
       ? this.fan.rpm.toFixed() + ' rpm'
       : undefined
   }
-  
+
   get customRules () {
     return {
       minFan: (v: string | number) => {

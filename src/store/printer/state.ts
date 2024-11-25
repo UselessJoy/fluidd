@@ -6,7 +6,7 @@ import type { PrinterState } from './types'
  */
 export const defaultState = (): PrinterState => {
   return {
-    printer: 
+    printer:
     {
       endstops: {},
       bed_mesh: {},
@@ -65,9 +65,6 @@ export const defaultState = (): PrinterState => {
         progress: 0,
         message: ''
       },
-      wifi_mode: {
-        wifiMode: ''
-      },
       screws_tilt_adjust: {
         errors: false,
         results: {}
@@ -84,9 +81,9 @@ export const defaultState = (): PrinterState => {
         enabled: true
       },
       messages: {
-        last_message_eventtime: .0,
-        message: "",
-        message_type: "",
+        last_message_eventtime: 0.0,
+        message: '',
+        message_type: '',
         is_open: false
       },
       pid_calibrate: {
@@ -102,11 +99,11 @@ export const defaultState = (): PrinterState => {
       locale: {
         langs: [
           {
-            name: "default",
-            code: "def"
+            name: 'default',
+            code: 'def'
           }
         ],
-        currentLang: "en"
+        currentLang: 'en'
       },
       safety_printing: {
         safety_enabled: false,
@@ -116,7 +113,7 @@ export const defaultState = (): PrinterState => {
         luft_overload: false
       },
       filament_watcher: {
-        filament_type: "",
+        filament_type: '',
         show_message: false
       },
       virtual_sdcard: {

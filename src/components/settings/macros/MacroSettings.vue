@@ -37,8 +37,8 @@
             <v-chip
               small
               class="mr-4"
-                >
-                {{ category.visible }} / {{ category.count }}
+            >
+              {{ category.visible }} / {{ category.count }}
             </v-chip>
           </template>
 
@@ -132,7 +132,7 @@ export default class MacroSettings extends Mixins(StateMixin) {
   get uncategorizedMacros () {
     const uncategorized = this.$store.getters['macros/getMacrosByCategory']()
     const count = uncategorized.length
-    const visible = uncategorized.filter((macro: Macro) => macro.visible).length
+    const visible = uncategorized.filter((macro: Macro) => macro.visible_new).length
     return {
       count,
       visible

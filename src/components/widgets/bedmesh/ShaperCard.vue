@@ -8,14 +8,21 @@
     layout-path="dashboard.shaper-card"
   >
     <v-card-text>
-      <div v-if="graphLoaded" class="d-flex justify-center">
-        <img :src="activeImageURL" width="100%" height="auto">
+      <div
+        v-if="graphLoaded"
+        class="d-flex justify-center"
+      >
+        <img
+          :src="activeImageURL"
+          width="100%"
+          height="auto"
+        >
       </div>
       <span v-else>{{ $t('app.shaper.msg.not_loaded') }}</span>
     </v-card-text>
   </collapsable-card>
 </template>
-  
+
 <script lang="ts">
 import { Component, Mixins, Prop, Watch } from 'vue-property-decorator'
 import FilesMixin from '@/mixins/files'
@@ -24,7 +31,7 @@ export default class ShaperCard extends Mixins(FilesMixin) {
   @Prop({ type: Boolean, default: false })
   readonly fullScreen!: boolean
 
-  activeImageURL = ""
+  activeImageURL = ''
   graphLoaded = false
 
   get activeShaperGraph (): string {
@@ -33,9 +40,9 @@ export default class ShaperCard extends Mixins(FilesMixin) {
 
   @Watch('activeShaperGraph')
   async onActiveShaperGraph (value: string) {
-    if (value === "") {
+    if (value === '') {
       this.graphLoaded = false
-      this.activeImageURL = ""
+      this.activeImageURL = ''
       return
     }
     const url = await this.createFileUrlWithToken(value)
@@ -43,7 +50,7 @@ export default class ShaperCard extends Mixins(FilesMixin) {
     this.graphLoaded = true
   }
 
-  async mounted() {
+  async mounted () {
     if (this.activeShaperGraph !== '') {
       const url = await this.createFileUrlWithToken(this.activeShaperGraph)
       this.activeImageURL = url

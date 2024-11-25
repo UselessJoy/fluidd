@@ -18,13 +18,12 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 export default class AppBtnGroup extends Vue {
   @Prop({ type: Boolean })
   readonly vertical?: boolean
-  
+
   @Prop({ type: Boolean })
   readonly divided?: boolean
-  
+
   @Prop({ type: Number })
   readonly elevation?: boolean
-  
 }
 </script>
 

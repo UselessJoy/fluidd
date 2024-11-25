@@ -113,11 +113,11 @@ export default class FileEditorSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-  
+
   get restoreViewState (): RestoreViewState {
     return this.$store.state.config.uiSettings.editor.restoreViewState
   }
-  
+
   set restoreViewState (value: RestoreViewState) {
     this.$store.dispatch('config/saveByPath', {
       path: 'uiSettings.editor.restoreViewState',
@@ -125,7 +125,7 @@ export default class FileEditorSettings extends Mixins(StateMixin) {
       server: true
     })
   }
-  
+
   get availableRestoreViewState (): { value: RestoreViewState, text: string }[] {
     return [
       {
@@ -142,7 +142,7 @@ export default class FileEditorSettings extends Mixins(StateMixin) {
       }
     ]
   }
-  
+
   get codeLens (): boolean {
     return this.$store.state.config.uiSettings.editor.codeLens
   }
