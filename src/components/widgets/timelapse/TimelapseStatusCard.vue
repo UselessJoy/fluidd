@@ -27,7 +27,7 @@
           :value="renderProgress"
         />
         <camera-item
-          v-if="!frameCount && camera"
+          v-if="!frameCount && camera && camera.enabled"
           :camera="camera"
         />
       </v-row>

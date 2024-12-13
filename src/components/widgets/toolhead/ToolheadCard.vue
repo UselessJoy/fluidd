@@ -424,7 +424,7 @@ export default class ToolheadCard extends Mixins(StateMixin, ToolheadMixin) {
         wait: this.$waits.onProbeAccuracy
       })
       tools.push({
-        name: 'PROBE_CALIBRATE SAMPLES=3',
+        name: 'PROBE_CALIBRATE SAMPLES=4',
         label: this.$tc('app.tool.title.probe_calibrate'),
         disabled: this.isManualProbeActive,
         wait: this.$waits.onProbeCalibrate
