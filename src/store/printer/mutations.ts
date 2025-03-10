@@ -22,6 +22,18 @@ export const mutations: MutationTree<PrinterState> = {
     state.printer.autooff = payload
   },
 
+  setIsOpenRebootDialog (state, payload) {
+    state.printer.fixing.open_dialog = payload
+  },
+
+  setRebootDialogMessage (state, payload) {
+    state.printer.fixing.dialog_message = payload
+  },
+
+  setCanReboot (state, payload) {
+    state.printer.fixing.can_reboot = payload
+  },
+
   setWatchBedMesh (state, payload) {
     state.printer.virtual_sdcard = payload
   },
@@ -44,13 +56,6 @@ export const mutations: MutationTree<PrinterState> = {
 
   setLedStatus (state, payload) {
     state.printer.led_control = payload
-  },
-  setAutoEnable (state, payload) {
-    state.printer.autooff = payload
-  },
-
-  setTimeAutoOff (state, payload) {
-    state.printer.autooff = payload
   },
 
   setIsScrewImage (state, payload) {

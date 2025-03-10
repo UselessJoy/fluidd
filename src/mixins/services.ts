@@ -14,11 +14,11 @@ export default class ServicesMixin extends Vue {
   async _klipperReset () {
     this.$store.commit('socket/setAcceptNotifications', false)
     await this.$store.dispatch('server/resetKlippy', undefined, { root: true })
-    await this.$store.dispatch('reset', [
-      'printer',
-      'charts',
-      'wait'
-    ], { root: true })
+    // await this.$store.dispatch('reset', [
+    //   'printer',
+    //   'charts',
+    //   'wait'
+    // ], { root: true })
   }
 
   /**

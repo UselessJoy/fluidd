@@ -1,3 +1,4 @@
+import type { Globals } from '@/globals'
 import type { FlashMessageTypes } from '@/types'
 
 export interface PrinterState {
@@ -90,10 +91,22 @@ export type StepperType<T = Record<string, any>> = {
 
 export interface MCU {
   name: string;
-  last_stats: Record<string, string | number>;
-  mcu_build_versions: string;
-  mcu_constants: Record<string, string | number>;
-  mcu_version: string;
+  prettyName: string;
+  last_stats?: Record<string, string | number>;
+  mcu_build_versions?: string;
+  mcu_constants?: Record<string, string | number>;
+  mcu_version?: string;
+  app?: string;
+  non_critical_disconnected?: boolean;
+  config: Record<string, any>;
+}
+
+export type SupportedKlipperServices = keyof typeof Globals.SUPPORTED_SERVICES.KLIPPER
+
+export interface KlippyApp {
+  name: SupportedKlipperServices;
+  domain: string;
+  minVersion: string;
 }
 
 export type OutputType<T = Record<string, any>> = {

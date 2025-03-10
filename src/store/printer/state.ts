@@ -112,6 +112,11 @@ export const defaultState = (): PrinterState => {
         luft_timeout: 3.0,
         luft_overload: false
       },
+      fixing: {
+        open_dialog: false,
+        dialog_message: '',
+        can_reboot: false
+      },
       filament_watcher: {
         filament_type: '',
         show_message: false

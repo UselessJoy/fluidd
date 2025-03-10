@@ -86,6 +86,18 @@
       </v-icon>
       Moonraker.log
     </app-btn>
+    <app-btn
+      block
+      class="me-2 mb-2"
+      @click="() => {open = true}"
+    >
+      {{ $t('app.general.label.send_klippy_log') }}
+    </app-btn>
+    <send-logs-dialog
+      v-if="open"
+      v-model="open"
+      @send="handleSendLogs"
+    />
   </div>
 </template>
 
@@ -94,15 +106,34 @@ import { Component, Mixins } from 'vue-property-decorator'
 import FilesMixin from '@/mixins/files'
 import StateMixin from '@/mixins/state'
 import ServicesMixin from '@/mixins/services'
+import { SocketActions } from '@/api/socketActions'
+import type { SendLogsMessage } from '@/store/config/types'
 
 @Component({})
 export default class SystemControl extends Mixins(StateMixin, FilesMixin, ServicesMixin) {
-  getKlippyLog () {
-    this.downloadFile('klippy.log', '')
+  description = ''
+  open = false
+  fields: string[] = []
+
+  handleSendLogs (form_message: SendLogsMessage) {
+    this.open = false
+    SocketActions.serverSendLogs(form_message.name, form_message.phone, form_message.email, form_message.serial_number, form_message.description)
+  }
+
+  setField (text: string, index: number) {
+    this.fields[index] = text
+  }
+
+  setDescription (text: string) {
+    this.description = text
   }
 
   getMoonrakerLog () {
     this.downloadFile('moonraker.log', '')
+  }
+
+  getKlippyLog () {
+    this.downloadFile('klippy.log', '')
   }
 }
 </script>

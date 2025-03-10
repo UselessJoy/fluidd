@@ -37,6 +37,32 @@
     </div>
 
     <div class="toolbar-supplemental">
+      <div v-if="openRebootDialog">
+        <v-tooltip
+          bottom
+        >
+          <template #activator="{ on, attrs }">
+            <app-btn
+              v-bind="attrs"
+              fab
+              small
+              text
+              color="warning"
+              :elevation="0"
+              v-on="on"
+              @click="() => {open = true}"
+            >
+              <v-icon>$alertCircleOutline</v-icon>
+            </app-btn>
+          </template>
+          <span>{{ $t('app.general.btn.system_fix') }}</span>
+        </v-tooltip>
+        <reboot-dialog
+          v-if="open"
+          v-model="open"
+          @close="() => {open = false}"
+        />
+      </div>
       <div v-if="isPIDCalibrating">
         <app-btn
           v-if="windowWidth > 600"
@@ -229,6 +255,7 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   pendingChangesDialogOpen = false
   isShutdownAtPrinting = false
   windowWidth = 0
+  open = false
   get supportsAuth () {
     return this.$store.getters['server/componentSupport']('authorization')
   }
@@ -280,6 +307,10 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
         .filter(key => !sectionsToIgnore.includes(key))
         .length > 0
     )
+  }
+
+  get openRebootDialog (): boolean {
+    return this.$store.getters['printer/getIsOpenRebootDialog']
   }
 
   get devicePowerComponentEnabled () {

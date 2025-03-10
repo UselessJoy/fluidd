@@ -338,6 +338,7 @@ app:
       save_as_default_color: Сохранить цвет по умолчанию
       save_restart: Сохранить и перезагрузить
       save_config_and_restart: Сохранить настройки и перезагрузить
+      system_fix: Cистемные исправления установлены не полностью
       select_columns: Выбрать столбцы
       send: Отправить
       set_color: Установить цвет
@@ -373,6 +374,7 @@ app:
         Moonraker не смог запустить некоторые плагины, пожалуйста проверьте
         логи, обновите конфигурацию и перезагрузите moonraker.
     label:
+      send_klippy_log: Сообщить об ошибке
       calendar: Календарь
       accel_to_decel: Ускорение к замедлению
       acceleration: Ускорение
@@ -480,7 +482,7 @@ app:
       stepper_enabled: Шаговый двигатель включен
       synced_extruder: Синхронизированный экструдер
       command: Команда
-      minimum_cruise_ratio: Минимальное отношение крейсерской мощности
+      minimum_cruise_ratio: Мин. коэф. крейсерской скорости 
       cross: Пересечение
       bars: Столбцы
       version_sort: Сортировка по версии
@@ -516,6 +518,8 @@ app:
         password_username: Не удается сопоставить имя пользователя
         required: Требуется
         invalid_aspect: Недопустимое соотношение сторон
+        valid_email: Недопустимый email
+        equal_len: Серийный номер должен иметь %{len} цифр
       msg:
         confirm: Вы уверены?
         confirm_rebuild: Печать была прервана. Продолжить печать?
@@ -678,6 +682,14 @@ app:
       title:
         printer_status: Статус принтера
       interrupt: Прерван
+  log_dialog:
+    placeholder: необязательно
+    send_logs: Отправка логов
+    name: ФИО
+    phone: Номер телефона
+    serial_number: Серийный номер
+    email: Почта
+    description: Опишите проблему 
   setting:
     btn:
       add_camera: Добавить камеру

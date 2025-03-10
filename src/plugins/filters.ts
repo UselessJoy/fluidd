@@ -495,6 +495,10 @@ export const Rules = {
     return !v.some(i => i === '' || isNaN(+(i ?? NaN))) || i18n.t('app.general.simple_form.error.arrayofnums')
   },
 
+  numberArrayLenIsEqualTo (len: number) {
+    return (v: unknown[]) => v.length === len || i18n.t('app.general.simple_form.error.equal_len', { len })
+  },
+
   numberArrayUnique (array: number[], index: number) {
     return (v: number) => array.every((val, i) => { return i === index ? true : +val !== +v }) || i18n.t('app.general.simple_form.error.uniquearray')
   },
@@ -505,6 +509,10 @@ export const Rules = {
 
   aspectRatioValid (v: string) {
     return /^\d+\s*[:/]\s*\d+$/.test(v) || i18n.t('app.general.simple_form.error.invalid_aspect')
+  },
+
+  emailValid (v: string) {
+    return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || i18n.t('app.general.simple_form.error.valid_email')
   },
 
   regExpPatternValid (v: string) {

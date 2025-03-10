@@ -720,6 +720,9 @@ export default class FileSystem extends Mixins(StateMixin, FilesMixin, ServicesM
 
   async handleSaveFileChanges (contents: string, restart: string) {
     if (contents.length > 0) {
+      if (this.fileEditorDialogState.filename === 'printer.cfg') {
+        this.sendGcode('BACKUP_CONFIG')
+      }
       const file = new File([contents], this.fileEditorDialogState.filename)
       if (!restart && this.fileEditorDialogState.open) this.fileEditorDialogState.loading = true
       await this.uploadFile(file, this.visiblePath, this.currentRoot, false)

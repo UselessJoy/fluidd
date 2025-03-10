@@ -158,6 +158,18 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.autooff.autoOff
   },
 
+  getIsOpenRebootDialog: (state) => {
+    return state.printer.fixing.open_dialog
+  },
+
+  getDialogMessage: (state) => {
+    return state.printer.fixing.dialog_message
+  },
+
+  getCanReboot: (state) => {
+    return state.printer.fixing.can_reboot
+  },
+
   getAutoOffEnable: (state) => {
     return state.printer.autooff.autoOff_enable
   },

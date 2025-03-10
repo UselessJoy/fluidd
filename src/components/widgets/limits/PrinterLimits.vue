@@ -87,19 +87,6 @@
             :loading="hasWait($waits.onSetMinimumCruiseRatio)"
             @submit="setMinimumCruiseRatio"
           />
-          <app-named-slider
-            :label="$t('app.general.label.accel_to_decel')"
-            :value="accelToDecel"
-            :reset-value="defaultAccelToDecel"
-            :min="1"
-            :max="defaultAccelToDecel"
-            :disabled="!klippyReady"
-            overridable
-            :locked="isMobileViewport"
-            :loading="hasWait($waits.onSetAccelToDecel)"
-            :suffix="$t('app.suffix.mm/s²')"
-            @submit="setAccelToDecel"
-          />
         </v-col>
       </v-row>
     </v-card-text>

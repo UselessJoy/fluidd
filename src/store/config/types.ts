@@ -198,6 +198,14 @@ export interface TemperaturePreset {
   gcode?: string;
 }
 
+export interface SendLogsMessage {
+  name: string;
+  phone: string;
+  email: string;
+  description: string;
+  serial_number: string;
+}
+
 export interface TemperaturePresetValues {
   [key: string]: TemperaturePresetValue;
 }

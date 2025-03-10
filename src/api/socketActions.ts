@@ -346,27 +346,24 @@ export const SocketActions = {
     )
   },
 
-  async setQuiteMode (stepper: string, quite_mode: boolean) {
+  async setQuiteMode (s: string, qm: boolean) {
     baseEmit(
       'printer.setQuiteMode', {
         dispatch: 'void',
         params: {
-          // eslint-disable-next-line object-shorthand
-          stepper: stepper,
-          // eslint-disable-next-line object-shorthand
-          quite_mode: quite_mode
+          stepper: s,
+          quite_mode: qm
         }
       }
     )
   },
 
-  async setActiveTension (tension: string) {
+  async setActiveTension (t: string) {
     baseEmit(
       'printer.setActiveTension', {
         dispatch: 'void',
         params: {
-          // eslint-disable-next-line object-shorthand
-          tension: tension
+          tension: t
         },
         wait: Waits.onSetTension
       }
@@ -559,6 +556,21 @@ export const SocketActions = {
     baseEmit(
       'server.config', {
         dispatch: 'server/onServerConfig'
+      }
+    )
+  },
+
+  async serverSendLogs (n: string, p: string, e: string, sn: string, d: string) {
+    baseEmit(
+      'server.bot.send_logs', {
+        dispatch: 'void',
+        params: {
+          name: n,
+          phone: p,
+          email: e,
+          serial_number: sn,
+          description: d
+        }
       }
     )
   },

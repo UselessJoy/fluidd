@@ -46,6 +46,10 @@
       :buttons="interruptConfirmButtons"
       @result="onResultInterrupt"
     />
+    <reboot-dialog
+      v-if="openRebootDialog"
+      v-model="openRebootDialog"
+    />
     <template v-if="hasScrewImage && showModal">
       <div class="parent_modal_div">
         <v-card class="modal v-dialog">
@@ -334,7 +338,6 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
     const url = await this.createFileUrlWithToken(value, 'config')
 
     const oldCustomStylesheet = document.getElementById('customStylesheet')
-
     if (oldCustomStylesheet) {
       oldCustomStylesheet.setAttribute('href', url)
       return
@@ -353,6 +356,10 @@ export default class App extends Mixins(StateMixin, FilesMixin, BrowserMixin) {
   /*      NEW      */
   get autoOff (): boolean {
     return this.$store.getters['printer/getAutoOff']
+  }
+
+  get openRebootDialog (): boolean {
+    return this.$store.getters['printer/getIsOpenRebootDialog']
   }
 
   get showInterrupt (): boolean {
