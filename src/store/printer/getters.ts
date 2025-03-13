@@ -166,6 +166,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.fixing.dialog_message
   },
 
+  getHasUninstalledUpdates: (state) => {
+    return state.printer.fixing.has_uninstalled_updates
+  },
+
   getCanReboot: (state) => {
     return state.printer.fixing.can_reboot
   },

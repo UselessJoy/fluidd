@@ -115,6 +115,7 @@ export const defaultState = (): PrinterState => {
       fixing: {
         open_dialog: false,
         dialog_message: '',
+        has_uninstalled_updates: true,
         can_reboot: false
       },
       filament_watcher: {

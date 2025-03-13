@@ -224,6 +224,10 @@ export const SocketActions = {
     )
   },
 
+  async printerCloseDialog () {
+    baseEmit('printer.fixing.close_dialog', {})
+  },
+
   async printerRestart () {
     baseEmit(
       'printer.restart', {

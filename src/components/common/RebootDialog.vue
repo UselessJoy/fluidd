@@ -40,6 +40,7 @@
 import { Component, Mixins, VModel } from 'vue-property-decorator'
 import StateMixin from '@/mixins/state'
 import ServicesMixin from '@/mixins/services'
+import { SocketActions } from '@/api/socketActions'
 
 @Component({})
 export default class RebootDialog extends Mixins(StateMixin, ServicesMixin) {
@@ -58,8 +59,14 @@ export default class RebootDialog extends Mixins(StateMixin, ServicesMixin) {
     return this.$store.getters['printer/getDialogMessage']
   }
 
+  get has_uninstalled_updates () {
+    return this.$store.getters['printer/getHasUninstalledUpdates']
+  }
+
   close () {
-    this.$emit('close')
+    if (!this.has_uninstalled_updates) {
+      SocketActions.printerCloseDialog()
+    }
     this.$destroy()
   }
 
