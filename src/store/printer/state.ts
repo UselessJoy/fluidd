@@ -74,7 +74,8 @@ export const defaultState = (): PrinterState => {
         tmp: [],
         belt_tensions: [],
         active_belt_tension: '',
-        active: ''
+        active: '',
+        shaping: false
       },
       led_control: {
         led_status: '',

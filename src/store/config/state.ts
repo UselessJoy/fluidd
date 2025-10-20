@@ -94,10 +94,10 @@ export const defaultState = (): ConfigState => {
       },
       dashboard: {
         tempPresets: [
-          { id: 0, name: 'PLA', values: { extruder: { value: 215, type: 'heater', active: true }, heater_bed: { value: 65, type: 'heater', active: true } } },
-          { id: 0, name: 'ABS', values: { extruder: { value: 240, type: 'heater', active: true }, heater_bed: { value: 110, type: 'heater', active: true } } },
-          { id: 0, name: 'PET-G', values: { extruder: { value: 235, type: 'heater', active: true }, heater_bed: { value: 85, type: 'heater', active: true } } },
-          { id: 0, name: 'FLEX', values: { extruder: { value: 240, type: 'heater', active: true }, heater_bed: { value: 90, type: 'heater', active: true } } }
+          { id: 0, name: 'PLA', values: { extruder: { value: 220, type: 'heater', active: true }, heater_bed: { value: 80, type: 'heater', active: true } } },
+          { id: 0, name: 'ABS', values: { extruder: { value: 245, type: 'heater', active: true }, heater_bed: { value: 120, type: 'heater', active: true } } },
+          { id: 0, name: 'PET-G', values: { extruder: { value: 235, type: 'heater', active: true }, heater_bed: { value: 80, type: 'heater', active: true } } },
+          { id: 0, name: 'TPU', values: { extruder: { value: 235, type: 'heater', active: true }, heater_bed: { value: 80, type: 'heater', active: true } } }
         ]
       },
       tableHeaders: {

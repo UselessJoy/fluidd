@@ -253,10 +253,11 @@
               </app-btn>
             </template>
             <v-list dense>
-              <template v-for="axis of ['x', '-', 'y', '-', 'all']">
+              <template v-for="axis of ['x', '-', 'y', '-', 'all', '-']">
                 <v-list-item
                   v-if="axis != '-'"
                   :key="axis"
+                  :disabled="shaperShaping"
                   @click="sendGcode(`SHAPER_CALIBRATE AXIS=${axis}`, $waits.onShaperCalibrate)"
                 >
                   <v-list-item-content>
@@ -270,6 +271,17 @@
                   :key="axis"
                 />
               </template>
+              <v-list-item
+                key="stop"
+                :disabled="!shaperShaping"
+                @click="sendGcode(`ASYNC_STOP_SHAPER`)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t(`app.shaper.axis.stop`) }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
             </v-list>
           </v-menu>
         </v-col>
@@ -312,6 +324,10 @@ export default class ShaperControls extends Mixins(StateMixin) {
   get shaperGraphs (): ShaperPaths {
     const graphs = this.$store.getters['printer/getShaperGraphs'] as ShaperPaths
     return graphs
+  }
+
+  get shaperShaping (): boolean {
+    return this.$store.getters['printer/getShaperShaping'] as boolean
   }
 
   async loadShaper (graph: string) {

@@ -89,6 +89,7 @@ app:
       x: Ось Х
       y: Ось Y
       all: Все
+      stop: Остановить
     msg:
       not_found: Не найдено графиков компенсации резонанса
       not_loaded: График компенсации резонанса не загружен
@@ -743,8 +744,8 @@ app:
         rawstream: Чистый поток
       camera_rotate_by: Повернуть на
       camera_stream_type: Тип потока
-      camera_url_snapshot: URL камеры
-      camera_url_stream: URL снимка камеры
+      camera_url_snapshot: URL снимка камеры
+      camera_url_stream: URL потока
       card: Карточка
       collector: Коллектор
       confirm_on_estop: Требовать подтверждение при аварийной остановке

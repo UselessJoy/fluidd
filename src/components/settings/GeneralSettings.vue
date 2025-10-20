@@ -8,6 +8,69 @@
       dense
       class="mb-4"
     >
+      <app-setting :title="$t('app.setting.label.auto_off_complete')">
+        <v-switch
+          v-model="enableAutoOff"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting :title="$t('app.setting.label.safety_printing')">
+        <v-switch
+          v-model="safetyPrinting"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting
+        :title="$t('app.setting.label.enable_quite_mode')"
+      >
+        <v-switch
+          v-model="enableQuiteMode"
+          hide-details
+          class="mb-5"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting
+        :title="$t('app.setting.label.watch_bed_mesh')"
+        :sub-title="$t('app.setting.label.sub_watch_bed_mesh')"
+      >
+        <v-switch
+          v-model="watchBedMesh"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
+      <app-setting
+        :title="$t('app.setting.label.autoload_bed_mesh')"
+        :sub-title="$t('app.setting.label.sub_autoload_bed_mesh')"
+      >
+        <v-switch
+          v-model="autoloadBedMesh"
+          hide-details
+          class="mt-0 mb-4"
+          @click.native.stop
+        />
+      </app-setting>
+
+      <v-divider />
+
       <app-setting :title="$t('app.setting.label.printer_name')">
         <v-text-field
           ref="instanceName"
@@ -44,7 +107,8 @@
 
       <app-setting
         :title="$t('app.setting.label.klipper_language')"
-        :sub-title="$t('app.setting.label.klipper_language_description')">
+        :sub-title="$t('app.setting.label.klipper_language_description')"
+      >
         <v-select
           filled
           dense
@@ -79,19 +143,6 @@
           dense
           hide-details="auto"
           :items="availableTimeFormats"
-        />
-      </app-setting>
-
-      <v-divider />
-
-      <app-setting
-        :title="$t('app.setting.label.enable_quite_mode')"
-      >
-        <v-switch
-          v-model="enableQuiteMode"
-          hide-details
-          class="mb-5"
-          @click.native.stop
         />
       </app-setting>
 
@@ -181,58 +232,6 @@
           />
         </app-setting>
       </template>
-
-      <v-divider />
-
-      <app-setting :title="$t('app.setting.label.auto_off_complete')">
-        <v-switch
-          v-model="enableAutoOff"
-          hide-details
-          class="mt-0 mb-4"
-          @click.native.stop
-        />
-      </app-setting>
-
-      <v-divider />
-
-      <app-setting :title="$t('app.setting.label.safety_printing')">
-        <v-switch
-          v-model="safetyPrinting"
-          hide-details
-          class="mt-0 mb-4"
-          @click.native.stop
-        />
-      </app-setting>
-
-      <v-divider />
-
-      <app-setting
-        :title="$t('app.setting.label.watch_bed_mesh')"
-        :sub-title="$t('app.setting.label.sub_watch_bed_mesh')"
-      >
-        <v-switch
-          v-model="watchBedMesh"
-          hide-details
-          class="mt-0 mb-4"
-          @click.native.stop
-        />
-      </app-setting>
-
-      <v-divider />
-
-      <app-setting
-        :title="$t('app.setting.label.autoload_bed_mesh')"
-        :sub-title="$t('app.setting.label.sub_autoload_bed_mesh')"
-      >
-        <v-switch
-          v-model="autoloadBedMesh"
-          hide-details
-          class="mt-0 mb-4"
-          @click.native.stop
-        />
-      </app-setting>
-
-      <v-divider />
 
       <app-setting
         :title="$t('app.setting.label.print_in_progress_layout')"

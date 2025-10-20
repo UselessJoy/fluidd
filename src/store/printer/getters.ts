@@ -139,6 +139,10 @@ export const getters: GetterTree<PrinterState, RootState> = {
     return state.printer.resonance_tester.active
   },
 
+  getShaperShaping: (state) => {
+    return state.printer.resonance_tester.shaping
+  },
+
   getBeltTensions: (state) => {
     return state.printer.resonance_tester.belt_tensions
   },
