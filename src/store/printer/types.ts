@@ -49,6 +49,14 @@ export interface SafetyPrinting {
   luft_overload: boolean;
 }
 
+export interface Fixing {
+  all_updated: boolean;
+  dialog_message: string;
+  require_internet: boolean;
+  require_reboot: boolean;
+  updating: boolean;
+}
+
 export interface LedControl {
   led_status: string
   enabled: boolean

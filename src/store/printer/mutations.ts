@@ -22,16 +22,24 @@ export const mutations: MutationTree<PrinterState> = {
     state.printer.autooff = payload
   },
 
-  setIsOpenRebootDialog (state, payload) {
-    state.printer.fixing.open_dialog = payload
-  },
-
-  setRebootDialogMessage (state, payload) {
+  setFixDialogMessage (state, payload) {
     state.printer.fixing.dialog_message = payload
   },
 
-  setCanReboot (state, payload) {
-    state.printer.fixing.can_reboot = payload
+  setRequireReboot (state, payload) {
+    state.printer.fixing.require_reboot = payload
+  },
+
+  setRequireInternet (state, payload) {
+    state.printer.fixing.require_internet = payload
+  },
+
+  setIsAllUpdated (state, payload) {
+    state.printer.fixing.all_updated = payload
+  },
+
+  setIsUpdating (state, payload) {
+    state.printer.fixing.updating = payload
   },
 
   setWatchBedMesh (state, payload) {

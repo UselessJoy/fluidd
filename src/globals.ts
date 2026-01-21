@@ -513,9 +513,11 @@ export const Waits = Object.freeze({
   onGetAutoloadBedMesh: 'onGetAutoloadBedMesh',
   onPidCalibrate: 'onPidCalibrate',
   onSetTension: 'onSetTension',
-  onGetIsOpenRebootDialog: 'onGetIsOpenRebootDialog',
-  onGetRebootDialogMessage: 'onGetRebootDialogMessage',
-  onGetCanReboot: 'onGetCanReboot'
+  onGetFixDialogMessage: 'onGetFixDialogMessage',
+  onGetRequireReboot: 'onGetRequireReboot',
+  onGetRequireInternet: 'onGetRequireInternet',
+  onGetIsAllUpdated: 'onGetIsAllUpdated',
+  onGetIsUpdating: 'onGetIsUpdating'
   /*    END NEW    */
 })
 

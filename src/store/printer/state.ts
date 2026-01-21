@@ -114,10 +114,11 @@ export const defaultState = (): PrinterState => {
         luft_overload: false
       },
       fixing: {
-        open_dialog: false,
+        all_updated: false,
         dialog_message: '',
-        has_uninstalled_updates: true,
-        can_reboot: false
+        require_internet: false,
+        require_reboot: false,
+        updating: false
       },
       filament_watcher: {
         filament_type: '',

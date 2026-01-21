@@ -263,6 +263,7 @@ app:
       close: Close
       config_reference: Config Reference
       create_zip_archive: Create ZIP Archive
+      continue: Continue
       delete: Delete
       download: Download
       duplicate: Duplicate

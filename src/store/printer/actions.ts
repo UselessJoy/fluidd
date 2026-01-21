@@ -32,16 +32,24 @@ export const actions: ActionTree<PrinterState, RootState> = {
     commit('setAutoOff', payload)
   },
 
-  async onGetIsOpenRebootDialog ({ commit }, payload) {
-    commit('setIsOpenRebootDialog', payload)
+  async onGetFixDialogMessage ({ commit }, payload) {
+    commit('setFixDialogMessage', payload)
   },
 
-  async onGetRebootDialogMessage ({ commit }, payload) {
-    commit('setRebootDialogMessage', payload)
+  async onGetRequireReboot ({ commit }, payload) {
+    commit('setRequireReboot', payload)
   },
 
-  async onGetCanReboot ({ commit }, payload) {
-    commit('setCanReboot', payload)
+  async onGetRequireInternet ({ commit }, payload) {
+    commit('setRequireInternet', payload)
+  },
+
+  async onGetIsAllUpdated ({ commit }, payload) {
+    commit('setIsAllUpdated', payload)
+  },
+
+  async onGetIsUpdating ({ commit }, payload) {
+    commit('setIsUpdating', payload)
   },
 
   async onGetWatchBedMesh ({ commit }, payload) {

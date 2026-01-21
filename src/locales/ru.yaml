@@ -270,6 +270,8 @@ app:
         drag_file_load: <strong>Перетащите</strong> файл gcode сюда для загрузки
   general:
     btn:
+      start_fix: Начать обновление
+      continue_fix: Продолжить обновление
       continue_print: Продолжить печать
       later: Позже
       delete_print: Отменить печать
@@ -295,6 +297,7 @@ app:
       close: Закрыть
       config_reference: Примеры конфигураций
       create_zip_archive: Создать ZIP архив
+      continue: Продолжить
       delete: Удалить
       download: Скачать
       duplicate: Копировать

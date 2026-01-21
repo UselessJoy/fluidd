@@ -37,7 +37,7 @@
     </div>
 
     <div class="toolbar-supplemental">
-      <div v-if="openRebootDialog">
+      <div v-if="!isAllUpdated">
         <v-tooltip
           bottom
         >
@@ -57,11 +57,6 @@
           </template>
           <span>{{ $t('app.general.btn.system_fix') }}</span>
         </v-tooltip>
-        <reboot-dialog
-          v-if="open"
-          v-model="open"
-          @close="() => {open = false}"
-        />
       </div>
       <div v-if="isPIDCalibrating">
         <app-btn
@@ -223,6 +218,12 @@
       v-model="pendingChangesDialogOpen"
       @save="saveConfigAndRestart(true)"
     />
+
+    <fix-dialog
+      v-if="open"
+      v-model="open"
+      @close="open = false"
+    />
   </v-app-bar>
 </template>
 
@@ -240,6 +241,7 @@ import { SocketActions } from '@/api/socketActions'
 import type { OutputPin } from '@/store/printer/types'
 import type { Device } from '@/store/power/types'
 import BrowserMixin from '@/mixins/browser'
+import FixDialog from '../common/FixDialog.vue'
 
 @Component({
   components: {
@@ -255,7 +257,8 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
   pendingChangesDialogOpen = false
   isShutdownAtPrinting = false
   windowWidth = 0
-  open = false
+  open = !this.isAllUpdated
+
   get supportsAuth () {
     return this.$store.getters['server/componentSupport']('authorization')
   }
@@ -309,8 +312,8 @@ export default class AppBar extends Mixins(StateMixin, ServicesMixin, FilesMixin
     )
   }
 
-  get openRebootDialog (): boolean {
-    return this.$store.getters['printer/getIsOpenRebootDialog']
+  get isAllUpdated (): boolean {
+    return this.$store.getters['printer/getIsAllUpdated']
   }
 
   get devicePowerComponentEnabled () {

@@ -224,8 +224,8 @@ export const SocketActions = {
     )
   },
 
-  async printerCloseDialog () {
-    baseEmit('printer.fixing.close_dialog', {})
+  async printerStartFix () {
+    baseEmit('printer.fixing.repeat_update', {wait: Waits.onGetIsUpdating})
   },
 
   async printerRestart () {
